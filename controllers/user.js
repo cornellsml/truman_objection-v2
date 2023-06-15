@@ -28,6 +28,17 @@ function shuffle(array) {
     return array;
 }
 
+// create random id for guest accounts
+function makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 /**
  * GET /login
  * Login page.
@@ -45,55 +56,55 @@ exports.getLogin = (req, res) => {
  * POST /login
  * Sign in using email and password.
  */
-exports.postLogin = (req, res, next) => {
-    req.assert('email', 'Email is not valid.').isEmail();
-    req.assert('password', 'Password cannot be blank.').notEmpty();
-    req.sanitize('email').normalizeEmail({ remove_dots: false });
+// exports.postLogin = (req, res, next) => {
+//     req.assert('email', 'Email is not valid.').isEmail();
+//     req.assert('password', 'Password cannot be blank.').notEmpty();
+//     req.sanitize('email').normalizeEmail({ remove_dots: false });
 
-    const errors = req.validationErrors();
+//     const errors = req.validationErrors();
 
-    if (errors) {
-        req.flash('errors', errors);
-        console.log(errors);
-        return res.redirect('/login');
-    }
+//     if (errors) {
+//         req.flash('errors', errors);
+//         console.log(errors);
+//         return res.redirect('/login');
+//     }
 
-    passport.authenticate('local', (err, user, info) => {
-        const two_days = 172800000; //Milliseconds in 2 days
-        const time_diff = Date.now() - user.createdAt; //Time difference between now and account creation.
-        if (err) { return next(err); }
-        if (!user) {
-            req.flash('errors', info);
-            return res.redirect('/login');
-        }
-        if (!(user.active) || ((time_diff >= two_days) && !user.isAdmin)) {
-            // var post_url = user.endSurveyLink;
-            req.flash('final');
-            return res.redirect('/login');
-        }
-        req.logIn(user, (err) => {
-            if (err) { return next(err); }
+//     passport.authenticate('local', (err, user, info) => {
+//         const two_days = 172800000; //Milliseconds in 2 days
+//         const time_diff = Date.now() - user.createdAt; //Time difference between now and account creation.
+//         if (err) { return next(err); }
+//         if (!user) {
+//             req.flash('errors', info);
+//             return res.redirect('/login');
+//         }
+//         if (!(user.active) || ((time_diff >= two_days) && !user.isAdmin)) {
+//             // var post_url = user.endSurveyLink;
+//             req.flash('final');
+//             return res.redirect('/login');
+//         }
+//         req.logIn(user, (err) => {
+//             if (err) { return next(err); }
 
-            var temp = req.session.passport; // {user: 1}
-            var returnTo = req.session.returnTo;
-            req.session.regenerate(function(err) {
-                //req.session.passport is now undefined
-                req.session.passport = temp;
-                req.session.save(function(err) {
-                    const time_now = Date.now();
-                    const userAgent = req.headers['user-agent'];
-                    const user_ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-                    user.logUser(time_now, userAgent, user_ip);
-                    if (user.consent) {
-                        return res.redirect(returnTo || '/');
-                    } else {
-                        return res.redirect(returnTo || '/account/signup_info');
-                    }
-                });
-            });
-        });
-    })(req, res, next);
-};
+//             var temp = req.session.passport; // {user: 1}
+//             var returnTo = req.session.returnTo;
+//             req.session.regenerate(function(err) {
+//                 //req.session.passport is now undefined
+//                 req.session.passport = temp;
+//                 req.session.save(function(err) {
+//                     const time_now = Date.now();
+//                     const userAgent = req.headers['user-agent'];
+//                     const user_ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+//                     user.logUser(time_now, userAgent, user_ip);
+//                     if (user.consent) {
+//                         return res.redirect(returnTo || '/');
+//                     } else {
+//                         return res.redirect(returnTo || '/account/signup_info');
+//                     }
+//                 });
+//             });
+//         });
+//     })(req, res, next);
+// };
 
 /**
  * GET /logout
@@ -102,7 +113,7 @@ exports.postLogin = (req, res, next) => {
 exports.logout = (req, res) => {
     req.logout();
     req.session.regenerate(function() {
-        res.redirect('/login');
+        res.redirect('/login'); // TODO: thank you page.
     })
 };
 
@@ -124,47 +135,46 @@ exports.getSignup = (req, res) => {
  * Create a new local account.
  */
 exports.postSignup = (req, res, next) => {
-    req.assert('email', 'Email is not valid.').isEmail();
-    req.assert('password', 'Password must be at least 4 characters long.').len(4);
-    req.assert('confirmPassword', 'Passwords do not match.').equals(req.body.password);
-    req.sanitize('email').normalizeEmail({ remove_dots: false });
-
-    const errors = req.validationErrors();
-
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/signup');
-    }
-
     /*###############################
     Place Experimental Varibles Here!
     ###############################*/
-    var versions = 3;
-    var varResult = ['var1', 'var2', 'var3'][Math.floor(Math.random() * versions)]
+    var versions = 5;
+    var varResult = [0, 1, 2, 3, 4][Math.floor(Math.random() * versions)]
 
     //TODO: assigning the correct survey link according to the study group
     var surveyLink = "https://cornell.qualtrics.com/jfe/form/SV_8CdA8rLS8pjZIoJ";
 
-    const user = new User({
-        email: req.body.email,
-        password: req.body.password,
-        mturkID: req.body.mturkID,
-        username: req.body.username,
-        group: varResult,
-        endSurveyLink: surveyLink,
-        active: true,
-        lastNotifyVisit: (Date.now()),
-        createdAt: (Date.now())
-    });
-
-    User.findOne({ email: req.body.email }, (err, existingUser) => {
+    // (1) If given r_id from Qualtrics: If user instance exists, go to profile page. If doens't exist, create a user instance. 
+    // (2) If not given r_id from Qualtrics: Generate a random username, not used yet, and save user instance.
+    if (req.query.r_id == 'null') {
+        req.query.r_id = makeid(10);
+    }
+    User.findOne({ mturkID: req.query.r_id }, (err, existingUser) => {
         if (err) { return next(err); }
+        let user;
         if (existingUser) {
-            req.flash('errors', { msg: 'An account with that email address already exists.' });
-            return res.redirect('/signup');
+            existingUser.username = req.body.username;
+            existingUser.profile.picture = req.body.photo;
+            user = existingUser;
+        } else {
+            user = new User({
+                mturkID: req.query.r_id,
+                username: req.body.username,
+                profile: {
+                    color: '#a6a488',
+                    picture: req.body.photo
+                },
+                group: varResult,
+                endSurveyLink: surveyLink,
+                active: true,
+                lastNotifyVisit: (Date.now()),
+                createdAt: (Date.now())
+            });
         }
+
         user.save((err) => {
             if (err) { return next(err); }
+            req.logout();
             req.logIn(user, (err) => {
                 if (err) {
                     return next(err);
@@ -178,7 +188,8 @@ exports.postSignup = (req, res, next) => {
                         const userAgent = req.headers['user-agent'];
                         const user_ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
                         user.logUser(time_now, userAgent, user_ip);
-                        res.redirect('/account/signup_info');
+                        res.set('Content-Type', 'application/json; charset=UTF-8');
+                        res.send({ result: "success" });
                     });
                 });
             });
@@ -190,124 +201,146 @@ exports.postSignup = (req, res, next) => {
  * POST /account/profile
  * Update profile information.
  */
-exports.postSignupInfo = (req, res, next) => {
+// exports.postSignupInfo = (req, res, next) => {
+//     User.findById(req.user.id, (err, user) => {
+//         if (err) { return next(err); }
+//         user.profile.name = req.body.name.trim() || '';
+//         user.profile.location = req.body.location.trim() || '';
+//         user.profile.bio = req.body.bio.trim() || '';
+
+//         if (req.file) {
+//             console.log("Changing Picture now to: " + req.file.filename);
+//             user.profile.picture = req.file.filename;
+//         }
+
+//         user.save((err) => {
+//             if (err) {
+//                 if (err.code === 11000) {
+//                     return res.redirect('/account/signup_info');
+//                 }
+//                 return next(err);
+//             }
+//             req.flash('success', { msg: 'Profile information has been updated.' });
+//             return res.redirect('/com');
+//         });
+//     });
+// };
+
+/**
+ * POST /account/interest
+ * Update interest information.
+ */
+exports.postInterestInfo = (req, res, next) => {
     User.findById(req.user.id, (err, user) => {
         if (err) { return next(err); }
-        user.profile.name = req.body.name.trim() || '';
-        user.profile.location = req.body.location.trim() || '';
-        user.profile.bio = req.body.bio.trim() || '';
 
-        if (req.file) {
-            console.log("Changing Picture now to: " + req.file.filename);
-            user.profile.picture = req.file.filename;
-        }
+        user.interest = req.body.interest;
+        user.consent = true;
 
         user.save((err) => {
             if (err) {
-                if (err.code === 11000) {
-                    return res.redirect('/account/signup_info');
-                }
                 return next(err);
             }
-            req.flash('success', { msg: 'Profile information has been updated.' });
-            return res.redirect('/com');
+            res.set('Content-Type', 'application/json; charset=UTF-8');
+            res.send({ result: "success" });
         });
     });
 };
+
 
 /**
  * GET /account
  * Profile page.
  */
-exports.getAccount = (req, res) => {
-    res.render('account/profile', {
-        title: 'Account Management'
-    });
-};
+// exports.getAccount = (req, res) => {
+//     res.render('account/profile', {
+//         title: 'Account Management'
+//     });
+// };
 
 /**
  * GET /me
  * Profile page.
  */
-exports.getMe = (req, res) => {
-    User.findById(req.user.id)
-        .populate({
-            path: 'posts.comments.actor',
-            model: 'Actor'
-        })
-        .exec(function(err, user) {
-            if (err) { return next(err); }
-            var allPosts = user.getPosts();
-            res.render('me', { posts: allPosts, title: user.profile.name || user.email || user.id });
-        });
-};
+// exports.getMe = (req, res) => {
+//     User.findById(req.user.id)
+//         .populate({
+//             path: 'posts.comments.actor',
+//             model: 'Actor'
+//         })
+//         .exec(function(err, user) {
+//             if (err) { return next(err); }
+//             var allPosts = user.getPosts();
+//             res.render('me', { posts: allPosts, title: user.profile.name || user.email || user.id });
+//         });
+// };
 
 /**
  * POST /account/profile
  * Update profile information.
  */
-exports.postUpdateProfile = (req, res, next) => {
-    req.assert('email', 'Please enter a valid email address.').isEmail();
-    req.sanitize('email').normalizeEmail({ remove_dots: false });
+// exports.postUpdateProfile = (req, res, next) => {
+//     req.assert('email', 'Please enter a valid email address.').isEmail();
+//     req.sanitize('email').normalizeEmail({ remove_dots: false });
 
-    const errors = req.validationErrors();
+//     const errors = req.validationErrors();
 
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/account');
-    }
+//     if (errors) {
+//         req.flash('errors', errors);
+//         return res.redirect('/account');
+//     }
 
-    User.findById(req.user.id, (err, user) => {
-        if (err) { return next(err); }
-        user.email = req.body.email || '';
-        user.profile.name = req.body.name || '';
-        user.profile.location = req.body.location || '';
-        user.profile.bio = req.body.bio || '';
+//     User.findById(req.user.id, (err, user) => {
+//         if (err) { return next(err); }
+//         user.email = req.body.email || '';
+//         user.profile.name = req.body.name || '';
+//         user.profile.location = req.body.location || '';
+//         user.profile.bio = req.body.bio || '';
 
-        if (req.file) {
-            console.log("Changing Picture now to: " + req.file.filename);
-            user.profile.picture = req.file.filename;
-        }
+//         if (req.file) {
+//             console.log("Changing Picture now to: " + req.file.filename);
+//             user.profile.picture = req.file.filename;
+//         }
 
-        user.save((err) => {
-            if (err) {
-                if (err.code === 11000) {
-                    req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
-                    return res.redirect('/account');
-                }
-                return next(err);
-            }
-            req.flash('success', { msg: 'Profile information has been updated.' });
-            res.redirect('/account');
-        });
-    });
-};
+//         user.save((err) => {
+//             if (err) {
+//                 if (err.code === 11000) {
+//                     req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
+//                     return res.redirect('/account');
+//                 }
+//                 return next(err);
+//             }
+//             req.flash('success', { msg: 'Profile information has been updated.' });
+//             res.redirect('/account');
+//         });
+//     });
+// };
 
 /**
  * POST /account/password
  * Update current password.
  */
-exports.postUpdatePassword = (req, res, next) => {
-    req.assert('password', 'Password must be at least 4 characters long').len(4);
-    req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+// exports.postUpdatePassword = (req, res, next) => {
+//     req.assert('password', 'Password must be at least 4 characters long').len(4);
+//     req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
-    const errors = req.validationErrors();
+//     const errors = req.validationErrors();
 
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/account');
-    }
+//     if (errors) {
+//         req.flash('errors', errors);
+//         return res.redirect('/account');
+//     }
 
-    User.findById(req.user.id, (err, user) => {
-        if (err) { return next(err); }
-        user.password = req.body.password;
-        user.save((err) => {
-            if (err) { return next(err); }
-            req.flash('success', { msg: 'Password has been changed.' });
-            res.redirect('/account');
-        });
-    });
-};
+//     User.findById(req.user.id, (err, user) => {
+//         if (err) { return next(err); }
+//         user.password = req.body.password;
+//         user.save((err) => {
+//             if (err) { return next(err); }
+//             req.flash('success', { msg: 'Password has been changed.' });
+//             res.redirect('/account');
+//         });
+//     });
+// };
 
 /**
  * POST /pageLog

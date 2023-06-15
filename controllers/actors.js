@@ -9,7 +9,8 @@ const _ = require('lodash');
  */
 exports.getActors = (req, res) => {
     Actor.find((err, docs) => {
-        res.render('actors', { actors: docs });
+        return res.send({ usernames: docs.map(a => a.username) });
+        // return res.render('actors', { actors: docs });
     });
 };
 

@@ -1,5 +1,7 @@
 const passport = require('passport');
 const request = require('request');
+const url = require('url');
+
 const LocalStrategy = require('passport-local').Strategy;
 
 const User = require('../models/User');
@@ -40,7 +42,10 @@ exports.isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect('/login');
+    res.redirect(url.format({
+        pathname: "/login",
+        query: req.query,
+    }));
 };
 
 /**

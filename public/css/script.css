@@ -29,24 +29,6 @@
 }
 
 
-/*CSS for Ads*/
-
-.ui.fluid.card.dim.adPost {
-    margin-bottom: 2em;
-    background-color: #F5F5F5;
-}
-
-.suggestedHeader {
-    font-weight: bold;
-    margin-bottom: 1em;
-}
-
-.suggestedHeader i.close.icon {
-    float: right;
-    cursor: pointer
-}
-
-
 /*CSS for adding new comment*/
 
 .extra.content>.ui.fluid.left.labeled.right.icon.input>.ui.form {
@@ -70,4 +52,273 @@ textarea.newcomment {
 
 .extra.content>.ui.fluid.left.labeled.right.icon.input>i.big.send.link.icon {
     margin-right: 4px;
+}
+
+
+/* ---- VIDEO CSS ---- */
+
+.ui.fluid.card {
+    min-height: calc(100vh - 150px);
+}
+
+video {
+    width: 100%;
+    min-height: calc(100vh - 300px);
+    background-color: black;
+}
+
+.six.wide.column.centered {
+    padding: 0;
+    border-right: #d4d4d5 solid 1px;
+}
+
+
+/* ---- VIDEO FUNCTIONALIIES CSS ---- */
+
+.content.buttons {
+    margin: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.ui.like.button,
+.ui.unlike.button,
+.ui.flag.button,
+.ui.share.button {
+    /* -webkit-transition: all 0.15s ease;
+    -moz-transition: all 0.15s ease;
+    -o-transition: all 0.15s ease;
+    transition: all 0.15s ease; */
+    border: 1px solid #D3D3D3 !important;
+    border-radius: 3em;
+}
+
+.ui.buttons.small {
+    justify-content: space-around;
+}
+
+.secondary-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.ui.button,
+.ui.button:focus {
+    background-color: #f9f9f9;
+    margin: 0.75em 0.75em 0.75em 0px;
+}
+
+.ui.left.labeled.button a {
+    border-radius: 3em 0 0 3em;
+}
+
+.ui.right.labeled.button a {
+    border-radius: 0 3em 3em 0;
+}
+
+.ui.labeled.button .ui.button {
+    border-radius: 0;
+}
+
+
+/* .ui.like.button.green {
+    background-color: #e0e0e0;
+    border-color: #21ba45 !important;
+    color: #21ba45 !important;
+    font-weight: bold !important;
+} */
+
+
+/* ---- COMMENT FORM TO VIDEO AND COMMENTS CSS ---- */
+
+.ui.form {
+    display: inline-block;
+    width: 100%;
+    margin-top: 1em;
+}
+
+.ui.form>.inline.field {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0em !important;
+}
+
+.ui.form>.inline.field>.image {
+    max-width: 44px !important;
+    width: 100%;
+    height: auto;
+    background-color: #a6a488;
+    border-radius: 50% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.ui.form>.inline.field>.image>img.ui.image.rounded {
+    width: 65%
+}
+
+textarea {
+    font-size: 1.1em !important;
+}
+
+.ui.button.replyToVideo {
+    float: right;
+    margin-top: 1em !important;
+    display: none;
+}
+
+.ui.button.replyToComment {
+    float: right;
+    margin-top: 1em !important;
+}
+
+
+/* ---- COMMENTS ---- */
+
+.ui.info.message.helper {
+    background-color: #f8ffff;
+    box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent !important;
+}
+
+.ui.comments {
+    margin-top: 1em;
+    margin-bottom: 0.25em;
+    height: 53vh;
+    overflow-y: auto;
+    max-width: none;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.comment {
+    /* margin: 1em 1em 1em 0em; */
+    padding: 0.5em !important;
+}
+
+.ui.comments,
+.ui.comments>h3 {
+    font-size: 1.25em;
+}
+
+.ui.comments>form.ui.reply.form {
+    width: 100%;
+}
+
+.comment>.comments {
+    padding-left: 3em !important;
+    padding-bottom: 0em !important;
+}
+
+.comment>.image {
+    width: 2.5em;
+    height: 2.5em;
+    margin: 0.2em 0.2em 0 0;
+    float: left;
+    background-color: #b7c9c8;
+    border-radius: 50% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.comment>.image.user_img {
+    background-color: #c9ba9b;
+}
+
+.comment>.image>a.avatar {
+    margin: 0 !important;
+}
+
+.comment>.image>a.avatar>img {
+    width: 65% !important;
+}
+
+.ui.comments .comment>.image~.content {
+    margin-left: 3.5em
+}
+
+.glowBorder {
+    box-shadow: 0 0 0 1px rgba(201, 186, 155, .22) inset, 0 2px 4px 0 rgba(201, 186, 155, .12), 0 2px 10px 0 rgba(201, 186, 155, .15);
+    background-color: #fffaf3 !important;
+    color: #573a08;
+}
+
+
+/* notification popups */
+
+
+/* https://stackoverflow.com/questions/26421274/css-circular-cropping-of-rectangle-image */
+
+.ui.info.message {
+    background-color: #ffffff;
+    box-shadow: 0 1px 10px #2B8490 !important;
+}
+
+.ui.sticky.notificationPopup .label {
+    overflow: hidden;
+    width: 3em;
+    height: 3em;
+    border-radius: 50% !important;
+    background-color: #b7c9c8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.ui.feed>.event>.label>img.popupNotificationImage {
+    width: 65%;
+    border-radius: 0%;
+}
+
+#desktopPopup,
+#mobilePopup {
+    padding-bottom: 4em;
+    padding-left: 1em;
+    padding-right: 1em;
+    display: none;
+    cursor: pointer;
+}
+
+.three.wide.column.centered {
+    margin-left: 0;
+}
+
+
+/** when page width < 1250px **/
+
+@media (max-width: 1250px) {
+    .largeScreen {
+        transition: 0.8s all ease;
+        display: none;
+        /** to hide/show the navbar items **/
+    }
+    .mediumScreen {
+        transition: 0.8s all ease;
+        display: inline;
+        /** to hide/show the navbar icon**/
+    }
+    .ui.attached.buttons {
+        margin-top: 0px;
+    }
+    .ui.reply.button,
+    .ui.flag.button,
+    .ui.share.button {
+        border-style: solid;
+        border-color: rgba(0, 0, 0, .3);
+        border-width: 0.1px 0.1px 0 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .ui.comments {
+        height: auto !important;
+        max-width: none;
+    }
 }

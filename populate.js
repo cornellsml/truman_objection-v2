@@ -97,24 +97,24 @@ async function doPopulate() {
                 resolve("done");
             });
         });
-    }).then(function(result) { //Convert the comments csv file to json, store in comment_list\
-        return new Promise((resolve, reject) => {
-            console.log(color_start, "Reading notification list...");
-            CSVToJSON().fromFile(notifications_inputFile).then(function(json_array) {
-                notification_list = json_array;
-                console.log(color_success, "Finished getting the notification list");
-                resolve("done");
-            });
-        });
-    }).then(function(result) { //Convert the notification reply csv file to json, store in comment_list\
-        return new Promise((resolve, reject) => {
-            console.log(color_start, "Reading notification reply list...");
-            CSVToJSON().fromFile(notifications_replies_inputFile).then(function(json_array) {
-                notification_reply_list = json_array;
-                console.log(color_success, "Finished getting the notification reply list");
-                resolve("done");
-            });
-        });
+        // }).then(function(result) { //Convert the comments csv file to json, store in comment_list\
+        //     return new Promise((resolve, reject) => {
+        //         console.log(color_start, "Reading notification list...");
+        //         CSVToJSON().fromFile(notifications_inputFile).then(function(json_array) {
+        //             notification_list = json_array;
+        //             console.log(color_success, "Finished getting the notification list");
+        //             resolve("done");
+        //         });
+        //     });
+        // }).then(function(result) { //Convert the notification reply csv file to json, store in comment_list\
+        //     return new Promise((resolve, reject) => {
+        //         console.log(color_start, "Reading notification reply list...");
+        //         CSVToJSON().fromFile(notifications_replies_inputFile).then(function(json_array) {
+        //             notification_reply_list = json_array;
+        //             console.log(color_success, "Finished getting the notification reply list");
+        //             resolve("done");
+        //         });
+        //     });
         /*************************
         Create all the Actors in the simulation
         Must be done before creating any other instances
@@ -127,10 +127,9 @@ async function doPopulate() {
                         username: actor_raw.username,
                         profile: {
                             name: actor_raw.name,
-                            gender: actor_raw.gender,
-                            age: actor_raw.age,
                             location: actor_raw.location,
                             bio: actor_raw.bio,
+                            color: actor_raw.color,
                             picture: actor_raw.picture
                         },
                         class: actor_raw.class
@@ -179,8 +178,9 @@ async function doPopulate() {
                                 body: new_post.body,
                                 picture: new_post.picture,
                                 likes: getLikes(),
+                                unlikes: getLikes(),
                                 actor: act,
-                                time: timeStringToNum(new_post.time) || null,
+                                time: new_post.time || null,
                                 class: new_post.class
                             }
 
@@ -215,114 +215,114 @@ async function doPopulate() {
         Creates each notification(replies) and uploads it to the DB
         Actors must be in DB first to add them correctly to the post
         *************************/
-    }).then(function(result) {
-        console.log(color_start, "Starting to populate notifications (replies) collection...");
-        return new Promise((resolve, reject) => {
-            async.each(notification_reply_list, function(new_notify, callback) {
-                    Actor.findOne({ username: new_notify.actor }, (err, act) => {
-                        if (err) {
-                            console.log(color_error, "ERROR: Something went wrong with finding actor in database");
-                            console.log(err);
-                            return;
-                        }
-                        if (act) {
-                            var notifydetail = {
-                                actor: act,
-                                notificationType: 'reply',
-                                time: timeStringToNum(new_notify.time),
-                                userPost: new_notify.userPostID,
-                                replyBody: new_notify.body
-                            };
+        // }).then(function(result) {
+        //     console.log(color_start, "Starting to populate notifications (replies) collection...");
+        //     return new Promise((resolve, reject) => {
+        //         async.each(notification_reply_list, function(new_notify, callback) {
+        //                 Actor.findOne({ username: new_notify.actor }, (err, act) => {
+        //                     if (err) {
+        //                         console.log(color_error, "ERROR: Something went wrong with finding actor in database");
+        //                         console.log(err);
+        //                         return;
+        //                     }
+        //                     if (act) {
+        //                         var notifydetail = {
+        //                             actor: act,
+        //                             notificationType: 'reply',
+        //                             time: timeStringToNum(new_notify.time),
+        //                             userPost: new_notify.userPostID,
+        //                             replyBody: new_notify.body
+        //                         };
 
-                            var notify = new Notification(notifydetail);
-                            notify.save(function(err) {
-                                if (err) {
-                                    console.log(color_error, "ERROR: Something went wrong with saving notification(reply) in database");
-                                    callback(err);
-                                }
-                                // console.log('Saved New Notification(reply): ' + new_notify.id);
-                                callback();
-                            });
-                        } else { //Else no actor found
-                            console.log(color_error, "ERROR: Actor not found in database");
-                            callback();
-                        }
-                    });
-                },
-                function(err) {
-                    if (err) {
-                        console.log(color_error, "ERROR: Something went wrong with saving notifications(replies) in database");
-                        callback(err);
-                    }
-                    // Return response
-                    console.log(color_success, "All notifications(replies) added to database!")
-                    resolve('Promise is resolved successfully.');
-                    return 'Loaded Notifications';
-                }
-            );
-        });
-        /*************************
-        Creates each notification(likes, reads) and uploads it to the DB
-        Actors must be in DB first to add them correctly to the post
-        *************************/
-    }).then(function(result) {
-        console.log(color_start, "Starting to populate notifications (likes, reads) collection...");
-        return new Promise((resolve, reject) => {
-            async.each(notification_list, function(new_notify, callback) {
-                    Actor.findOne({ username: new_notify.actor }, (err, act) => {
-                        if (err) {
-                            console.log(color_error, "ERROR: Something went wrong with finding actor in database");
-                            console.log(err);
-                            return;
-                        }
-                        if (act) {
-                            var notifydetail = {
-                                actor: act,
-                                notificationType: new_notify.type,
-                                time: timeStringToNum(new_notify.time)
-                            };
+        //                         var notify = new Notification(notifydetail);
+        //                         notify.save(function(err) {
+        //                             if (err) {
+        //                                 console.log(color_error, "ERROR: Something went wrong with saving notification(reply) in database");
+        //                                 callback(err);
+        //                             }
+        //                             // console.log('Saved New Notification(reply): ' + new_notify.id);
+        //                             callback();
+        //                         });
+        //                     } else { //Else no actor found
+        //                         console.log(color_error, "ERROR: Actor not found in database");
+        //                         callback();
+        //                     }
+        //                 });
+        //             },
+        //             function(err) {
+        //                 if (err) {
+        //                     console.log(color_error, "ERROR: Something went wrong with saving notifications(replies) in database");
+        //                     callback(err);
+        //                 }
+        //                 // Return response
+        //                 console.log(color_success, "All notifications(replies) added to database!")
+        //                 resolve('Promise is resolved successfully.');
+        //                 return 'Loaded Notifications';
+        //             }
+        //         );
+        //     });
+        //     /*************************
+        //     Creates each notification(likes, reads) and uploads it to the DB
+        //     Actors must be in DB first to add them correctly to the post
+        //     *************************/
+        // }).then(function(result) {
+        //     console.log(color_start, "Starting to populate notifications (likes, reads) collection...");
+        //     return new Promise((resolve, reject) => {
+        //         async.each(notification_list, function(new_notify, callback) {
+        //                 Actor.findOne({ username: new_notify.actor }, (err, act) => {
+        //                     if (err) {
+        //                         console.log(color_error, "ERROR: Something went wrong with finding actor in database");
+        //                         console.log(err);
+        //                         return;
+        //                     }
+        //                     if (act) {
+        //                         var notifydetail = {
+        //                             actor: act,
+        //                             notificationType: new_notify.type,
+        //                             time: timeStringToNum(new_notify.time)
+        //                         };
 
-                            if (new_notify.userPost >= 0 && new_notify.userPost) {
-                                notifydetail.userPost = new_notify.userPost;
-                            } else if (new_notify.userReply >= 0 && new_notify.userReply) {
-                                notifydetail.userReply = new_notify.userReply;
-                            } else if (new_notify.actorReply >= 0 && new_notify.actorReply) {
-                                notifydetail.actorReply = new_notify.actorReply;
-                            }
+        //                         if (new_notify.userPost >= 0 && new_notify.userPost) {
+        //                             notifydetail.userPost = new_notify.userPost;
+        //                         } else if (new_notify.userReply >= 0 && new_notify.userReply) {
+        //                             notifydetail.userReply = new_notify.userReply;
+        //                         } else if (new_notify.actorReply >= 0 && new_notify.actorReply) {
+        //                             notifydetail.actorReply = new_notify.actorReply;
+        //                         }
 
-                            var notify = new Notification(notifydetail);
-                            notify.save(function(err) {
-                                if (err) {
-                                    console.log(color_error, "ERROR: Something went wrong with saving notification(reply) in database");
-                                    callback(err);
-                                }
-                                // console.log('Saved New Notification');
-                                callback();
-                            });
-                        } else { //Else no actor found
-                            console.log(color_error, "ERROR: Actor not found in database");
-                            callback();
-                        }
-                    });
-                },
-                function(err) {
-                    if (err) {
-                        console.log(color_error, "ERROR: Something went wrong with saving notifications in database");
-                        callback(err);
-                    }
-                    // Return response
-                    console.log(color_success, "All notifications added to database!")
-                    resolve('Promise is resolved successfully.');
-                    return 'Loaded Notifications';
-                }
-            );
-        });
-        /*************************
-        Creates inline comments for each post
-        Looks up actors and posts to insert the correct comment
-        Does this in series to insure comments are put in the correct order
-        Takes a while to run because of this.
-        *************************/
+        //                         var notify = new Notification(notifydetail);
+        //                         notify.save(function(err) {
+        //                             if (err) {
+        //                                 console.log(color_error, "ERROR: Something went wrong with saving notification(reply) in database");
+        //                                 callback(err);
+        //                             }
+        //                             // console.log('Saved New Notification');
+        //                             callback();
+        //                         });
+        //                     } else { //Else no actor found
+        //                         console.log(color_error, "ERROR: Actor not found in database");
+        //                         callback();
+        //                     }
+        //                 });
+        //             },
+        //             function(err) {
+        //                 if (err) {
+        //                     console.log(color_error, "ERROR: Something went wrong with saving notifications in database");
+        //                     callback(err);
+        //                 }
+        //                 // Return response
+        //                 console.log(color_success, "All notifications added to database!")
+        //                 resolve('Promise is resolved successfully.');
+        //                 return 'Loaded Notifications';
+        //             }
+        //         );
+        //     });
+        //     /*************************
+        //     Creates inline comments for each post
+        //     Looks up actors and posts to insert the correct comment
+        //     Does this in series to insure comments are put in the correct order
+        //     Takes a while to run because of this.
+        //     *************************/
     }).then(function(result) {
         console.log(color_start, "Starting to populate post replies...");
         return new Promise((resolve, reject) => {
@@ -336,7 +336,7 @@ async function doPopulate() {
                                         body: new_reply.body,
                                         likes: getLikesComment(),
                                         actor: act,
-                                        time: timeStringToNum(new_reply.time)
+                                        time: new_reply.time || null
                                     };
 
                                     pr.comments.push(comment_detail);
@@ -345,7 +345,6 @@ async function doPopulate() {
                                     pr.save(function(err) {
                                         if (err) {
                                             console.log(color_error, "ERROR: Something went wrong with saving reply in database");
-                                            console.log(new_reply.id);
                                             callback(err);
                                         }
                                         // console.log('Saved New Reply');
@@ -353,12 +352,12 @@ async function doPopulate() {
                                     });
                                 } else { //Else no post found
                                     console.log(color_error, "ERROR: Post not found in database");
-                                    console.log(new_reply.id);
                                     callback();
                                 }
                             });
                         } else { //Else no actor found
                             console.log(color_error, "ERROR: Actor not found in database");
+                            console.log(act);
                             callback();
                         }
                     })

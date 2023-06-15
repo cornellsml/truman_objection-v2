@@ -1,54 +1,88 @@
 function likePost(e) {
     const target = $(e.target).closest('.ui.like.button');
-    const label = target.closest('.ui.like.button').next("a.ui.basic.red.left.pointing.label.count");
-    const postID = target.closest(".ui.fluid.card").attr("postID");
-    const postClass = target.closest(".ui.fluid.card").attr("postClass");
+    const post = target.closest(".ui.fluid.card");
+    const label = post.find("a.ui.basic.green.right.pointing.label");
+    const postID = post.attr("postID");
+    const postClass = post.attr("postClass");
+    const like = Date.now();
 
-    if (target.hasClass("red")) { //Unlike Post
-        target.removeClass("red");
+    if (target.hasClass("green")) { //Undo like Post
+        target.removeClass("green");
         label.html(function(i, val) { return val * 1 - 1 });
-        const unlike = Date.now();
+    } else { //Like Post
+        target.addClass("green");
+        label.html(function(i, val) { return val * 1 + 1 });
 
-        if (target.closest(".ui.fluid.card").attr("type") == 'userPost')
-            $.post("/userPost_feed", {
-                postID: postID,
-                unlike: unlike,
-                _csrf: $('meta[name="csrf-token"]').attr('content')
-            });
-        else
+        let dislike = post.find('.ui.unlike.button');
+        if (dislike.hasClass("red")) {
+            dislike.removeClass("red");
+            var label2 = dislike.siblings("a.ui.basic.red.left.pointing.label");
+            label2.html(function(i, val) { return val * 1 - 1 });
             $.post("/feed", {
                 postID: postID,
-                unlike: unlike,
+                unlike: like,
                 postClass: postClass,
                 _csrf: $('meta[name="csrf-token"]').attr('content')
             });
+        }
+    }
+    $.post("/feed", {
+        postID: postID,
+        like: like,
+        postClass: postClass,
+        _csrf: $('meta[name="csrf-token"]').attr('content')
+    });
+}
+
+function unlikePost(e) {
+    const target = $(e.target).closest('.ui.unlike.button');
+    const post = target.closest(".ui.fluid.card");
+    const label = post.find("a.ui.basic.red.left.pointing.label");
+    const postID = post.attr("postID");
+    const postClass = post.attr("postClass");
+    const unlike = Date.now();
+
+    if (target.hasClass("red")) { //Undo unlike Post
+        target.removeClass("red");
+        label.html(function(i, val) { return val * 1 - 1 });
     } else { //Like Post
         target.addClass("red");
         label.html(function(i, val) { return val * 1 + 1 });
-        const like = Date.now();
 
-        if (target.closest(".ui.fluid.card").attr("type") == 'userPost')
-            $.post("/userPost_feed", {
-                postID: postID,
-                like: like,
-                _csrf: $('meta[name="csrf-token"]').attr('content')
-            });
-        else
+        let like = post.find('.ui.like.button');
+        if (like.hasClass("green")) {
+            like.removeClass("green");
+            var label2 = like.siblings("a.ui.basic.green.right.pointing.label");
+            label2.html(function(i, val) { return val * 1 - 1 });
             $.post("/feed", {
                 postID: postID,
-                like: like,
+                like: unlike,
                 postClass: postClass,
                 _csrf: $('meta[name="csrf-token"]').attr('content')
             });
+        }
     }
+
+    $.post("/feed", {
+        postID: postID,
+        unlike: unlike,
+        postClass: postClass,
+        _csrf: $('meta[name="csrf-token"]').attr('content')
+    });
 }
 
 function flagPost(e) {
     const target = $(e.target);
-    const post = target.closest(".ui.fluid.card.dim");
+    const post = target.closest(".ui.fluid.card");
     const postID = post.attr("postID");
     const postClass = post.attr("postClass");
     const flag = Date.now();
+
+    if (target.hasClass("orange")) { //Undo Flag Post
+        target.removeClass("orange");
+    } else { //Flag Post
+        target.addClass("orange");
+    }
 
     $.post("/feed", {
         postID: postID,
@@ -56,9 +90,25 @@ function flagPost(e) {
         postClass: postClass,
         _csrf: $('meta[name="csrf-token"]').attr('content')
     });
-    post.find(".ui.dimmer.flag").dimmer({ closable: false }).dimmer('show');
-    //repeat to ensure its closable
-    post.find(".ui.dimmer.flag").dimmer({ closable: false }).dimmer('show');
+}
+
+function sharePost(e) {
+    const target = $(e.target);
+    const post = target.closest(".ui.fluid.card");
+    const postID = post.attr("postID");
+    const postClass = post.attr("postClass");
+    const share = Date.now();
+
+    const pathname = window.location.href;
+    $(".pathname").html(pathname + "?postID=" + postID);
+    $('.ui.small.shareVideo.modal').modal('show');
+
+    $.post("/feed", {
+        postID: postID,
+        share: share,
+        postClass: postClass,
+        _csrf: $('meta[name="csrf-token"]').attr('content')
+    });
 }
 
 function likeComment(e) {
@@ -257,11 +307,17 @@ $(window).on('load', () => {
     //Create a new Comment
     $("i.big.send.link.icon").on('click', addComment);
 
-    //Like/Unlike Post
+    //Like Post
     $('.like.button').on('click', likePost);
+
+    //Unlike Post
+    $('.unlike.button').on('click', unlikePost);
 
     //Flag Post
     $('.flag.button').on('click', flagPost);
+
+    //Share Post
+    $('.share.button').on('click', sharePost);
 
     // ************ Actions on Comments***************
     // Like/Unlike comment

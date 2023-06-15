@@ -3,6 +3,16 @@ body {
     padding: 0em;
 }
 
+
+/* Header CSS*/
+
+.ui.menu>.container {
+    justify-content: center
+}
+
+
+/* General CSS */
+
 .hidden {
     display: none;
 }
@@ -74,11 +84,55 @@ button {
 
 /*Page Container*/
 
-#pagecontainer {
-    padding-top: 50px;
+#pagegrid {
     justify-content: center;
 }
 
-#pagegrid {
+#pagecontainer {
+    padding-top: 90px;
     justify-content: center;
+}
+
+
+/* ---- CONTINUE TO NEXT PAGE BUTTON ---- */
+
+.ui.labeled.icon.button>.icon {
+    font-size: 25px;
+    width: 50px;
+}
+
+.ui.labeled.icon.button {
+    margin-bottom: 40px;
+}
+
+.ui.big.green.button {
+    background-color: #2b905a;
+}
+
+.ui.big.green.button:hover {
+    background-color: #349a64;
+}
+
+.ui.big.green.button:active {
+    background-color: #278552;
+}
+
+
+/*User Avatar in header*/
+
+.ui.simple.dropdown.item .image {
+    width: 44px;
+    height: 44px;
+    margin-right: 5px;
+    background-color: #a6a488;
+    border-radius: 50% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.ui.simple.dropdown.item .image>img.ui.image.rounded {
+    width: 60%;
+    margin-right: 1px;
 }

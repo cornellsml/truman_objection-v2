@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
-    email: { type: String, unique: true },
+    email: { type: String },
     password: String,
     // passwordResetToken: String,
     // passwordResetExpires: Date,
@@ -19,28 +19,29 @@ const userSchema = new mongoose.Schema({
     numComments: { type: Number, default: -1 }, //# of comments on posts (user and actor), it is used for indexing and commentID of uesr comments on posts (user and actor)
     numActorReplies: { type: Number, default: -1 }, //# of actor replies on user posts, it is used for indexing and commentID of actor comments on user posts
 
-    numPostLikes: { type: Number, default: 0 }, //# of actor posts liked
-    numCommentLikes: { type: Number, default: 0 }, //# of actor comments liked
+    // numPostLikes: { type: Number, default: 0 }, //# of actor posts liked
+    // numCommentLikes: { type: Number, default: 0 }, //# of actor comments liked
 
     lastNotifyVisit: Date, //Absolute Time, most recent visit to /notifications. First initialization is at account creation
     createdAt: Date, //Absolute Time user was created
     consent: { type: Boolean, default: false }, //Indicates if user has proceeded through welcome signup pages
 
-    mturkID: String,
+    mturkID: { type: String, unique: true },
 
-    group: String, //full group type for post displays. Values: 'var1', 'var2', 'var3'
+    group: Number, //0, 1, 2, 3, 4 (which video the offense and objection appears in)
+    interest: String, //'Science', 'Lifestyle', 'Education'
 
     tokens: Array,
 
-    blocked: [String], //list of usernames of actors user has blocked
-    reported: [String], //list of usernames of actors user has reported
-    followed: [String], //list of usernames of actors user has followed
-    blockReportAndFollowLog: [new Schema({
-        time: Date,
-        action: String,
-        report_issue: String,
-        actorName: String
-    })],
+    // blocked: [String], //list of usernames of actors user has blocked
+    // reported: [String], //list of usernames of actors user has reported
+    // followed: [String], //list of usernames of actors user has followed
+    // blockReportAndFollowLog: [new Schema({
+    //     time: Date,
+    //     action: String,
+    //     report_issue: String,
+    //     actorName: String
+    // })],
 
     study_days: { //how many times the user looked at the feed per day
         type: [Number],
@@ -48,30 +49,30 @@ const userSchema = new mongoose.Schema({
     }, //TODO: Update. It inaccurately +1, whenever creates a new post.
 
     // User Made posts
-    posts: [new Schema({
-        type: String, //Value: user_post
-        postID: Number, //postID for user post (0,1,2,3...)
-        body: { type: String, default: '', trim: true }, //body of post
-        picture: String, //picture for post
-        liked: { type: Boolean, default: false }, //has the user liked it?
-        likes: { type: Number, default: 0 }, //number of likes on post by actors (excludes user's like)
+    // posts: [new Schema({
+    //     type: String, //Value: user_post
+    //     postID: Number, //postID for user post (0,1,2,3...)
+    //     body: { type: String, default: '', trim: true }, //body of post
+    //     picture: String, //picture for post
+    //     liked: { type: Boolean, default: false }, //has the user liked it?
+    //     likes: { type: Number, default: 0 }, //number of likes on post by actors (excludes user's like)
 
-        //Comments for User Made Posts
-        comments: [new Schema({
-            actor: { type: Schema.ObjectId, ref: 'Actor' }, //If comment is by Actor
-            body: { type: String, default: '', trim: true }, //body of comment
-            commentID: Number, //ID of the comment
-            relativeTime: Number, //in milliseconds, relative time to when the user created their account
-            absTime: Date, //Exact time comment is made
-            new_comment: { type: Boolean, default: false }, //is this a comment from user?
-            liked: { type: Boolean, default: false }, //has the user liked it?
-            flagged: { type: Boolean, default: false }, //has the user flagged it?
-            likes: { type: Number, default: 0 } //number of likes on comment by actors (excludes user's like)
-        }, { versionKey: false })],
+    //     //Comments for User Made Posts
+    //     comments: [new Schema({
+    //         actor: { type: Schema.ObjectId, ref: 'Actor' }, //If comment is by Actor
+    //         body: { type: String, default: '', trim: true }, //body of comment
+    //         commentID: Number, //ID of the comment
+    //         relativeTime: Number, //in milliseconds, relative time to when the user created their account
+    //         absTime: Date, //Exact time comment is made
+    //         new_comment: { type: Boolean, default: false }, //is this a comment from user?
+    //         liked: { type: Boolean, default: false }, //has the user liked it?
+    //         flagged: { type: Boolean, default: false }, //has the user flagged it?
+    //         likes: { type: Number, default: 0 } //number of likes on comment by actors (excludes user's like)
+    //     }, { versionKey: false })],
 
-        absTime: Date, //Exact time post is made
-        relativeTime: { type: Number } //in milliseconds, relative time to when the user created their account
-    })],
+    //     absTime: Date, //Exact time post is made
+    //     relativeTime: { type: Number } //in milliseconds, relative time to when the user created their account
+    // })],
 
     log: [new Schema({ //Logins
         time: Date,
@@ -111,12 +112,13 @@ const userSchema = new mongoose.Schema({
         rereadTimes: { type: Number, default: 0 }, //number of times post has been viewed by user.
 
         liked: { type: Boolean, default: false }, //has the user liked it?
+        unliked: { type: Boolean, default: false }, //has the user disliked it?
         flagged: { type: Boolean, default: false }, // has the user flagged it?
+        shared: { type: Boolean, default: false }, //has the user shared it?
         likeTime: [Date], //absoluteTimes of times user has liked the post
         unlikeTime: [Date], //absoluteTimes of times user has unliked the post
         flagTime: [Date], //absoluteTimes of times user has flagged the post
-        hidden: { type: Boolean, default: false }, //has the user hidden it? Used for Ads only.
-        hideTime: [Date], //absoluteTimes of times user has hidden the post
+        shareTime: [Date], //absoluteTimes of times user has shared the post
         readTime: [Number], //in milliseconds, how long the user spent looking at the post (we do not record times less than 1.5 seconds and more than 24 hrs)
 
         comments: [new Schema({
@@ -139,6 +141,7 @@ const userSchema = new mongoose.Schema({
         name: String,
         location: String,
         bio: String,
+        color: String,
         picture: String
     }
 }, { timestamps: true, versionKey: false });

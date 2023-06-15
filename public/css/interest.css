@@ -18,11 +18,13 @@
     height: auto;
     position: relative;
     cursor: pointer;
-    padding: 15px 5px;
+    padding: 2.5em;
     margin: 10px;
     background-color: white;
     /* border: solid 0.75px;
     border-color: gray; */
+    border: solid 4px;
+    border-color: white;
     border-radius: 0.5em;
     display: flex;
     justify-content: center;
@@ -31,7 +33,7 @@
 }
 
 .images .image h2 {
-    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 .images .image p {
@@ -54,13 +56,12 @@
     border-radius: 0.5em;
 }
 
-i.icon.green {
+.image i.icon.green {
     float: right;
 }
 
-i.icon.green.hidden {
+.image i.icon.green.hidden {
     visibility: hidden;
-    float: left
 }
 
 .image i.icon.green.check {
