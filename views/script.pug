@@ -7,6 +7,8 @@ block content
     include ./partials/shareModal
     
 block scripts
+  script. 
+    var script = !{JSON.stringify(script)};
   script(src='/public/js/script.js')
   script(src='/public/js/postFunctionalities.js')
 

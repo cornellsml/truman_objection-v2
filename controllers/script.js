@@ -1,5 +1,6 @@
 const Script = require('../models/Script.js');
 const User = require('../models/User');
+const Actor = require('../models/Actor');
 const Notification = require('../models/Notification');
 const _ = require('lodash');
 
@@ -50,14 +51,42 @@ exports.getScript = (req, res, next) => {
                         model: 'Actor'
                     }
                 })
-                .exec(function(err, script_feed) {
+                .exec(async function(err, script_feed) {
                     if (err) { return next(err); }
 
                     //Final array of all posts to go in the feed
                     let finalfeed = [];
 
+                    const offense_actor = await Actor.find({ class: "offense_actor" }).exec();
+                    const objection_actor = await Actor.find({ class: "objection_actor" }).exec();
+
                     // //While there are regular posts or user-made posts to add to the final feed
                     while (script_feed.length) {
+                        //Check to see if offense or objection post 
+                        if (script_feed[0].postID % 5 == user.group) {
+                            const offense_comment = {
+                                commentID: 60,
+                                body: "LOL, what a waste of time! Did you make this video with your eyes closed? It's so poorly edited and boring. Nobody cares about your garbage content. Do us all a favor and stop wasting your time.",
+                                likes: 0,
+                                unlikes: 0,
+                                actor: offense_actor[0],
+                                time: script_feed[0].offense_time,
+
+                                subcomments: [{
+                                    commentID: 61,
+                                    body: "Shut your mouth.  What you said is wrong.  Don’t you know how to respect others?  Don’t be a jerk.",
+                                    likes: 0,
+                                    unlikes: 0,
+                                    actor: objection_actor[0],
+                                    time: script_feed[0].objection_time,
+                                    reply_to: 60
+                                }]
+                            };
+
+                            script_feed[0].comments.push(offense_comment);
+                        }
+
+
                         //Looking at the post in script_feed[0] now.
                         //For this post, check if there is a user feedAction matching this post's ID and get its index.
                         const feedIndex = _.findIndex(user.feedAction, function(o) { return o.post == script_feed[0].id; });
@@ -65,46 +94,54 @@ exports.getScript = (req, res, next) => {
                         if (feedIndex != -1) {
                             //User performed an action with this post
                             //Check to see if there are comment-type actions.
-                            // if (Array.isArray(user.feedAction[feedIndex].comments) && user.feedAction[feedIndex].comments) {
-                            //     //There are comment-type actions on this post.
-                            //     //For each comment on this post, add likes, flags, etc.
-                            //     for (const commentObject of user.feedAction[feedIndex].comments) {
-                            //         if (commentObject.new_comment) {
-                            //             // This is a new, user-made comment. Add it to the comments
-                            //             // list for this post.
-                            //             const cat = {
-                            //                 commentID: commentObject.new_comment_id,
-                            //                 body: commentObject.body,
-                            //                 likes: commentObject.likes,
-                            //                 time: commentObject.relativeTime,
+                            if (Array.isArray(user.feedAction[feedIndex].comments) && user.feedAction[feedIndex].comments) {
+                                //There are comment-type actions on this post.
+                                //For each comment on this post, add likes, flags, etc.
+                                for (const commentObject of user.feedAction[feedIndex].comments) {
+                                    if (commentObject.new_comment) {
+                                        //             // This is a new, user-made comment. Add it to the comments
+                                        //             // list for this post.
+                                        //             const cat = {
+                                        //                 commentID: commentObject.new_comment_id,
+                                        //                 body: commentObject.body,
+                                        //                 likes: commentObject.likes,
+                                        //                 time: commentObject.relativeTime,
 
-                            //                 new_comment: commentObject.new_comment,
-                            //                 liked: commentObject.liked
-                            //             };
-                            //             script_feed[0].comments.push(cat);
-                            //         } else {
-                            //             // This is not a new, user-created comment.
-                            //             // Get the comment index that corresponds to the correct comment
-                            //             const commentIndex = _.findIndex(script_feed[0].comments, function(o) { return o.id == commentObject.comment; });
-                            //             // If this comment's ID is found in script_feed, add likes, flags, etc.
-                            //             if (commentIndex != -1) {
-                            //                 // Check if there is a like recorded for this comment.
-                            //                 if (commentObject.liked) {
-                            //                     // Update the comment in script_feed.
-                            //                     script_feed[0].comments[commentIndex].liked = true;
-                            //                 }
-                            //                 // Check if there is a flag recorded for this comment.
-                            //                 if (commentObject.flagged) {
-                            //                     // Remove the comment from the post if it has been flagged.
-                            //                     script_feed[0].comments.splice(commentIndex, 1);
-                            //                 }
-                            //             }
-                            //         }
-                            //     }
-                            // }
-                            // script_feed[0].comments.sort(function(a, b) {
-                            //     return a.time - b.time;
-                            // });
+                                        //                 new_comment: commentObject.new_comment,
+                                        //                 liked: commentObject.liked
+                                        //             };
+                                        //             script_feed[0].comments.push(cat);
+                                    } else {
+                                        // This is not a new, user-created comment.
+                                        // Get the comment index that corresponds to the correct comment
+                                        const commentIndex = _.findIndex(script_feed[0].comments, function(o) { return o.id == commentObject.comment; });
+                                        // If this comment's ID is found in script_feed, add likes, flags, etc.
+                                        if (commentIndex != -1) {
+                                            // Check if there is a like recorded for this comment.
+                                            if (commentObject.liked) {
+                                                // Update the comment in script_feed.
+                                                script_feed[0].comments[commentIndex].liked = true;
+                                                script_feed[0].comments[commentIndex].likes++;
+                                            }
+                                            if (commentObject.unliked) {
+                                                // Update the comment in script_feed.
+                                                script_feed[0].comments[commentIndex].unliked = true;
+                                                script_feed[0].comments[commentIndex].unlikes++;
+                                            }
+                                            // Check if there is a flag recorded for this comment.
+                                            if (commentObject.flagged) {
+                                                // Remove the comment from the post if it has been flagged.
+                                                script_feed[0].comments.splice(commentIndex, 1);
+                                            }
+                                        } else {
+                                            // deal with subcomment.
+                                        }
+                                    }
+                                }
+                            }
+                            script_feed[0].comments.sort(function(a, b) {
+                                return b.time - a.time; // in descending order.
+                            });
                             // No longer looking at comments on this post.
                             // Now we are looking at the main post.
                             // Check if there user has viewed the post before.
@@ -146,16 +183,22 @@ exports.getScript = (req, res, next) => {
                             //     if (user.blocked.includes(script_feed[0].actor.username)) {
                             //         script_feed.splice(0, 1);
                             //     } else {
+                            script_feed[0].comments.sort(function(a, b) {
+                                return b.time - a.time;
+                            });
                             finalfeed.push(script_feed[0]);
                             script_feed.splice(0, 1);
                             // }
                         }
                     }
 
-                    //shuffle the feed
-                    // finalfeed = shuffle(finalfeed);
+                    //sort the feed
+                    finalfeed.sort(function(a, b) {
+                        return a.postID - b.postID;
+                    });
 
                     console.log("Script Size is now: " + finalfeed.length);
+                    console.log(finalfeed);
                     user.save((err) => {
                         if (err) {
                             return next(err);
@@ -297,7 +340,7 @@ exports.postUpdateFeedAction = (req, res, next) => {
                 } else {
                     user.feedAction[feedIndex].comments[commentIndex].likeTime = [like];
                 }
-                user.feedAction[feedIndex].comments[commentIndex].liked = true;
+                user.feedAction[feedIndex].comments[commentIndex].liked = !user.feedAction[feedIndex].comments[commentIndex].liked;
                 if (req.body.isUserComment != 'true') user.numCommentLikes++;
             }
 
@@ -309,7 +352,7 @@ exports.postUpdateFeedAction = (req, res, next) => {
                 } else {
                     user.feedAction[feedIndex].comments[commentIndex].unlikeTime = [unlike];
                 }
-                user.feedAction[feedIndex].comments[commentIndex].liked = false;
+                user.feedAction[feedIndex].comments[commentIndex].unliked = !user.feedAction[feedIndex].comments[commentIndex].unliked;
                 if (req.body.isUserComment != 'true') user.numCommentLikes--;
             }
 

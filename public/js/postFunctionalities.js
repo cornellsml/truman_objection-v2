@@ -112,65 +112,100 @@ function sharePost(e) {
 }
 
 function likeComment(e) {
-    const target = $(e.target);
-    const comment = target.parents(".comment");
-    const label = comment.find("span.num");
+    const target = $(e.target).closest('a.like'); //a.like
+    const comment = target.closest(".comment");
+    const label = target.find("span.num");
+    const icon = target.find("i.icon.thumbs.up");
 
     const postID = target.closest(".ui.fluid.card").attr("postID");
     const postClass = target.closest(".ui.fluid.card").attr("postClass");
     const commentID = comment.attr("commentID");
     const isUserComment = comment.find("a.author").attr('href') === '/me';
+    const like = Date.now();
 
-    if (target.hasClass("red")) { //Unlike comment
-        target.removeClass("red");
-        comment.find("i.heart.icon").removeClass("red");
-        target.html('Like');
+    if (target.hasClass("green")) { //Undo like comment
+        target.removeClass("green");
+        icon.removeClass("green");
         label.html(function(i, val) { return val * 1 - 1 });
-        const unlike = Date.now();
+    } else { //Like comment
+        target.addClass("green");
+        icon.addClass("green");
+        label.html(function(i, val) { return val * 1 + 1 });
 
-        if (target.closest(".ui.fluid.card").attr("type") == 'userPost') {
-            $.post("/userPost_feed", {
-                postID: postID,
-                commentID: commentID,
-                unlike: unlike,
-                isUserComment: isUserComment,
-                _csrf: $('meta[name="csrf-token"]').attr('content')
-            });
-        } else {
+        let dislike = target.siblings("a.unlike");
+        if (dislike.hasClass("red")) {
+            dislike.removeClass("red");
+            var label2 = dislike.find("span.num");
+            var icon2 = dislike.find("i.icon.thumbs.down");
+            label2.html(function(i, val) { return val * 1 - 1 });
+            icon2.removeClass("red");
             $.post("/feed", {
                 postID: postID,
                 commentID: commentID,
-                unlike: unlike,
+                unlike: like,
                 isUserComment: isUserComment,
                 postClass: postClass,
                 _csrf: $('meta[name="csrf-token"]').attr('content')
             });
         }
-    } else { //Like comment
-        target.addClass("red");
-        comment.find("i.heart.icon").addClass("red");
-        target.html('Unlike');
-        label.html(function(i, val) { return val * 1 + 1 });
-        const like = Date.now();
+    }
+    $.post("/feed", {
+        postID: postID,
+        commentID: commentID,
+        like: like,
+        isUserComment: isUserComment,
+        postClass: postClass,
+        _csrf: $('meta[name="csrf-token"]').attr('content')
+    });
+}
 
-        if (target.closest(".ui.fluid.card").attr("type") == 'userPost')
-            $.post("/userPost_feed", {
-                postID: postID,
-                commentID: commentID,
-                like: like,
-                isUserComment: isUserComment,
-                _csrf: $('meta[name="csrf-token"]').attr('content')
-            });
-        else
+function unlikeComment(e) {
+    const target = $(e.target).closest('a.unlike'); //a.unlike
+    const comment = target.closest(".comment");
+    const label = target.find("span.num");
+    const icon = target.find("i.icon.thumbs.down");
+
+    const postID = target.closest(".ui.fluid.card").attr("postID");
+    const postClass = target.closest(".ui.fluid.card").attr("postClass");
+    const commentID = comment.attr("commentID");
+    const isUserComment = comment.find("a.author").attr('href') === '/me';
+    const unlike = Date.now();
+
+    if (target.hasClass("red")) { //Undo unlike comment
+        target.removeClass("red");
+        icon.removeClass("red");
+        label.html(function(i, val) { return val * 1 - 1 });
+    } else { //unlike comment
+        target.addClass("red");
+        icon.addClass("red");
+        label.html(function(i, val) { return val * 1 + 1 });
+
+        let like = target.siblings("a.like");
+        if (like.hasClass("green")) {
+            like.removeClass("green");
+            var label2 = like.find("span.num");
+            var icon2 = like.find("i.icon.thumbs.up");
+            label2.html(function(i, val) { return val * 1 - 1 });
+            icon2.removeClass("green");
+
             $.post("/feed", {
                 postID: postID,
                 commentID: commentID,
-                like: like,
+                like: unlike,
                 isUserComment: isUserComment,
                 postClass: postClass,
                 _csrf: $('meta[name="csrf-token"]').attr('content')
             });
+        }
     }
+    $.post("/feed", {
+        postID: postID,
+        commentID: commentID,
+        unlike: unlike,
+        isUserComment: isUserComment,
+        postClass: postClass,
+        _csrf: $('meta[name="csrf-token"]').attr('content')
+    });
 }
 
 function flagComment(e) {
@@ -260,32 +295,6 @@ function addComment(e) {
     }
 }
 
-function followUser(e) {
-    const target = $(e.target);
-    const username = target.attr('actor_un');
-    if (target.text().trim() == "Follow") { //Follow Actor
-        $(`.ui.basic.primary.follow.button[actor_un=${username}]`).each(function(i, element) {
-            const button = $(element);
-            button.text("Following");
-            button.prepend("<i class='check icon'></i>");
-        })
-        $.post("/user", {
-            followed: username,
-            _csrf: $('meta[name="csrf-token"]').attr('content')
-        })
-    } else { //Unfollow Actor
-        $(`.ui.basic.primary.follow.button[actor_un=${username}]`).each(function(i, element) {
-            const button = $(element);
-            button.text("Follow");
-            button.find('i').remove();
-        })
-        $.post("/user", {
-            unfollowed: username,
-            _csrf: $('meta[name="csrf-token"]').attr('content')
-        })
-    }
-}
-
 $(window).on('load', () => {
     // ************ Actions on Main Post ***************
     // Focus new comment element if "Reply" button is clicked
@@ -320,12 +329,12 @@ $(window).on('load', () => {
     $('.share.button').on('click', sharePost);
 
     // ************ Actions on Comments***************
-    // Like/Unlike comment
-    $('a.like.comment').on('click', likeComment);
+    // Like comment
+    $('a.like').on('click', likeComment);
+
+    // Unlike comment
+    $('a.unlike').on('click', unlikeComment);
 
     //Flag comment
     $('a.flag.comment').on('click', flagComment);
-
-    //Follow button
-    $('.ui.basic.primary.follow.button').on('click', followUser);
 });

@@ -1,40 +1,26 @@
 $(window).on("load", function() {
-    $('.ui.tiny.post.modal').modal({
-        observeChanges: true
-    });
-
-    //Add new post Modal functionality
-    $("#newpost, a.item.newpost").click(function() {
-        $('.ui.tiny.post.modal').modal('show');
-    });
-
-    //new post validator (picture and text can not be empty)
-    $('#postform').form({
-        on: 'blur',
-        fields: {
-            body: {
-                identifier: 'body',
-                rules: [{
-                    type: 'empty',
-                    prompt: 'Please add some text about your meal.'
-                }]
-            },
-            picinput: {
-                identifier: 'picinput',
-                rules: [{
-                    type: 'notExactly[/public/photo-camera.svg]',
-                    prompt: 'Please click on the Camera Icon to add a photo.'
-                }]
+    $('video').on("timeupdate", function() {
+        const post = $(this).parents('.ui.fluid.card');
+        const postTimeStamps = JSON.parse(post.attr('postTimeStamps'));
+        const postTimeStampsDictionary = JSON.parse(post.attr('postTimeStampsDict'));
+        for (const timestamp of postTimeStamps) {
+            if (this.currentTime * 1000 > timestamp) {
+                const comments = postTimeStampsDictionary[timestamp];
+                for (const comment of comments) {
+                    const commentElement = $(`.comment[index=${comment}]`);
+                    if (!commentElement.is(":visible")) {
+                        if (commentElement.parent('.subcomments').length) {
+                            if (!commentElement.parent('.subcomments').is(":visible")) {
+                                commentElement.parent('.subcomments').transition('fade up');
+                            }
+                        }
+                        commentElement.addClass("glowBorder", 1000).transition('fade up');
+                        setTimeout(function() {
+                            commentElement.removeClass("glowBorder", 1000);
+                        }, 2500);
+                    }
+                }
             }
-        },
-        onSuccess: function(event, fields) {
-            $("#postform")[0].submit();
-            $('.actions .ui.green.button').addClass('disabled');
-            $('.actions .ui.green.button').val('Posting...');
-        }
-    });
-
-    $('#postform').submit(function(e) {
-        e.preventDefault();
+        };
     });
 });

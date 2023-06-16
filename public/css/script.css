@@ -1,33 +1,5 @@
 /*CSS for Posts*/
 
-.ui[class*="bottom attached"].buttons .button:first-child {
-    border-radius: 0 !important;
-}
-
-.ui[class*="bottom attached"].buttons .ui.label {
-    border-radius: 0 !important;
-}
-
-.ui.comments .comment .text {
-    margin: 0.25em 0;
-}
-
-.ui.comments .comment .text {
-    margin: 0.25em 0;
-}
-
-.ui.fluid.card>.content>a>span {
-    margin-left: 5px;
-}
-
-.ui.comments .comment:first-child {
-    padding-top: 0.5em !important;
-}
-
-.ui.label>img {
-    width: 2.1666em!important;
-}
-
 
 /*CSS for adding new comment*/
 
@@ -249,64 +221,18 @@ textarea {
     color: #573a08;
 }
 
-
-/* notification popups */
-
-
-/* https://stackoverflow.com/questions/26421274/css-circular-cropping-of-rectangle-image */
-
-.ui.info.message {
-    background-color: #ffffff;
-    box-shadow: 0 1px 10px #2B8490 !important;
+a.like.green {
+    color: #16ab39 !important;
 }
 
-.ui.sticky.notificationPopup .label {
-    overflow: hidden;
-    width: 3em;
-    height: 3em;
-    border-radius: 50% !important;
-    background-color: #b7c9c8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-}
-
-.ui.feed>.event>.label>img.popupNotificationImage {
-    width: 65%;
-    border-radius: 0%;
-}
-
-#desktopPopup,
-#mobilePopup {
-    padding-bottom: 4em;
-    padding-left: 1em;
-    padding-right: 1em;
-    display: none;
-    cursor: pointer;
-}
-
-.three.wide.column.centered {
-    margin-left: 0;
+a.unlike.red {
+    color: #db2828 !important;
 }
 
 
 /** when page width < 1250px **/
 
 @media (max-width: 1250px) {
-    .largeScreen {
-        transition: 0.8s all ease;
-        display: none;
-        /** to hide/show the navbar items **/
-    }
-    .mediumScreen {
-        transition: 0.8s all ease;
-        display: inline;
-        /** to hide/show the navbar icon**/
-    }
-    .ui.attached.buttons {
-        margin-top: 0px;
-    }
     .ui.reply.button,
     .ui.flag.button,
     .ui.share.button {

@@ -105,6 +105,7 @@ $(window).on("load", async function() {
         const userID = (new URL(document.location)).searchParams.get("r_id"); // null or Response ID from Qualtrics Survey
 
         if ($(this).hasClass("green")) {
+            $(this).addClass('loading disabled');
             $.post(`/signup?r_id=${userID}`, {
                 username: username,
                 photo: src,

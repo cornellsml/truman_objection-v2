@@ -1,11 +1,18 @@
-id,body,picture,actor,time,class
-0,How model stirling engines are made | How It's Made ,Science/science_1.mp4,sciencechannel,,Science
-1,Satellite Sees Global View of Sandy's Life to Landfall,Science/science_2.mp4,nasa,,Science
-2,Raindrops aren't shaped like raindrops,Science/science_3.mp4,veritasium,,Science
-3,Majestic Dolphin Leaps into the Air,Science/science_4.mp4,bbcearth,,Science
-4,Are we all just players in the game of life? ,Education/education_1.mp4,teded,,Education
-5,Would you take the road less traveled?,Education/education_2.mp4,teded,,Education
-6,What does “chance of rain” really mean?,Education/education_3.mp4,vox,,Education
-7,How To Simplify Your Life #theschooloflife #simplelife,Lifestyle/lifestyle_1.mp4,theschooloflifetv,,Lifestyle
-8,cleaning motivation 🧼🧹 #cleanwithme,Lifestyle/lifestyle_2.mp4,cleanwith_kayleigh,,Lifestyle
-9,A Test to Judge How Good Your Parents Were #shorts #parents,Lifestyle/lifestyle_3.mp4,theschooloflifetv,,Lifestyle
+id,body,picture,actor,time,class,offense_time,objection_time
+0,How model stirling engines are made | How It's Made ,Science/science_1.mp4,sciencechannel,,Science,19000,25000
+1,Satellite Sees Global View of Sandy's Life to Landfall,Science/science_2.mp4,nasa,,Science,15000,19000
+2,Raindrops aren't shaped like raindrops,Science/science_3.mp4,veritasium,,Science,42000,47000
+3,Majestic Dolphin Leaps into the Air,Science/science_4.mp4,bbcearth,,Science,9000,12000
+4,The Magical Northern Lights ✨ ,Science/science_5.mp4,bbcearth,,Science,22000,26000
+,,,,,,,
+5,Are we all just players in the game of life? ,Education/education_1.mp4,teded,,Education,19000,25000
+6,Would you take the road less traveled?,Education/education_2.mp4,teded,,Education,19000,30000
+7,What does “chance of rain” really mean?,Education/education_3.mp4,vox,,Education,42000,48000
+8,"White, pink, and brown noise, explained ",Education/education_4.mp4,vox,,Education,42000,48000
+9,How Video Games Can Level Up the Way You Learn,Education/education_5.mp4,teded,,Education,42000,48000
+,,,,,,,
+10,How To Simplify Your Life #theschooloflife #simplelife,Lifestyle/lifestyle_1.mp4,theschooloflifetv,,Lifestyle,42000,48000
+11,cleaning motivation 🧼🧹 #cleanwithme,Lifestyle/lifestyle_2.mp4,cleanwith_kayleigh,,Lifestyle,17000,24000
+12,A Test to Judge How Good Your Parents Were #shorts #parents,Lifestyle/lifestyle_3.mp4,theschooloflifetv,,Lifestyle,19000,25000
+13,ice restock! #organization #aesthetic #amazonproducts #amazon,Lifestyle/lifestyle_4.mp4,kaeliemaee,,Lifestyle,42000,48000
+14,Restocking the fridge before a busy weekend #asmr #restock #refill #organization #organized,Lifestyle/lifestyle_5.mp4,kelliatkinson,,Lifestyle,42000,48000

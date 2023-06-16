@@ -8,7 +8,10 @@ const scriptSchema = new mongoose.Schema({
     likes: Number, //number of likes of post (randomly assigned in populate.js)
     unlikes: Number, //number of dislikes of post (randomly assigned in populate.js)
     actor: { type: Schema.ObjectId, ref: 'Actor' }, //actor of post
-    time: String,
+    time: Number,
+
+    offense_time: Number,
+    objection_time: Number,
 
     class: String, //For experimental use (can be used to define the type of post)
 
@@ -16,12 +19,25 @@ const scriptSchema = new mongoose.Schema({
     comments: [new Schema({
         commentID: Number, //ID of the comment
         body: { type: String, default: '', trim: true }, //body of comment
-        likes: Number, //number of likes of comment (randomly assigned in populate.js)
+        likes: Number, //number of likes of comment (randomly assigned in populate.js, assigned for offense)
+        unlikes: Number, //number of dislikes of comment (randomly assigned in populate.js, assigned for offense)
         actor: { type: Schema.ObjectId, ref: 'Actor' }, //actor of comment
-        time: String, //time of comment
+        time: Number, //time of comment in reference to video (in milliseconds)
+
+        subcomments: [new Schema({
+            commentID: Number, // ID of the comment
+            body: { type: String, default: '', trim: true }, //body of comment
+            likes: Number, //number of likes of comment (assigned for objection)
+            unlikes: Number, //number of dislikes of comment (assigned for objection)
+            actor: { type: Schema.ObjectId, ref: 'Actor' }, //actor of comment
+            time: Number, //time of comment in reference to video (in milliseconds)
+
+            new_comment: { type: Boolean, default: false },
+            liked: { type: Boolean, default: false }
+        })],
 
         new_comment: { type: Boolean, default: false },
-        liked: { type: Boolean, default: false },
+        liked: { type: Boolean, default: false }
     }, { versionKey: false })]
 }, { versionKey: false });
 

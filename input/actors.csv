@@ -1,29 +1,33 @@
-username,name,gender,age,location,bio,picture,class
-sciencechannel,Science Channel,,,,,,Science
-nasa,NASA,,,,,,Science
-veritasium,Veritasium,,,,,,Science
-bbcearth,BBC Earth,,,,,,Science
-teded,Ted Education,,,,,,Education
-vox,Vox,,,,,,Education
-cleanwith_kayleigh,Clean with Kayleigh,,,,,,Lifestyle
-theschooloflifetv,The School of Life TV,,,,,,Lifestyle
-jd920,,,,11_bee.svg,#8999a2,,
-kd022,,,,12_fox.svg,#a6888a,,
-dh223,,,,13_hawk.svg,#a69588,,
-wh392,,,,14_jellyfish.svg,#93ae9f,,
-hy092,,,,15_lion.svg,#b7c9c8,,
-kc753,,,,16_frog.svg,,,
-dj293,,,,17_pig.svg,,,
-jk554,,,,18_sealion.svg,,,
-yu239,,,,19_squirrel.svg,,,
-mx921,,,,20_whale.svg,,,
-id578,,,,21_dolphin.svg,,,
-sb302,,,,22_elephant.svg,,,
-eh552,,,,23_fish.svg,,,
-kf043,,,,24_spider.svg,,,
-de384,,,,25_squid.svg,,,
-hs231,,,,,,,
-hy507,,,,,,,
-di371,,,,,,,
-jj392,,,,,,,
-se341,,,,,,,
+username,name,location,bio,picture,color,class,
+sciencechannel,Science Channel,,,,,Science,
+nasa,NASA,,,,,Science,
+veritasium,Veritasium,,,,,Science,
+bbcearth,BBC Earth,,,,,Science,
+teded,Ted Education,,,,,Education,
+vox,Vox,,,,,Education,
+cleanwith_kayleigh,Clean with Kayleigh,,,,,Lifestyle,
+theschooloflifetv,The School of Life TV,,,,,Lifestyle,
+kaeliemaee,Kaelie Mae,,,,,Lifestyle,
+kelliatkinson,Kelli Atkinson,,,,,,
+jd920,,,,1_ant.svg,#8999a2,,1
+kd022,,,,12_fox.svg,#a6888a,,1
+dh223,,,,13_hawk.svg,#a69588,,1
+wh392,,,,14_jellyfish.svg,#93ae9f,,1
+hy092,,,,10_monkey.svg,#b7c9c8,,2
+kc753,,,,16_frog.svg,#99a289,,2
+dj293,,,,17_pig.svg,#a28999,,2
+jk554,,,,18_sealion.svg,#ffe599,,2
+yu239,,,,19_squirrel.svg,#f9cb9c,,3
+mx921,,,,20_whale.svg,#a6888a,,3
+id578,,,,3_butterfly.svg,#a69588,,3
+sb302,,,,22_elephant.svg,#93ae9f,,3
+eh552,,,,23_fish.svg,#b7c9c8,,4
+kf043,,,,24_spider.svg,#f9cb9c,,4
+de384,,,,25_squid.svg,#a28999,,4
+hs231,,,,21_dolphin.svg,#ffe599,,4
+hy507,,,,9_dog.svg,#93ae9f,,5
+di371,,,,11_bee.svg,#a69588,,5
+jj392,,,,15_lion.svg,#8999a2,,5
+se341,,,,14_jellyfish.svg,#a6888a,,5
+pd881,,,,2_bear.svg,#b4a7d6,offense_actor,
+op231,,,,6_crab.svg,#cfe2f3,objection_actor,

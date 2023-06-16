@@ -181,7 +181,9 @@ async function doPopulate() {
                                 unlikes: getLikes(),
                                 actor: act,
                                 time: new_post.time || null,
-                                class: new_post.class
+                                class: new_post.class,
+                                offense_time: new_post.offense_time,
+                                objection_time: new_post.objection_time
                             }
 
                             var script = new Script(postdetail);
@@ -335,6 +337,7 @@ async function doPopulate() {
                                         commentID: new_reply.id,
                                         body: new_reply.body,
                                         likes: getLikesComment(),
+                                        unlikes: getLikesComment(),
                                         actor: act,
                                         time: new_reply.time || null
                                     };

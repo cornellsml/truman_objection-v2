@@ -124,9 +124,10 @@ const userSchema = new mongoose.Schema({
         comments: [new Schema({
             comment: { type: Schema.ObjectId }, //ID Reference for Script post comment
             liked: { type: Boolean, default: false }, //has the user liked it?
+            unliked: { type: Boolean, default: false },
             flagged: { type: Boolean, default: false }, //has the user flagged it?
-            likeTime: [Date], //absoluteTimes of times user has liked the 
-            unlikeTime: [Date], //absoluteTimes
+            likeTime: [Date], //absoluteTimes of times user has liked the comment
+            unlikeTime: [Date], //absoluteTimes of times user has unliked the comment
             flagTime: [Date], //absoluteTimes of times user has flagged the comment
             new_comment: { type: Boolean, default: false }, //is this a comment from user?
             new_comment_id: Number, //ID for comment

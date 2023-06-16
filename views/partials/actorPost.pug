@@ -1,4 +1,6 @@
-.ui.fluid.card(postID=val.id, postClass=val.class)
+-const postTimeStampsDict = val.comments.reduce(function(dict, commentObj) {dict[commentObj.time] ? dict[commentObj.time].push(commentObj.commentID) : dict[commentObj.time] = [commentObj.commentID]; commentObj.subcomments.length > 0 ? commentObj.subcomments.forEach(function(subcomment) { dict[subcomment.time] ? dict[subcomment.time].push(subcomment.commentID) : dict[subcomment.time] = [subcomment.commentID]; }) : null; return dict;}, {})
+-const postTimeStamps = Object.keys(postTimeStampsDict).map(Number).sort((a,b) => a-b)
+.ui.fluid.card(postID=val.id, index=val.postID, postClass=val.class, postTimeStamps = postTimeStamps, postTimeStampsDict = postTimeStampsDict)
   .content.title
     h2 !{val.body}
       span(style="float: right; font-size: 0.8em; font-weight: normal;") 
@@ -34,6 +36,48 @@
             i.icon.youtube.big(style="float:left; margin-right:10px;")
             | Timed Comments is on. Comments linked to a specific time in the video will appear when the video hits that timestamp.
         .ui.comments
+          each comment in val.comments 
+            .comment.hidden(commentID=comment.id, index=comment.commentID)
+              .image(style="background-color:"+comment.actor.profile.color)
+                a.avatar
+                  img(src='/profile_pictures/'+comment.actor.profile.picture)
+              .content
+                a.author !{comment.actor.username}
+                .metadata(style="float:right;")
+                  span.date 0:!{comment.time/1000<10 ? "0" + comment.time/1000 : comment.time/1000}
+                .text !{comment.body}
+                .actions 
+                  a.like(class=comment.liked ? "green" : null)
+                    i.icon.thumbs.up(class=comment.liked ? "green" : null)
+                    span.num !{comment.likes} 
+                  a.unlike(class=comment.unliked ? "red" : null)
+                    i.icon.thumbs.down(class=comment.unliked ? "red" : null)
+                    span.num !{comment.unlikes}
+                  a.reply Reply
+                  a.flag Flag
+                  a.share Share
+              if comment.subcomments.length!==0
+                .comments.subcomments.hidden
+                  each subcomment in comment.subcomments
+                    .comment.hidden(commentID=subcomment.id, index=subcomment.commentID)
+                      .image(style="background-color:"+subcomment.actor.profile.color)
+                        a.avatar
+                          img(src='/profile_pictures/'+subcomment.actor.profile.picture)
+                      .content
+                        a.author !{subcomment.actor.username}
+                        .metadata(style="float:right;")
+                          span.date 0:!{subcomment.time/1000<10 ? "0" + subcomment.time/1000 : subcomment.time/1000}
+                        .text !{subcomment.body}
+                        .actions 
+                          a.like(class=comment.unliked ? "green" : null)
+                            i.icon.thumbs.up(class=comment.unliked ? "green" : null)
+                            span.num !{subcomment.likes} 
+                          a.unlike(class=comment.unliked ? "red" : null)
+                            i.icon.thumbs.down(class=comment.unliked ? "red" : null)
+                            span.num !{subcomment.unlikes}
+                          a.reply Reply
+                          a.flag Flag
+                          a.share Share
         .ui.form
           .inline.field
             .image
