@@ -7,7 +7,7 @@
   .content
     .ui.two.column.grid.stackable
       .six.wide.column.centered   
-        video(src='/post_pictures/'+val.picture controls type='video/mp4')
+        video(src=cdn+'/post_pictures/'+val.picture controls type='video/mp4')
         .content.buttons
           .ui.buttons.small
             .ui.left.labeled.button
@@ -40,7 +40,7 @@
             .comment.hidden(commentID=comment.id, index=comment.commentID)
               .image(style="background-color:"+comment.actor.profile.color)
                 a.avatar
-                  img(src='/profile_pictures/'+comment.actor.profile.picture)
+                  img(src=cdn+'/profile_pictures/'+comment.actor.profile.picture)
               .content
                 a.author !{comment.actor.username}
                 .metadata(style="float:right;")
@@ -62,7 +62,7 @@
                     .comment.hidden(commentID=subcomment.id, index=subcomment.commentID)
                       .image(style="background-color:"+subcomment.actor.profile.color)
                         a.avatar
-                          img(src='/profile_pictures/'+subcomment.actor.profile.picture)
+                          img(src=cdn+'/profile_pictures/'+subcomment.actor.profile.picture)
                       .content
                         a.author !{subcomment.actor.username}
                         .metadata(style="float:right;")

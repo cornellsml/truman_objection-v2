@@ -4,9 +4,8 @@ block styles
     link(type='text/css', rel='stylesheet', href='/public/css/signup.css')
 
 block content
-  -var cdn = "https://dhpd030vnpk29.cloudfront.net/truman-objections";
   -var initials = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"] 
-  -var photos = ['/profile_pictures/1_ant.svg', '/profile_pictures/3_butterfly.svg', '/profile_pictures/2_bear.svg', '/profile_pictures/4_cat.svg','/profile_pictures/5_chicken.svg','/profile_pictures/6_crab.svg','/profile_pictures/7_deer.svg','/profile_pictures/8_gorilla.svg','/profile_pictures/9_dog.svg','/profile_pictures/10_monkey.svg']
+  -var photos = ['/1_ant.svg', '/3_butterfly.svg', '/2_bear.svg', '/4_cat.svg','/5_chicken.svg','/6_crab.svg','/7_deer.svg','/8_gorilla.svg','/9_dog.svg','/10_monkey.svg']
   .thirteen.wide.column.centered
     h1 Create an Account
     h3 First, begin by creating an account.
@@ -52,7 +51,7 @@ block content
         each filename in photos
           .image
             a.avatar
-              img(src=cdn+filename)
+              img(src=cdn+"/profile_pictures"+filename)
             i.icon.green.check.hidden
     .ui.big.labeled.icon.button
       i.arrow.alternate.circle.right.icon
