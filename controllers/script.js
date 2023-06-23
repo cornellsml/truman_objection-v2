@@ -36,7 +36,7 @@ exports.getScript = (req, res, next) => {
             if (!user.active) {
                 req.logout();
                 req.flash('errors', { msg: 'Account is no longer active. Study is over.' });
-                res.redirect('/login');
+                res.redirect('/signup');
             }
 
             //Get the newsfeed
@@ -99,18 +99,20 @@ exports.getScript = (req, res, next) => {
                                 //For each comment on this post, add likes, flags, etc.
                                 for (const commentObject of user.feedAction[feedIndex].comments) {
                                     if (commentObject.new_comment) {
-                                        //             // This is a new, user-made comment. Add it to the comments
-                                        //             // list for this post.
-                                        //             const cat = {
-                                        //                 commentID: commentObject.new_comment_id,
-                                        //                 body: commentObject.body,
-                                        //                 likes: commentObject.likes,
-                                        //                 time: commentObject.relativeTime,
+                                        // This is a new, user-made comment. Add it to the comments
+                                        // list for this post.
+                                        const cat = {
+                                            commentID: commentObject.new_comment_id,
+                                            body: commentObject.body,
+                                            likes: commentObject.liked ? 1 : 0,
+                                            unlikes: commentObject.unliked ? 1 : 0,
+                                            time: commentObject.videoTime,
 
-                                        //                 new_comment: commentObject.new_comment,
-                                        //                 liked: commentObject.liked
-                                        //             };
-                                        //             script_feed[0].comments.push(cat);
+                                            new_comment: commentObject.new_comment,
+                                            liked: commentObject.liked,
+                                            unliked: commentObject.unliked
+                                        };
+                                        script_feed[0].comments.push(cat);
                                     } else {
                                         // This is not a new, user-created comment.
                                         // Get the comment index that corresponds to the correct comment
@@ -142,6 +144,7 @@ exports.getScript = (req, res, next) => {
                             script_feed[0].comments.sort(function(a, b) {
                                 return b.time - a.time; // in descending order.
                             });
+
                             // No longer looking at comments on this post.
                             // Now we are looking at the main post.
                             // Check if there user has viewed the post before.
@@ -176,6 +179,7 @@ exports.getScript = (req, res, next) => {
                             //     script_feed.splice(0, 1);
                             // } else {
                             finalfeed.push(script_feed[0]);
+                            console.log(finalfeed);
                             script_feed.splice(0, 1);
                             // }
                         } //user did not interact with this post
@@ -198,84 +202,17 @@ exports.getScript = (req, res, next) => {
                     });
 
                     console.log("Script Size is now: " + finalfeed.length);
-                    console.log(finalfeed);
+                    // console.log(finalfeed);
                     user.save((err) => {
                         if (err) {
                             return next(err);
                         }
-                        res.render('script', { script: finalfeed });
+                        res.render('script', { script: finalfeed, title: 'Feed' });
                     }); //end of user.save()
                     //end of Script.find() -- for ads
                 }); //end of Script.find() -- for feed
         }); //end of User.findByID
 }; //end of .getScript
-
-/*
- * Post /post/new
- * Add new user post, including actor replies (comments) that go along with it.
- */
-// exports.newPost = (req, res) => {
-//     User.findById(req.user.id, (err, user) => {
-//         if (err) { return next(err); }
-
-//         //This is a new post
-//         if (req.file) {
-//             user.numPosts = user.numPosts + 1; //begins at 0
-//             const currTime = Date.now();
-
-//             var post = {
-//                 type: "user_post",
-//                 postID: user.numPosts,
-//                 body: req.body.body,
-//                 picture: req.file.filename,
-//                 liked: false,
-//                 likes: 0,
-//                 comments: [],
-//                 absTime: currTime,
-//                 relativeTime: currTime - user.createdAt,
-//             };
-
-//             //Now we find any Actor Replies (Comments) that go along with it
-//             Notification.find()
-//                 .where('userPost').equals(post.postID)
-//                 .where('notificationType').equals('reply')
-//                 .populate('actor')
-//                 .exec(function(err, actor_replies) {
-//                     if (err) { return next(err); }
-//                     if (actor_replies.length > 0) {
-//                         //we have a actor reply that goes with this userPost
-//                         //add them to the posts array
-//                         for (const reply of actor_replies) {
-//                             user.numActorReplies = user.numActorReplies + 1; //begins at 0
-//                             var tmp_actor_reply = {
-//                                 actor: reply.actor._id,
-//                                 body: reply.replyBody,
-//                                 commentID: user.numActorReplies,
-//                                 relativeTime: post.relativeTime + reply.time,
-//                                 absTime: new Date(user.createdAt.getTime() + post.relativeTime + reply.time),
-//                                 new_comment: false,
-//                                 liked: false,
-//                                 flagged: false,
-//                                 likes: 0
-//                             };
-//                             post.comments.push(tmp_actor_reply);
-//                         }
-//                     }
-//                     user.posts.unshift(post); //adds elements to the beginning of the array
-
-//                     user.save((err) => {
-//                         if (err) {
-//                             return next(err);
-//                         }
-//                         res.redirect('/');
-//                     });
-//                 });
-//         } else {
-//             req.flash('errors', { msg: 'ERROR: Your post did not get sent. Please include a photo and a caption.' });
-//             res.redirect('/');
-//         }
-//     });
-// };
 
 /**
  * POST /feed/
@@ -301,12 +238,16 @@ exports.postUpdateFeedAction = (req, res, next) => {
             user.numComments = user.numComments + 1;
             var cat = {
                 new_comment: true,
-                new_comment_id: user.numComments,
+                new_comment_id: user.numComments + 62,
                 body: req.body.comment_text,
                 relativeTime: req.body.new_comment - user.createdAt,
                 absTime: req.body.new_comment,
+                videoTime: req.body.videoTime,
                 liked: false,
+                unliked: false,
                 flagged: false,
+                shared: false,
+                reply_to: req.body.reply_to
             }
             user.feedAction[feedIndex].comments.push(cat);
         }
@@ -366,6 +307,19 @@ exports.postUpdateFeedAction = (req, res, next) => {
                     user.feedAction[feedIndex].comments[commentIndex].flagTime = [flag];
                 }
                 user.feedAction[feedIndex].comments[commentIndex].flagged = true;
+            }
+
+            //SHARE A COMMENT 
+            else if (req.body.share) {
+                console.log()
+                let share = req.body.share;
+                if (user.feedAction[feedIndex].comments[commentIndex].shareTime) {
+                    user.feedAction[feedIndex].comments[commentIndex].shareTime.push(share);
+
+                } else {
+                    user.feedAction[feedIndex].comments[commentIndex].shareTime = [share];
+                }
+                user.feedAction[feedIndex].comments[commentIndex].shared = true;
             }
         }
         //Not a comment-- Are we doing anything with the post?

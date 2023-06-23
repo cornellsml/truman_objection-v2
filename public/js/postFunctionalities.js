@@ -120,7 +120,7 @@ function likeComment(e) {
     const postID = target.closest(".ui.fluid.card").attr("postID");
     const postClass = target.closest(".ui.fluid.card").attr("postClass");
     const commentID = comment.attr("commentID");
-    const isUserComment = comment.find("a.author").attr('href') === '/me';
+    const isUserComment = comment.find("a.author").hasClass('/me');
     const like = Date.now();
 
     if (target.hasClass("green")) { //Undo like comment
@@ -168,7 +168,7 @@ function unlikeComment(e) {
     const postID = target.closest(".ui.fluid.card").attr("postID");
     const postClass = target.closest(".ui.fluid.card").attr("postClass");
     const commentID = comment.attr("commentID");
-    const isUserComment = comment.find("a.author").attr('href') === '/me';
+    const isUserComment = comment.find("a.author").hasClass('/me');
     const unlike = Date.now();
 
     if (target.hasClass("red")) { //Undo unlike comment
@@ -210,111 +210,265 @@ function unlikeComment(e) {
 
 function flagComment(e) {
     const target = $(e.target);
-    const comment = target.parents(".comment");
+    const comment = target.closest(".comment");
     const postID = target.closest(".ui.fluid.card").attr("postID");
     const postClass = target.closest(".ui.fluid.card").attr("postClass");;
     const commentID = comment.attr("commentID");
+    const isUserComment = comment.find("a.author").hasClass('/me');
+
     comment.replaceWith(`
         <div class="comment" commentID="${commentID}" style="background-color:black;color:white">
-            <h5 class="ui inverted header" style="padding-bottom: 0.5em; padding-left: 0.5em;">
+            <h5 class="ui inverted header">
                 The admins will review this comment further. We are sorry you had this experience.
             </h5>
         </div>`);
     const flag = Date.now();
 
-    if (target.closest(".ui.fluid.card").attr("type") == 'userPost')
-        console.log("Should never be here.")
-    else
-        $.post("/feed", {
-            postID: postID,
-            commentID: commentID,
-            flag: flag,
-            postClass: postClass,
-            _csrf: $('meta[name="csrf-token"]').attr('content')
-        });
+    $.post("/feed", {
+        postID: postID,
+        commentID: commentID,
+        flag: flag,
+        isUserComment: isUserComment,
+        postClass: postClass,
+        _csrf: $('meta[name="csrf-token"]').attr('content')
+    });
 }
 
-function addComment(e) {
+function shareComment(e) {
     const target = $(e.target);
-    const text = target.siblings(".ui.form").find("textarea.newcomment").val().trim();
+    const comment = target.closest(".comment");
+    const postID = target.closest(".ui.fluid.card").attr("postID");
+    const postClass = target.closest(".ui.fluid.card").attr("postClass");;
+    const commentID = comment.attr("commentID");
+    const isUserComment = comment.find("a.author").hasClass('/me');
+    const share = Date.now();
+
+    const pathname = window.location.href;
+    $(".pathname").html(pathname + "?commentID=" + postID);
+    $('.ui.small.shareComment.modal').modal('show');
+
+    $.post("/feed", {
+        postID: postID,
+        commentID: commentID,
+        share: share,
+        isUserComment: isUserComment,
+        postClass: postClass,
+        _csrf: $('meta[name="csrf-token"]').attr('content')
+    });
+}
+
+function addCommentToVideo(e) {
+    const target = $(e.target);
+    const form = target.parents(".ui.form");
+    const text = form.find("textarea.replyToVideo").val().trim();
     const card = target.parents(".ui.fluid.card");
     let comments = card.find(".ui.comments");
-    const postClass = target.parents(".ui.fluid.card").attr("postClass");;
-    //no comments area - add it
-    if (!comments.length) {
-        const buttons = card.find(".ui.bottom.attached.icon.buttons")
-        buttons.after('<div class="content"><div class="ui comments"></div>');
-        comments = card.find(".ui.comments")
-    }
+    const postClass = target.parents(".ui.fluid.card").attr("postClass");
     if (text.trim() !== '') {
+        const videoTime = card.find("video")[0].currentTime * 1000;
         const date = Date.now();
-        const ava = target.siblings('.ui.label').find('img.ui.avatar.image');
-        const ava_img = ava.attr("src");
-        const ava_name = ava.attr("name");
         const postID = card.attr("postID");
-        const commentID = numComments + 1;
+        const commentID = numComments + 1 + 62;
 
         const mess = `
-        <div class="comment" commentID=${commentID}>
-            <a class="avatar"><img src="${ava_img}"></a>
+        <div class="comment" commentID=${commentID} index=${commentID}>
+            <div class="image" style="background-color:${userProfile.color}">
+                <a class="avatar"><img src="${userProfile.picture}"></a>
+            </div>
             <div class="content"> 
-                <a class="author" href="/me">${ava_name}</a>
+                <a class="author /me">${userProfile.name} (me)</a>
                 <div class="metadata"> 
-                    <span class="date">${humanized_time_span(date)}</span>
-                    <i class="heart icon"></i> 
-                    <span class="num"> 0 </span> Likes
+                    <span class="date">0:${videoTime/1000<10 ? "0" + Math.floor(videoTime/1000) : Math.floor(videoTime/1000)}</span>
                 </div> 
                 <div class="text">${text}</div>
                 <div class="actions"> 
-                    <a class="like comment" onClick="likeComment(event)">Like</a> 
+                    <a class="like" onClick="likeComment(event)">
+                        <i class="icon thumbs up"></i>
+                        <span class="num">0</span>
+                    </a>
+                    <a class="unlike" onClick="unlikeComment(event)">
+                        <i class="icon thumbs down"></i>
+                        <span class="num">0</span>
+                    </a>
+                    <a class="reply" onClick="openCommentReply(event)">Reply</a>
+                    <a class="share" onClick="shareComment(event)">Share</a>                                        
                 </div> 
             </div>
         </div>`;
-        $(this).siblings(".ui.form").find("textarea.newcomment").val('');
-        comments.append(mess);
+        form.find("textarea.replyToVideo").val('');
+        form.find("textarea.replyToVideo").blur();
+        const lastVisibleComment = comments.children('.comment:not(.hidden)').first()[0];
+        lastVisibleComment.insertAdjacentHTML("beforebegin", mess);
 
-        if (card.attr("type") == 'userPost')
-            $.post("/userPost_feed", {
-                postID: postID,
-                new_comment: date,
-                comment_text: text,
-                _csrf: $('meta[name="csrf-token"]').attr('content')
-            }).then(function(json) {
-                numComments = json.numComments;
-            });
-        else
-            $.post("/feed", {
-                postID: postID,
-                new_comment: date,
-                comment_text: text,
-                postClass: postClass,
-                _csrf: $('meta[name="csrf-token"]').attr('content')
-            }).then(function(json) {
-                numComments = json.numComments;
-            });;
+        $.post("/feed", {
+            postID: postID,
+            new_comment: date,
+            videoTime: videoTime,
+            comment_text: text,
+            postClass: postClass,
+            _csrf: $('meta[name="csrf-token"]').attr('content')
+        }).then(function(json) {
+            numComments = json.numComments;
+        });
+    }
+}
+
+function changeColor(e, string = "") {
+    let target = $(e.target);
+    if (target.val().trim() !== string) {
+        target.parents(".ui.form").children('.ui.submit.button').addClass("blue");
+    } else {
+        target.parents(".ui.form").children('.ui.submit.button').removeClass("blue");
+    }
+}
+
+function openCommentReply(e) {
+    const photo = userProfile.picture;
+    const color = userProfile.color;
+    const target = $(e.target).parents('.content');
+    const reply_to = target.children('a.author').text().replace(" (me)", "");
+    const form = target.children('.ui.form');
+    if (form.length !== 0) {
+        form.hide(function() { $(this).remove(); });
+        target[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
+    } else {
+        const comment_level = target.parents(".comment").length;
+        const comment_area = (
+            `<div class="ui form">
+                <div class="inline field">
+                    <div class="image" style="background-color:${color}">
+                        <img class="ui image rounded" src=${photo}>
+                    </div>
+                        <textarea class="replyToComment" type="text" placeholder="Add a Reply..." rows="1" onInput="changeColor(event${comment_level==2 ? ", '@"+reply_to +"'": ""})">${(comment_level == 2) ? "@"+reply_to+" " : ""}</textarea>
+                </div>
+                <div class="ui submit button replyToComment" onClick="addCommentToComment(event)">
+                    Reply to ${reply_to}
+                </div>
+                <div class="ui cancel basic blue button replyToComment" onClick="openCommentReply(event)">
+                    Cancel
+                </div>
+            </div>
+            </form>`
+        );
+        $(comment_area).insertAfter(target.children('.actions')).hide().show(400);
+        const comment_area_element = $(target).find('textarea.replyToComment');
+        const end = comment_area_element.val().length;
+        comment_area_element[0].setSelectionRange(end, end);
+        if (comment_level == 2) {
+            comment_area_element.highlightWithinTextarea({
+                highlight: [{
+                    highlight: "@" + reply_to, // string, regexp, array, function, or custom object
+                    className: 'blue'
+                }]
+            })
+        };
+        comment_area_element.focus();
+        comment_area_element[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+}
+
+function addCommentToComment(e) {
+    const target = $(e.target);
+    const form = target.parents(".ui.form");
+    if (!form.children(".ui.submit.button").hasClass("blue")) {
+        return;
+    }
+    let text = form.find("textarea.replyToComment").val();
+    const orig_comment = form.closest(".comment");
+    const comment_level = form.parents(".comment").length; // = 1 if 1st level, = 2 if 2nd level
+    if (comment_level == 1) {
+        if (!orig_comment.children('.comments').length) {
+            orig_comment.append('<div class="comments">');
+        }
+        comments = orig_comment.find(".comments");
+    } else {
+        comments = orig_comment.closest(".comments");
+    }
+    if (text.trim() !== "") {
+        const words = form.find("mark").map(function() {
+            return $(this).html();
+        })
+        const highlights = [...new Set(words)].sort(function(a, b) {
+            return b.length - a.length; // Desc order
+        });
+        if (highlights.length !== 0) {
+            for (word of highlights) {
+                var regEx = new RegExp('(?<!<a>)' + word, 'gmi');
+                text = text.replace(regEx, '<a>' + word + '</a>')
+            }
+        }
+
+        const card = target.parents(".ui.fluid.card");
+        const videoTime = card.find("video")[0].currentTime * 1000;
+        const date = Date.now();
+        const postID = card.attr("postID");
+        const postClass = card.attr("postClass");
+        const commentID = numComments + 1 + 62;
+        const reply_to = orig_comment.find("a.author").hasClass('/me') ? orig_comment.attr('commentID') : orig_comment.attr('index');
+
+        const mess =
+            `<div class="comment" commentID=${commentID}>
+            <div class="image" style="background-color:${userProfile.color}">
+                <a class="avatar"><img src="${userProfile.picture}"></a>
+            </div>
+            <div class="content"> 
+                <a class="author /me">${userProfile.name} (me)</a>
+                <div class="metadata"> 
+                    <span class="date">0:${videoTime/1000<10 ? "0" + Math.floor(videoTime/1000) : Math.floor(videoTime/1000)}</span>
+                </div> 
+                <div class="text">${text}</div>
+                <div class="actions"> 
+                    <a class="like" onClick="likeComment(event)">
+                        <i class="icon thumbs up"></i>
+                        <span class="num">0</span>
+                    </a>
+                    <a class="unlike" onClick="unlikeComment(event)">
+                        <i class="icon thumbs down"></i>
+                        <span class="num">0</span>
+                    </a>
+                    <a class="reply" onClick="openCommentReply(event)">Reply</a>
+                    <a class="share" onClick="shareComment(event)">Share</a>                                        
+                </div> 
+            </div>
+        </div>`;
+
+        form.find("textarea.newComment").val("");
+        form.remove();
+        comments.append(mess);
+        $(`.comment[commentID=${commentID}]`).last()[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
+
+        $.post("/feed", {
+            postID: postID,
+            new_comment: date,
+            videoTime: videoTime,
+            comment_text: text,
+            postClass: postClass,
+            reply_to: reply_to,
+            _csrf: $('meta[name="csrf-token"]').attr('content')
+        }).then(function(json) {
+            numComments = json.numComments;
+        });
     }
 }
 
 $(window).on('load', () => {
     // ************ Actions on Main Post ***************
-    // Focus new comment element if "Reply" button is clicked
-    $('.reply.button').on('click', function() {
-        let parent = $(this).closest(".ui.fluid.card");
-        parent.find("textarea.newcomment").focus();
-    });
 
     // Press enter to submit a comment
-    $("textarea.newcomment").keydown(function(event) {
-        if (event.key === "Enter" && !event.shiftKey) {
+    window.addEventListener("keydown", function(event) {
+        if (!event.ctrlKey && event.key === "Enter" && $(event.target).hasClass("replyToVideo")) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            $(this).parents(".ui.form").siblings("i.big.send.link.icon").click();
-
+            addCommentToVideo(event);
+        } else if (!event.ctrlKey && event.key === "Enter" && $(event.target).hasClass("replyToComment")) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            addCommentToComment(event);
         }
-    });
+    }, true);
 
     //Create a new Comment
-    $("i.big.send.link.icon").on('click', addComment);
+    $("i.big.send.link.icon.replyToVideo").on('click', addCommentToVideo);
 
     //Like Post
     $('.like.button').on('click', likePost);
@@ -336,5 +490,11 @@ $(window).on('load', () => {
     $('a.unlike').on('click', unlikeComment);
 
     //Flag comment
-    $('a.flag.comment').on('click', flagComment);
+    $('a.flag').on('click', flagComment);
+
+    //Share comment 
+    $('a.share').on('click', shareComment);
+
+    //Reply to comment
+    $('a.reply').on('click', openCommentReply);
 });

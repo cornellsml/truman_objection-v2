@@ -1,29 +1,6 @@
-/*CSS for Posts*/
-
-
-/*CSS for adding new comment*/
-
-.extra.content>.ui.fluid.left.labeled.right.icon.input>.ui.form {
-    width: 100%;
-}
-
-textarea.newcomment {
-    border-radius: 0 .28571429rem .28571429rem 0;
-}
-
-.extra.content>.ui.fluid.left.labeled.right.icon.input>.ui.label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0.5em;
-}
-
-.extra.content>.ui.fluid.left.labeled.right.icon.input>.ui.label>img {
-    margin: 0;
-}
-
-.extra.content>.ui.fluid.left.labeled.right.icon.input>i.big.send.link.icon {
-    margin-right: 4px;
+#pagecontainer {
+    padding-top: 65px;
+    /*For single post on page*/
 }
 
 
@@ -31,6 +8,12 @@ textarea.newcomment {
 
 .ui.fluid.card {
     min-height: calc(100vh - 150px);
+    margin: 0 !important;
+    /*For single post on page*/
+}
+
+.ui.fluid.card.hidden {
+    display: none !important;
 }
 
 video {
@@ -46,6 +29,12 @@ video {
 
 
 /* ---- VIDEO FUNCTIONALIIES CSS ---- */
+
+.ui.button,
+.ui.button:focus {
+    background-color: #f9f9f9;
+    margin: 0.75em 0.75em 0.75em 0px;
+}
 
 .content.buttons {
     margin: 0.5em;
@@ -75,12 +64,6 @@ video {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-
-.ui.button,
-.ui.button:focus {
-    background-color: #f9f9f9;
-    margin: 0.75em 0.75em 0.75em 0px;
 }
 
 .ui.left.labeled.button a {
@@ -119,9 +102,8 @@ video {
 }
 
 .ui.form>.inline.field>.image {
-    max-width: 44px !important;
-    width: 100%;
-    height: auto;
+    min-width: 44px;
+    height: 44px;
     background-color: #a6a488;
     border-radius: 50% !important;
     display: flex;
@@ -134,28 +116,32 @@ video {
     width: 65%
 }
 
-textarea {
+.ui.form>.inline.field>textarea {
     font-size: 1.1em !important;
+    padding-right: 35px !important;
 }
 
-.ui.button.replyToVideo {
+.ui.form>.inline.field>i.big.send.link.icon {
+    position: absolute;
+    right: 10px;
+    top: 9px;
+}
+
+
+/* .ui.button.replyToVideo {
     float: right;
     margin-top: 1em !important;
     display: none;
-}
+} */
 
 .ui.button.replyToComment {
     float: right;
     margin-top: 1em !important;
+    font-size: 1.05em !important;
 }
 
 
 /* ---- COMMENTS ---- */
-
-.ui.info.message.helper {
-    background-color: #f8ffff;
-    box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent !important;
-}
 
 .ui.comments {
     margin-top: 1em;
@@ -165,6 +151,10 @@ textarea {
     max-width: none;
     display: flex;
     flex-direction: column-reverse;
+}
+
+.ui.comments .comment:first-child {
+    margin: 0.5em 0 0 !important;
 }
 
 .comment {
@@ -199,10 +189,6 @@ textarea {
     align-content: center;
 }
 
-.comment>.image.user_img {
-    background-color: #c9ba9b;
-}
-
 .comment>.image>a.avatar {
     margin: 0 !important;
 }
@@ -211,8 +197,12 @@ textarea {
     width: 65% !important;
 }
 
-.ui.comments .comment>.image~.content {
+.comment>.image~.content {
     margin-left: 3.5em
+}
+
+.comment>.content>.metadata {
+    float: right;
 }
 
 .glowBorder {

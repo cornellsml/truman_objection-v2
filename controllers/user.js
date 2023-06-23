@@ -155,12 +155,14 @@ exports.postSignup = (req, res, next) => {
         if (existingUser) {
             existingUser.username = req.body.username;
             existingUser.profile.picture = req.body.photo;
+            existingUser.profile.name = req.body.username;
             user = existingUser;
         } else {
             user = new User({
                 mturkID: req.query.r_id,
                 username: req.body.username,
                 profile: {
+                    name: req.body.username,
                     color: '#a6a488',
                     picture: req.body.photo
                 },

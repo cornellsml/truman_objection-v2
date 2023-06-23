@@ -7,9 +7,15 @@ block content
   -var initials = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"] 
   -var photos = ['/1_ant.svg', '/3_butterfly.svg', '/2_bear.svg', '/4_cat.svg','/5_chicken.svg','/6_crab.svg','/7_deer.svg','/8_gorilla.svg','/9_dog.svg','/10_monkey.svg']
   .thirteen.wide.column.centered
-    h1 Create an Account
+    h1(style="text-align:center;") Welcome to
+      img(src='https://dhpd030vnpk29.cloudfront.net/truman-objections/favicon.svg', height="50px", style="margin-bottom:-10px")
+      span.title VidShare
+      | !
+    h3 We are a new video-based social media community.  
+    h3 We warmly welcome you to fully immerse yourself in our lively community by interacting with videos and comments from other users.
+    h1(style="margin-top:2em;") Create an Account
     h3 First, begin by creating an account.
-    .ui.divider
+    //- .ui.divider
     h2 Create a Username
     .ui.warning.message.hidden.username
       i.close.icon 
@@ -40,12 +46,12 @@ block content
           h2.username_2.username &nbsp;
         button.ui.button 
           h2.username_3.username &nbsp;
-    .ui.divider
-    h2 Choose a Profile Photo
+    //- .ui.divider
+    h2 Choose a Profile Picture
     .ui.warning.message.hidden.photo
       i.close.icon 
       .header Don't forget to choose a profile picture!
-    h3 Please also choose a profile photo from below to use.
+    h3 Please also choose a profile picture from below to use.
     .ui.form
       .images
         each filename in photos

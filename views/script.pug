@@ -1,16 +1,26 @@
 extends ui_layout
 
 block content
+  .one.wide.column
+    button.circular.ui.icon.button.blue.centered.left(nextVid=4, data-tooltip='Previous Video')
+      i.chevron.left.icon
   .thirteen.wide.computer.ten.wide.tablet.sixteen.wide.mobile.column
-    each val in script
+    each val, index in script
       include ./partials/actorPost
     include ./partials/shareModal
+  .one.wide.column
+    button.circular.ui.icon.button.blue.centered.right(nextVid=1, data-tooltip='Next Video')
+      i.chevron.right.icon
     
 block scripts
-  script. 
-    var script = !{JSON.stringify(script)};
+  script.
+    var numComments = !{JSON.stringify(user.numComments)};
+    var userProfile = !{JSON.stringify(user.profile)};
+    const posts = !{JSON.stringify(script.map(post => post._id))};
   script(src='/public/js/script.js')
+  script(src='/public/js/lib/jquery.highlight-within-textarea.js')
   script(src='/public/js/postFunctionalities.js')
 
 block styles 
+  link(type='text/css', rel='stylesheet', href='/public/css/jquery.highlight-within-textarea.css')
   link(type='text/css', rel='stylesheet', href='/public/css/script.css')

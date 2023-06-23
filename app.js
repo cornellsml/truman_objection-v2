@@ -236,7 +236,7 @@ app.post('/signup', userController.postSignup); //Creates new user or updates ol
 //     });
 // });
 // app.post('/account/signup_info_post', passportConfig.isAuthenticated, useravatarupload.single('picinput'), csrf, userController.postSignupInfo);
-app.get('/account/interest', async function(req, res) {
+app.get('/account/interest', passportConfig.isAuthenticated, async function(req, res) {
     const data = await fs.readFileAsync(`${__dirname}/public/json/interestData.json`)
     const interestData = JSON.parse(data.toString());
 

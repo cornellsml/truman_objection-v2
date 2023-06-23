@@ -43,7 +43,7 @@ exports.isAuthenticated = (req, res, next) => {
         return next();
     }
     res.redirect(url.format({
-        pathname: "/login",
+        pathname: "/signup",
         query: req.query,
     }));
 };
