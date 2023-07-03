@@ -113,7 +113,7 @@ exports.getLogin = (req, res) => {
 exports.logout = (req, res) => {
     req.logout();
     req.session.regenerate(function() {
-        res.redirect('/login'); // TODO: thank you page.
+        res.redirect('/signup'); // TODO: thank you page.
     })
 };
 
@@ -166,7 +166,8 @@ exports.postSignup = (req, res, next) => {
                     color: '#a6a488',
                     picture: req.body.photo
                 },
-                group: varResult,
+                // group: varResult,
+                group: 1,
                 endSurveyLink: surveyLink,
                 active: true,
                 lastNotifyVisit: (Date.now()),

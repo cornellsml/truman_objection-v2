@@ -290,8 +290,7 @@ function addCommentToVideo(e) {
                         <i class="icon thumbs down"></i>
                         <span class="num">0</span>
                     </a>
-                    <a class="reply" onClick="openCommentReply(event)">Reply</a>
-                    <a class="share" onClick="shareComment(event)">Share</a>                                        
+                    <a class="reply" onClick="openCommentReply(event)">Reply</a>                                     
                 </div> 
             </div>
         </div>`;
@@ -399,12 +398,15 @@ function addCommentToComment(e) {
         }
 
         const card = target.parents(".ui.fluid.card");
+        console.log(card);
         const videoTime = card.find("video")[0].currentTime * 1000;
         const date = Date.now();
         const postID = card.attr("postID");
         const postClass = card.attr("postClass");
         const commentID = numComments + 1 + 62;
         const reply_to = orig_comment.find("a.author").hasClass('/me') ? orig_comment.attr('commentID') : orig_comment.attr('index');
+        const parent_comment = form.parents(".comment").last().attr('index');
+        console.log(parent_comment);
 
         const mess =
             `<div class="comment" commentID=${commentID}>
@@ -426,8 +428,7 @@ function addCommentToComment(e) {
                         <i class="icon thumbs down"></i>
                         <span class="num">0</span>
                     </a>
-                    <a class="reply" onClick="openCommentReply(event)">Reply</a>
-                    <a class="share" onClick="shareComment(event)">Share</a>                                        
+                    <a class="reply" onClick="openCommentReply(event)">Reply</a>                                  
                 </div> 
             </div>
         </div>`;
@@ -444,6 +445,7 @@ function addCommentToComment(e) {
             comment_text: text,
             postClass: postClass,
             reply_to: reply_to,
+            parent_comment: parent_comment,
             _csrf: $('meta[name="csrf-token"]').attr('content')
         }).then(function(json) {
             numComments = json.numComments;
@@ -480,7 +482,7 @@ $(window).on('load', () => {
     $('.flag.button').on('click', flagPost);
 
     //Share Post
-    $('.share.button').on('click', sharePost);
+    // $('.share.button').on('click', sharePost);
 
     // ************ Actions on Comments***************
     // Like comment
@@ -493,7 +495,7 @@ $(window).on('load', () => {
     $('a.flag').on('click', flagComment);
 
     //Share comment 
-    $('a.share').on('click', shareComment);
+    // $('a.share').on('click', shareComment);
 
     //Reply to comment
     $('a.reply').on('click', openCommentReply);

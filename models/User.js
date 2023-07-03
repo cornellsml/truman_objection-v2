@@ -134,6 +134,7 @@ const userSchema = new mongoose.Schema({
             new_comment: { type: Boolean, default: false }, //is this a comment from user?
             new_comment_id: Number, //ID for comment, begins at 62
             reply_to: Number, // CommentID/index if comment is a reply
+            parent_comment: Number, //CommentID/index of parent comment (used for identifying subcommenting)
             body: String, //Body of comment
             absTime: Date, //Exact time comment was made
             relativeTime: Number, //in milliseconds, relative time comment was made to when the user created their account

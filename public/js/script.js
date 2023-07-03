@@ -11,7 +11,7 @@ $(window).on("load", function() {
                     if (!commentElement.is(":visible")) {
                         if (commentElement.parent('.subcomments').length) {
                             if (!commentElement.parent('.subcomments').is(":visible")) {
-                                commentElement.parent('.subcomments').transition('fade up');
+                                commentElement.parent('.subcomments').transition('fade');
                             }
                         }
                         commentElement.addClass("glowBorder", 1000).transition('fade up');
@@ -24,6 +24,7 @@ $(window).on("load", function() {
         };
     });
 
+    // At the end of the video, just ensure all the comments appear.
     $('video').on("ended", function() {
         const post = $(this).parents('.ui.fluid.card');
         for (const comment of post.find('.comment.hidden')) {
