@@ -1,4 +1,6 @@
 $(window).on("load", function() {
+    let offenseSeen = false;
+    let objectionSeen = false;
     $.post("/pageLog", {
         path: window.location.pathname + `?=v${$('.ui.fluid.card:visible').attr('index')}`,
         _csrf: $('meta[name="csrf-token"]').attr('content')
@@ -26,11 +28,40 @@ $(window).on("load", function() {
                 }
             }
         };
+
+        const index = parseInt(post.attr("index"));
+        const offense = {
+            1: 45000,
+            6: 22000,
+            11: 45000
+        }
+        const objection = {
+            1: 49000,
+            6: 28000,
+            11: 49000
+        }
+        if ([1, 6, 11].includes(index)) {
+            if (this.currentTime * 1000 > offense[index] && !offenseSeen) {
+                $.post("/messageSeen", {
+                    offense: true,
+                    _csrf: $('meta[name="csrf-token"]').attr('content')
+                });
+                offenseSeen = true;
+            }
+            if (this.currentTime * 1000 > objection[index] && !objectionSeen) {
+                $.post("/messageSeen", {
+                    objection: true,
+                    _csrf: $('meta[name="csrf-token"]').attr('content')
+                });
+                objectionSeen = true;
+            }
+        }
     });
 
     // At the end of the video, just ensure all the comments appear.
     $('video').on("ended", function() {
         const post = $(this).parents('.ui.fluid.card');
+        const postID = post.attr("postID");
         for (const comment of post.find('.comment.hidden')) {
             const commentElement = $(comment);
             if (!commentElement.is(":visible")) {
@@ -45,12 +76,132 @@ $(window).on("load", function() {
                 }, 2500);
             }
         }
+        $.post("/feed", {
+            postID: postID,
+            videoAction: {
+                action: 'ended',
+                absTime: Date.now(),
+            },
+            _csrf: $('meta[name="csrf-token"]').attr('content')
+        });
     });
+
+    $('video').on("play", function() {
+        const post = $(this).parents('.ui.fluid.card');
+        const postID = post.attr("postID");
+        $.post("/feed", {
+            postID: postID,
+            videoAction: {
+                action: 'play',
+                absTime: Date.now(),
+                videoTime: this.currentTime,
+            },
+            _csrf: $('meta[name="csrf-token"]').attr('content')
+        });
+    })
+
+    $('video').on("pause", function() {
+        const post = $(this).parents('.ui.fluid.card');
+        const postID = post.attr("postID");
+        if (!this.seeking) {
+            $.post("/feed", {
+                postID: postID,
+                videoAction: {
+                    action: 'pause',
+                    absTime: Date.now(),
+                    videoTime: this.currentTime,
+                },
+                _csrf: $('meta[name="csrf-token"]').attr('content')
+            });
+        }
+    })
+
+    $('video').on("seeked", function() {
+        const post = $(this).parents('.ui.fluid.card');
+        const postID = post.attr("postID");
+        $.post("/feed", {
+            postID: postID,
+            videoAction: {
+                action: 'seeked',
+                absTime: Date.now(),
+                videoTime: this.currentTime,
+            },
+            _csrf: $('meta[name="csrf-token"]').attr('content')
+        });
+    })
+
+    $('video').on("seeking", function() {
+        const post = $(this).parents('.ui.fluid.card');
+        const postID = post.attr("postID");
+        $.post("/feed", {
+            postID: postID,
+            videoAction: {
+                action: 'seeking',
+                absTime: Date.now(),
+                videoTime: this.currentTime,
+            },
+            _csrf: $('meta[name="csrf-token"]').attr('content')
+        });
+    })
+
+
+    $('video').on("volumechange", function() {
+        const post = $(this).parents('.ui.fluid.card');
+        const postID = post.attr("postID");
+        $.post("/feed", {
+            postID: postID,
+            videoAction: {
+                action: 'volumechange',
+                absTime: Date.now(),
+                videoTime: this.currentTime,
+                volume: (this.muted) ? 0 : this.volume
+            },
+            _csrf: $('meta[name="csrf-token"]').attr('content')
+        });
+    })
 
     //Buttons to switch videos
     $('button.circular.ui.icon.button.blue.centered').on("click", function() {
         const currentCard = $('.ui.fluid.card:visible');
-        currentCard.find('video').trigger('pause');
+        const postID = currentCard.attr("postID");
+
+        i = 0;
+        videoDuration = [];
+        while (i < currentCard.find('video')[0].played.length) {
+            videoDuration.push({
+                startTime: currentCard.find('video')[0].played.start(i),
+                endTime: currentCard.find('video')[0].played.end(i)
+            })
+            i++;
+        }
+        if (videoDuration.length != 0) {
+            $.post("/feed", {
+                postID: postID,
+                videoDuration: videoDuration,
+                _csrf: $('meta[name="csrf-token"]').attr('content')
+            });
+        }
+
+        if (!currentCard.find('video')[0].paused) {
+            currentCard.find('video').off("pause");
+            currentCard.find('video').trigger('pause');
+            currentCard.find('video').on("pause", function() {
+                const post = $(this).parents('.ui.fluid.card');
+                const postID = post.attr("postID");
+                if (!this.seeking) {
+                    $.post("/feed", {
+                        postID: postID,
+                        videoAction: {
+                            action: 'pause',
+                            absTime: Date.now(),
+                            videoTime: this.currentTime,
+                        },
+                        _csrf: $('meta[name="csrf-token"]').attr('content')
+                    });
+                }
+            })
+        }
+
         const nextVid = parseInt($(this).attr('nextVid'));
         $.post("/pageLog", {
             path: window.location.pathname + `?v=${nextVid}`,

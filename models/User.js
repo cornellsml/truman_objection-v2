@@ -43,10 +43,13 @@ const userSchema = new mongoose.Schema({
     //     actorName: String
     // })],
 
-    study_days: { //how many times the user looked at the feed per day
-        type: [Number],
-        default: [0, 0]
-    }, //TODO: Update. It inaccurately +1, whenever creates a new post.
+    // study_days: { //how many times the user looked at the feed per day
+    //     type: [Number],
+    //     default: [0, 0]
+    // }, //TODO: Update. It inaccurately +1, whenever creates a new post.
+
+    offenseMessageSeen: { type: Boolean, default: false },
+    objectionMessageSeen: { type: Boolean, default: false },
 
     // User Made posts
     // posts: [new Schema({
@@ -121,9 +124,20 @@ const userSchema = new mongoose.Schema({
         shareTime: [Date], //absoluteTimes of times user has shared the post
         // readTime: [Number], //in milliseconds, how long the user spent looking at the post (we do not record times less than 1.5 seconds and more than 24 hrs)
 
-        videoActions: [new Schema({
+        videoAction: [{
+            action: String, //Type of action (play, pause, seeking, seeked, volumeChange, ended) https: //developer.mozilla.org/en-US/docs/Web/HTML/Element/video#events
+            absTime: Date, //Exact time action was taken
+            videoTime: Number, //in milliseconds (play: time in video they clicked play, pause: time in video they clicked pause, seeking + seeked: time in video they seeked to)
+            volume: Number //number from 0-1, indicating new volume.
+        }],
 
-        })], // play, pause, seek, https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video#events
+        videoDuration: [
+            [{
+                startTime: Number,
+                endTime: Number
+            }]
+        ],
+
         comments: [new Schema({
             comment: { type: Schema.ObjectId }, //ID Reference for Script post comment
             liked: { type: Boolean, default: false }, //has the user liked it?

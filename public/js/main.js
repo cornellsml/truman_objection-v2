@@ -1,7 +1,7 @@
 //Before Page load:
 // $('#content').hide();
 // $('#loading').show();
-let startTime;
+let startTime = Date.now();
 
 //Called when inactive and when page unloads
 //Function calculates duration of activity and adds to sum in the database.

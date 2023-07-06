@@ -392,7 +392,12 @@ exports.postUpdateFeedAction = (req, res, next) => {
                 }
                 user.feedAction[feedIndex].rereadTimes++;
                 user.feedAction[feedIndex].mostRecentTime = Date.now();
+            } else if (req.body.videoAction) {
+                user.feedAction[feedIndex].videoAction.push(req.body.videoAction);
+            } else if (req.body.videoDuration) {
+                user.feedAction[feedIndex].videoDuration.push(req.body.videoDuration);
             } else {
+                console.log(req.body)
                 console.log('Something in feedAction went crazy. You should never see this.');
             }
         }
@@ -411,74 +416,24 @@ exports.postUpdateFeedAction = (req, res, next) => {
 };
 
 /**
- * POST /userPost_feed/
- * Update user's actions on USER posts. 
+ * POST /messageSeen
+ * Post whether offense or objection message is seen
  */
-// exports.postUpdateUserPostFeedAction = (req, res, next) => {
-//     User.findById(req.user.id, (err, user) => {
-//         if (err) { return next(err); }
-
-//         //Find the index of object in user posts
-//         var feedIndex = _.findIndex(user.posts, function(o) { return o.postID == req.body.postID; });
-
-//         if (feedIndex == -1) {
-//             // Should not happen.
-//         } // Add a new comment
-//         else if (req.body.new_comment) {
-//             user.numComments = user.numComments + 1;
-//             var cat = {
-//                 body: req.body.comment_text,
-//                 commentID: user.numComments, // not sure if it needs to be added to 900
-//                 relativeTime: req.body.new_comment - user.createdAt,
-//                 absTime: req.body.new_comment,
-//                 new_comment: true,
-//                 liked: false,
-//                 flagged: false,
-//                 likes: 0
-//             };
-//             user.posts[feedIndex].comments.push(cat);
-//         } //Are we doing anything with a comment?
-//         else if (req.body.commentID) {
-//             var commentIndex = _.findIndex(user.posts[feedIndex].comments, function(o) {
-//                 return o.commentID == req.body.commentID && o.new_comment == (req.body.isUserComment == 'true')
-//             });
-//             //no comment in this post-actions yet
-//             if (commentIndex == -1) {
-//                 console.log("Should not happen.");
-//             }
-
-//             //LIKE A COMMENT
-//             else if (req.body.like) {
-//                 user.posts[feedIndex].comments[commentIndex].liked = true;
-//             } else if (req.body.unlike) {
-//                 user.posts[feedIndex].comments[commentIndex].liked = false;
-//             }
-
-//             //FLAG A COMMENT
-//             else if (req.body.flag) {
-//                 user.posts[feedIndex].comments[commentIndex].flagged = true;
-//             }
-
-//         } //Not a comment-- Are we doing anything with the post?
-//         else {
-//             //we found the right post, and feedIndex is the right index for it
-//             if (req.body.like) {
-//                 user.posts[feedIndex].liked = true;
-//             }
-//             if (req.body.unlike) {
-//                 user.posts[feedIndex].liked = false;
-//             }
-//         }
-//         user.save((err) => {
-//             if (err) {
-//                 if (err.code === 11000) {
-//                     req.flash('errors', { msg: 'Something in profile_feed went crazy. You should never see this.' });
-//                     return res.redirect('/');
-//                 }
-//                 console.log(err);
-//                 return next(err);
-//             }
-//             res.send({ result: "success", numComments: user.numComments });
-//         });
-//     });
-// }
+exports.postMessageSeen = (req, res, next) => {
+    User.findById(req.user.id, (err, user) => {
+        if (err) { return next(err); }
+        if (req.body.offense) {
+            user.offenseMessageSeen = true;
+        }
+        if (req.body.objection) {
+            user.objectionMessageSeen = true;
+        }
+        user.save((err) => {
+            if (err) {
+                return next(err);
+            }
+            res.set('Content-Type', 'application/json; charset=UTF-8');
+            res.send({ result: "success" });
+        });
+    });
+};

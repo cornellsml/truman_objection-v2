@@ -2,14 +2,14 @@ extends ui_layout
 
 block content
   .one.wide.column
-    button.circular.ui.icon.button.blue.centered.left.hidden(data-tooltip='Previous Video')
+    button.circular.ui.icon.button.blue.big.centered.left.hidden(data-tooltip='Previous Video')
       i.chevron.left.icon
   .thirteen.wide.computer.ten.wide.tablet.sixteen.wide.mobile.column
     each val, index in script
       include ./partials/actorPost
     //- include ./partials/shareModal
   .one.wide.column
-    button.circular.ui.icon.button.blue.centered.right(nextVid=script[1].postID, data-tooltip='Next Video')
+    button.circular.ui.icon.button.blue.big.centered.right(nextVid=script[1].postID, data-tooltip='Next Video')
       i.chevron.right.icon
     
 block scripts

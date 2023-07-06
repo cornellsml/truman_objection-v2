@@ -195,6 +195,7 @@ app.get('/', passportConfig.isAuthenticated, scriptController.getScript);
 // app.post('/post/new', userpostupload.single('picinput'), csrf, scriptController.newPost);
 app.post('/pageLog', passportConfig.isAuthenticated, userController.postPageLog);
 app.post('/pageTimes', passportConfig.isAuthenticated, userController.postPageTime);
+app.post('/messageSeen', passportConfig.isAuthenticated, scriptController.postMessageSeen);
 
 // app.get('/com', function(req, res) {
 //     const feed = req.query.feed == "true" ? true : false; //Are we accessing the community rules from the feed?
