@@ -181,9 +181,7 @@ async function doPopulate() {
                                 unlikes: getLikes(),
                                 actor: act,
                                 time: new_post.time || null,
-                                class: new_post.class,
-                                offense_time: new_post.offense_time,
-                                objection_time: new_post.objection_time
+                                class: new_post.class
                             }
 
                             var script = new Script(postdetail);
@@ -328,6 +326,7 @@ async function doPopulate() {
     }).then(function(result) {
         console.log(color_start, "Starting to populate post replies...");
         return new Promise((resolve, reject) => {
+            let offenseComment;
             async.eachSeries(comment_list, function(new_reply, callback) {
                     Actor.findOne({ username: new_reply.actor }, (err, act) => {
                         if (act) {
@@ -341,18 +340,36 @@ async function doPopulate() {
                                         actor: act,
                                         time: new_reply.time || null
                                     };
-
-                                    pr.comments.push(comment_detail);
-                                    pr.comments.sort(function(a, b) { return a.time - b.time; });
-
-                                    pr.save(function(err) {
-                                        if (err) {
-                                            console.log(color_error, "ERROR: Something went wrong with saving reply in database");
-                                            callback(err);
-                                        }
-                                        // console.log('Saved New Reply');
+                                    if (new_reply.class == 'offense') {
+                                        offenseComment = comment_detail;
                                         callback();
-                                    });
+                                    } else if (new_reply.class == 'objection') {
+                                        offenseComment.subcomments = [comment_detail];
+                                        comment_detail = offenseComment;
+                                        pr.comments.push(comment_detail);
+                                        pr.comments.sort(function(a, b) { return a.time - b.time; });
+
+                                        pr.save(function(err) {
+                                            if (err) {
+                                                console.log(color_error, "ERROR: Something went wrong with saving reply in database");
+                                                callback(err);
+                                            }
+                                            // console.log('Saved New Reply');
+                                            callback();
+                                        });
+                                    } else {
+                                        pr.comments.push(comment_detail);
+                                        pr.comments.sort(function(a, b) { return a.time - b.time; });
+
+                                        pr.save(function(err) {
+                                            if (err) {
+                                                console.log(color_error, "ERROR: Something went wrong with saving reply in database");
+                                                callback(err);
+                                            }
+                                            // console.log('Saved New Reply');
+                                            callback();
+                                        });
+                                    }
                                 } else { //Else no post found
                                     console.log(color_error, "ERROR: Post not found in database");
                                     callback();

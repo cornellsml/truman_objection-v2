@@ -120,7 +120,7 @@ function likeComment(e) {
     const postID = target.closest(".ui.fluid.card").attr("postID");
     const postClass = target.closest(".ui.fluid.card").attr("postClass");
     const commentID = comment.attr("commentID");
-    const isUserComment = comment.find("a.author").hasClass('/me');
+    const isUserComment = comment.children(".content").children("a.author").hasClass('/me');
     const like = Date.now();
 
     if (target.hasClass("green")) { //Undo like comment
@@ -168,7 +168,7 @@ function unlikeComment(e) {
     const postID = target.closest(".ui.fluid.card").attr("postID");
     const postClass = target.closest(".ui.fluid.card").attr("postClass");
     const commentID = comment.attr("commentID");
-    const isUserComment = comment.find("a.author").hasClass('/me');
+    const isUserComment = comment.children(".content").children("a.author").hasClass('/me');
     const unlike = Date.now();
 
     if (target.hasClass("red")) { //Undo unlike comment
@@ -214,13 +214,29 @@ function flagComment(e) {
     const postID = target.closest(".ui.fluid.card").attr("postID");
     const postClass = target.closest(".ui.fluid.card").attr("postClass");;
     const commentID = comment.attr("commentID");
-    const isUserComment = comment.find("a.author").hasClass('/me');
+    const index = comment.attr("index");
+    const isUserComment = comment.children(".content").children("a.author").hasClass('/me');
+
+    const subcomments = comment.children('.subcomments').html();
+    const metadata = comment.children(".content").children(".metadata").html();
+    console.log(subcomments);
 
     comment.replaceWith(`
-        <div class="comment" commentID="${commentID}" style="background-color:black;color:white">
-            <h5 class="ui inverted header">
-                The admins will review this comment further. We are sorry you had this experience.
-            </h5>
+        <div class="comment" commentID="${commentID}" index="${index}">
+            <div class="content">
+                <div class="metadata">${metadata}</div>
+                <div class="text" style="background-color:black; color: white; margin-right:2.5em; padding: 0.2em">
+                    You flagged this comment. The admins will review this comment further. We are sorry you had this experience.
+                </div>
+            </div>
+            ${subcomments? '<div class="comments subcomments">' + 
+            subcomments
+            .replace("glowBorder", "")
+            .replace('class="like"', 'class="like" onclick="likeComment(event)"')
+            .replace('class="unlike"', 'class="unlike" onclick="unlikeComment(event)"')
+            .replace('class="flag"', 'class="unlike" onclick="flagComment(event)"')
+            .replace('class="reply"', 'class="unlike" onclick="openCommentReply(event)"')
+             + '</div>' : ""}
         </div>`);
     const flag = Date.now();
 
@@ -240,7 +256,7 @@ function shareComment(e) {
     const postID = target.closest(".ui.fluid.card").attr("postID");
     const postClass = target.closest(".ui.fluid.card").attr("postClass");;
     const commentID = comment.attr("commentID");
-    const isUserComment = comment.find("a.author").hasClass('/me');
+    const isUserComment = comment.children(".content").children("a.author").hasClass('/me');
     const share = Date.now();
 
     const pathname = window.location.href;
@@ -268,7 +284,7 @@ function addCommentToVideo(e) {
         const videoTime = card.find("video")[0].currentTime * 1000;
         const date = Date.now();
         const postID = card.attr("postID");
-        const commentID = numComments + 1 + 62;
+        const commentID = numComments + 1 + 63;
 
         const mess = `
         <div class="comment" commentID=${commentID} index=${commentID}>
@@ -290,8 +306,7 @@ function addCommentToVideo(e) {
                         <i class="icon thumbs down"></i>
                         <span class="num">0</span>
                     </a>
-                    <a class="reply" onClick="openCommentReply(event)">Reply</a>
-                    <a class="share" onClick="shareComment(event)">Share</a>                                        
+                    <a class="reply" onClick="openCommentReply(event)">Reply</a>                                  
                 </div> 
             </div>
         </div>`;
@@ -339,7 +354,7 @@ function openCommentReply(e) {
                     <div class="image" style="background-color:${color}">
                         <img class="ui image rounded" src=${photo}>
                     </div>
-                        <textarea class="replyToComment" type="text" placeholder="Add a Reply..." rows="1" onInput="changeColor(event${comment_level==2 ? ", '@"+reply_to +"'": ""})">${(comment_level == 2) ? "@"+reply_to+" " : ""}</textarea>
+                    <textarea class="replyToComment" type="text" placeholder="Add a Reply..." rows="1" onInput="changeColor(event${comment_level==2 ? ", '@"+reply_to +"'": ""})">${(comment_level == 2) ? "@"+reply_to+" " : ""}</textarea>
                 </div>
                 <div class="ui submit button replyToComment" onClick="addCommentToComment(event)">
                     Reply to ${reply_to}
@@ -348,7 +363,7 @@ function openCommentReply(e) {
                     Cancel
                 </div>
             </div>
-            </form>`
+            </div>`
         );
         $(comment_area).insertAfter(target.children('.actions')).hide().show(400);
         const comment_area_element = $(target).find('textarea.replyToComment');
@@ -378,7 +393,7 @@ function addCommentToComment(e) {
     const comment_level = form.parents(".comment").length; // = 1 if 1st level, = 2 if 2nd level
     if (comment_level == 1) {
         if (!orig_comment.children('.comments').length) {
-            orig_comment.append('<div class="comments">');
+            orig_comment.append('<div class="comments subcomments">');
         }
         comments = orig_comment.find(".comments");
     } else {
@@ -403,8 +418,9 @@ function addCommentToComment(e) {
         const date = Date.now();
         const postID = card.attr("postID");
         const postClass = card.attr("postClass");
-        const commentID = numComments + 1 + 62;
-        const reply_to = orig_comment.find("a.author").hasClass('/me') ? orig_comment.attr('commentID') : orig_comment.attr('index');
+        const commentID = numComments + 1 + 63;
+        const reply_to = orig_comment.children(".content").children("a.author").hasClass('/me') ? orig_comment.attr('commentID') : orig_comment.attr('index');
+        const parent_comment = form.parents(".comment").last().attr('index');
 
         const mess =
             `<div class="comment" commentID=${commentID}>
@@ -426,15 +442,24 @@ function addCommentToComment(e) {
                         <i class="icon thumbs down"></i>
                         <span class="num">0</span>
                     </a>
-                    <a class="reply" onClick="openCommentReply(event)">Reply</a>
-                    <a class="share" onClick="shareComment(event)">Share</a>                                        
+                    <a class="reply" onClick="openCommentReply(event)">Reply</a>                                       
                 </div> 
             </div>
         </div>`;
 
         form.find("textarea.newComment").val("");
         form.remove();
-        comments.append(mess);
+
+        if (!comments.is(":visible")) {
+            comments.transition('fade');
+        }
+        // comments.append(mess);
+        const lastVisibleComment = comments.children('.comment:not(.hidden)').last()[0];
+        if (!lastVisibleComment) { //There are no comments visible
+            comments.prepend(mess);
+        } else { // There are some comments visible.
+            lastVisibleComment.insertAdjacentHTML("afterend", mess);
+        }
         $(`.comment[commentID=${commentID}]`).last()[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
 
         $.post("/feed", {
@@ -444,6 +469,7 @@ function addCommentToComment(e) {
             comment_text: text,
             postClass: postClass,
             reply_to: reply_to,
+            parent_comment: parent_comment,
             _csrf: $('meta[name="csrf-token"]').attr('content')
         }).then(function(json) {
             numComments = json.numComments;
@@ -480,7 +506,7 @@ $(window).on('load', () => {
     $('.flag.button').on('click', flagPost);
 
     //Share Post
-    $('.share.button').on('click', sharePost);
+    // $('.share.button').on('click', sharePost);
 
     // ************ Actions on Comments***************
     // Like comment
@@ -493,7 +519,7 @@ $(window).on('load', () => {
     $('a.flag').on('click', flagComment);
 
     //Share comment 
-    $('a.share').on('click', shareComment);
+    // $('a.share').on('click', shareComment);
 
     //Reply to comment
     $('a.reply').on('click', openCommentReply);

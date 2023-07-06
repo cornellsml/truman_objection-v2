@@ -107,9 +107,9 @@ const userSchema = new mongoose.Schema({
 
     feedAction: [new Schema({
         post: { type: Schema.ObjectId, ref: 'Script' },
-        postClass: String, //Used for post classification purposes.
-        mostRecentTime: Date, //Absolute Time, the most recent Date the post was viewed
-        rereadTimes: { type: Number, default: 0 }, //number of times post has been viewed by user.
+        // postClass: String, //Used for post classification purposes.
+        // mostRecentTime: Date, //Absolute Time, the most recent Date the post was viewed
+        // rereadTimes: { type: Number, default: 0 }, //number of times post has been viewed by user.
 
         liked: { type: Boolean, default: false }, //has the user liked it?
         unliked: { type: Boolean, default: false }, //has the user disliked it?
@@ -119,8 +119,11 @@ const userSchema = new mongoose.Schema({
         unlikeTime: [Date], //absoluteTimes of times user has unliked the post
         flagTime: [Date], //absoluteTimes of times user has flagged the post
         shareTime: [Date], //absoluteTimes of times user has shared the post
-        readTime: [Number], //in milliseconds, how long the user spent looking at the post (we do not record times less than 1.5 seconds and more than 24 hrs)
+        // readTime: [Number], //in milliseconds, how long the user spent looking at the post (we do not record times less than 1.5 seconds and more than 24 hrs)
 
+        videoActions: [new Schema({
+
+        })], // play, pause, seek, https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video#events
         comments: [new Schema({
             comment: { type: Schema.ObjectId }, //ID Reference for Script post comment
             liked: { type: Boolean, default: false }, //has the user liked it?
@@ -132,8 +135,9 @@ const userSchema = new mongoose.Schema({
             flagTime: [Date], //absoluteTimes of times user has flagged the comment
             shareTime: [Date], //absoluteTimes of times user has shared the comment
             new_comment: { type: Boolean, default: false }, //is this a comment from user?
-            new_comment_id: Number, //ID for comment, begins at 62
+            new_comment_id: Number, //ID for comment, begins at 63
             reply_to: Number, // CommentID/index if comment is a reply
+            parent_comment: Number, //CommentID/index of parent comment (used for identifying subcommenting)
             body: String, //Body of comment
             absTime: Date, //Exact time comment was made
             relativeTime: Number, //in milliseconds, relative time comment was made to when the user created their account

@@ -42,10 +42,17 @@ exports.getScript = (req, res, next) => {
             //Get the newsfeed
             Script.find()
                 .where('class').equals(user.interest)
-                .sort('-time')
+                .sort('postID')
                 .populate('actor')
                 .populate({
                     path: 'comments.actor',
+                    populate: {
+                        path: 'actor',
+                        model: 'Actor'
+                    }
+                })
+                .populate({
+                    path: 'comments.subcomments.actor',
                     populate: {
                         path: 'actor',
                         model: 'Actor'
@@ -57,35 +64,9 @@ exports.getScript = (req, res, next) => {
                     //Final array of all posts to go in the feed
                     let finalfeed = [];
 
-                    const offense_actor = await Actor.find({ class: "offense_actor" }).exec();
-                    const objection_actor = await Actor.find({ class: "objection_actor" }).exec();
-
                     // //While there are regular posts or user-made posts to add to the final feed
                     while (script_feed.length) {
-                        //Check to see if offense or objection post 
-                        if (script_feed[0].postID % 5 == user.group) {
-                            const offense_comment = {
-                                commentID: 60,
-                                body: "LOL, what a waste of time! Did you make this video with your eyes closed? It's so poorly edited and boring. Nobody cares about your garbage content. Do us all a favor and stop wasting your time.",
-                                likes: 0,
-                                unlikes: 0,
-                                actor: offense_actor[0],
-                                time: script_feed[0].offense_time,
-
-                                subcomments: [{
-                                    commentID: 61,
-                                    body: "Shut your mouth.  What you said is wrong.  Don’t you know how to respect others?  Don’t be a jerk.",
-                                    likes: 0,
-                                    unlikes: 0,
-                                    actor: objection_actor[0],
-                                    time: script_feed[0].objection_time,
-                                    reply_to: 60
-                                }]
-                            };
-
-                            script_feed[0].comments.push(offense_comment);
-                        }
-
+                        let replyDictionary = {}; // where Key = parent comment reply falls under, value = the list of comment objects
 
                         //Looking at the post in script_feed[0] now.
                         //For this post, check if there is a user feedAction matching this post's ID and get its index.
@@ -112,7 +93,18 @@ exports.getScript = (req, res, next) => {
                                             liked: commentObject.liked,
                                             unliked: commentObject.unliked
                                         };
-                                        script_feed[0].comments.push(cat);
+
+                                        if (commentObject.reply_to != null) {
+                                            cat.reply_to = commentObject.reply_to;
+                                            cat.parent_comment = commentObject.parent_comment;
+                                            if (replyDictionary[commentObject.parent_comment]) {
+                                                replyDictionary[commentObject.parent_comment].push(cat)
+                                            } else {
+                                                replyDictionary[commentObject.parent_comment] = [cat];
+                                            }
+                                        } else {
+                                            script_feed[0].comments.push(cat);
+                                        }
                                     } else {
                                         // This is not a new, user-created comment.
                                         // Get the comment index that corresponds to the correct comment
@@ -132,11 +124,29 @@ exports.getScript = (req, res, next) => {
                                             }
                                             // Check if there is a flag recorded for this comment.
                                             if (commentObject.flagged) {
-                                                // Remove the comment from the post if it has been flagged.
-                                                script_feed[0].comments.splice(commentIndex, 1);
+                                                script_feed[0].comments[commentIndex].flagged = true;
                                             }
                                         } else {
-                                            // deal with subcomment.
+                                            script_feed[0].comments.forEach(function(comment, index) {
+                                                const subcommentIndex = _.findIndex(comment.subcomments, function(o) { return o.id == commentObject.comment; });
+                                                if (subcommentIndex != -1) {
+                                                    // Check if there is a like recorded for this subcomment.
+                                                    if (commentObject.liked) {
+                                                        // Update the comment in script_feed.
+                                                        script_feed[0].comments[index].subcomments[subcommentIndex].liked = true;
+                                                        script_feed[0].comments[index].subcomments[subcommentIndex].likes++;
+                                                    }
+                                                    if (commentObject.unliked) {
+                                                        // Update the subcomment in script_feed.
+                                                        script_feed[0].comments[index].subcomments[subcommentIndex].unliked = true;
+                                                        script_feed[0].comments[index].subcomments[subcommentIndex].unlikes++;
+                                                    }
+                                                    // Check if there is a flag recorded for this subcomment.
+                                                    if (commentObject.flagged) {
+                                                        script_feed[0].comments[index].subcomments[subcommentIndex].flagged = true;
+                                                    }
+                                                }
+                                            })
                                         }
                                     }
                                 }
@@ -144,6 +154,15 @@ exports.getScript = (req, res, next) => {
                             script_feed[0].comments.sort(function(a, b) {
                                 return b.time - a.time; // in descending order.
                             });
+
+                            for (const [key, value] of Object.entries(replyDictionary)) {
+                                const commentIndex = _.findIndex(script_feed[0].comments, function(o) { return o.commentID == key; });
+                                script_feed[0].comments[commentIndex]["subcomments"] =
+                                    script_feed[0].comments[commentIndex]["subcomments"].concat(value)
+                                    .sort(function(a, b) {
+                                        return a.time - b.time; // in descending order.
+                                    });
+                            }
 
                             // No longer looking at comments on this post.
                             // Now we are looking at the main post.
@@ -179,7 +198,6 @@ exports.getScript = (req, res, next) => {
                             //     script_feed.splice(0, 1);
                             // } else {
                             finalfeed.push(script_feed[0]);
-                            console.log(finalfeed);
                             script_feed.splice(0, 1);
                             // }
                         } //user did not interact with this post
@@ -238,7 +256,7 @@ exports.postUpdateFeedAction = (req, res, next) => {
             user.numComments = user.numComments + 1;
             var cat = {
                 new_comment: true,
-                new_comment_id: user.numComments + 62,
+                new_comment_id: user.numComments + 63,
                 body: req.body.comment_text,
                 relativeTime: req.body.new_comment - user.createdAt,
                 absTime: req.body.new_comment,
@@ -247,7 +265,8 @@ exports.postUpdateFeedAction = (req, res, next) => {
                 unliked: false,
                 flagged: false,
                 shared: false,
-                reply_to: req.body.reply_to
+                reply_to: req.body.reply_to,
+                parent_comment: req.body.parent_comment
             }
             user.feedAction[feedIndex].comments.push(cat);
         }
@@ -262,7 +281,6 @@ exports.postUpdateFeedAction = (req, res, next) => {
                 _.findIndex(user.feedAction[feedIndex].comments, function(o) {
                     return o.comment == req.body.commentID && o.new_comment == isUserComment
                 });
-
             //no comment in this post-actions yet
             if (commentIndex == -1) {
                 var cat = {

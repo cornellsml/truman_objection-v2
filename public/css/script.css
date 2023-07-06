@@ -3,6 +3,10 @@
     /*For single post on page*/
 }
 
+button.circular.ui.icon.button.blue.centered.hidden {
+    display: none !important;
+}
+
 
 /* ---- VIDEO CSS ---- */
 

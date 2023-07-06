@@ -220,10 +220,10 @@ app.get('/completed', passportConfig.isAuthenticated, userController.userTestRes
 
 // app.get('/notifications', passportConfig.isAuthenticated, notificationController.getNotifications);
 
-app.get('/login', userController.getLogin); //Renders home page
+// app.get('/login', userController.getLogin); //Renders home page
 // app.post('/login', userController.postLogin); //One-shot study doesn't require "logging in"
 app.get('/logout', userController.logout);
-app.get('/forgot', userController.getForgot);
+// app.get('/forgot', userController.getForgot);
 app.get('/signup', userController.getSignup); //Renders username/profile photo Page
 app.post('/signup', userController.postSignup); //Creates new user or updates old user based on form fields
 
