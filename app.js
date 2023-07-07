@@ -226,6 +226,11 @@ app.get('/completed', passportConfig.isAuthenticated, userController.userTestRes
 app.get('/logout', userController.logout);
 // app.get('/forgot', userController.getForgot);
 app.get('/signup', userController.getSignup); //Renders username/profile photo Page
+app.get('/thankyou', function(req, res) {
+    res.render('thankyou', {
+        title: 'Thank you!',
+    })
+}); //Renders Thank you page
 app.post('/signup', userController.postSignup); //Creates new user or updates old user based on form fields
 
 // app.get('/account', passportConfig.isAuthenticated, userController.getAccount);

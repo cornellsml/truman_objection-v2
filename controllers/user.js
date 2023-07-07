@@ -113,7 +113,7 @@ exports.getLogin = (req, res) => {
 exports.logout = (req, res) => {
     req.logout();
     req.session.regenerate(function() {
-        res.redirect('/signup'); // TODO: thank you page.
+        res.redirect('/thankyou');
     })
 };
 
