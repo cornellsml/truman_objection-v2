@@ -31,14 +31,14 @@ $(window).on("load", function() {
 
         const index = parseInt(post.attr("index"));
         const offense = {
-            1: 45000,
-            6: 22000,
-            11: 45000
+            1: 34000,
+            6: 30000,
+            11: 39000
         }
         const objection = {
-            1: 49000,
-            6: 28000,
-            11: 49000
+            1: 42000,
+            6: 38000,
+            11: 46000
         }
         if ([1, 6, 11].includes(index)) {
             if (this.currentTime * 1000 > offense[index] && !offenseSeen) {
