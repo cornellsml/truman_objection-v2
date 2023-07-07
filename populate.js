@@ -178,7 +178,7 @@ async function doPopulate() {
                                 body: new_post.body,
                                 picture: new_post.picture,
                                 likes: getLikes(),
-                                unlikes: getLikes(),
+                                unlikes: getUnlikes(),
                                 actor: act,
                                 time: new_post.time || null,
                                 class: new_post.class
@@ -335,8 +335,8 @@ async function doPopulate() {
                                     var comment_detail = {
                                         commentID: new_reply.id,
                                         body: new_reply.body,
-                                        likes: getLikesComment(),
-                                        unlikes: getLikesComment(),
+                                        likes: new_reply.likes || getLikesComment(),
+                                        unlikes: new_reply.dislikes || getUnlikesComment(),
                                         actor: act,
                                         time: new_reply.time || null
                                     };
@@ -427,10 +427,22 @@ function getLikes() {
     return notRandomNumbers[idx];
 }
 
+function getUnlikes() {
+    var notRandomNumbers = [0, 0, 0, 0, 0, 1, 1, 1];
+    var idx = Math.floor(Math.random() * notRandomNumbers.length);
+    return notRandomNumbers[idx];
+}
+
 //Create a radom number (for likes) with a weighted distrubution
 //This is for comments
 function getLikesComment() {
     var notRandomNumbers = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 3, 4];
+    var idx = Math.floor(Math.random() * notRandomNumbers.length);
+    return notRandomNumbers[idx];
+}
+
+function getUnlikesComment() {
+    var notRandomNumbers = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2];
     var idx = Math.floor(Math.random() * notRandomNumbers.length);
     return notRandomNumbers[idx];
 }
