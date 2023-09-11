@@ -234,8 +234,8 @@ function flagComment(e) {
             .replace("glowBorder", "")
             .replace('class="like"', 'class="like" onclick="likeComment(event)"')
             .replace('class="unlike"', 'class="unlike" onclick="unlikeComment(event)"')
-            .replace('class="flag"', 'class="unlike" onclick="flagComment(event)"')
-            .replace('class="reply"', 'class="unlike" onclick="openCommentReply(event)"')
+            .replace('class="flag"', 'class="flag" onclick="flagComment(event)"')
+            .replace('class="reply"', 'class="reply" onclick="openCommentReply(event)"')
              + '</div>' : ""}
         </div>`);
     const flag = Date.now();
@@ -313,7 +313,11 @@ function addCommentToVideo(e) {
         form.find("textarea.replyToVideo").val('');
         form.find("textarea.replyToVideo").blur();
         const lastVisibleComment = comments.children('.comment:not(.hidden)').first()[0];
-        lastVisibleComment.insertAdjacentHTML("beforebegin", mess);
+        if (!lastVisibleComment) { //There are no comments visible
+            comments.append(mess);
+        } else { // There are some comments visible.
+            lastVisibleComment.insertAdjacentHTML("beforebegin", mess);
+        }
 
         $.post("/feed", {
             postID: postID,
