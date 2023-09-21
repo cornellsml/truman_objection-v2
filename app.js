@@ -270,11 +270,6 @@ app.post('/feed', passportConfig.isAuthenticated, scriptController.postUpdateFee
 /**
  * Error Handler.
  */
-
-/**
- * Error Handler.
- */
-// error handler
 app.use(function(err, req, res, next) {
     // No routes handled the request and no system error, that means 404 issue.
     // Forward to next middleware to handle it.

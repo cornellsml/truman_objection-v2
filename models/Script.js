@@ -13,7 +13,7 @@ const scriptSchema = new mongoose.Schema({
     offense_time: Number,
     objection_time: Number,
 
-    class: String, //For experimental use (can be used to define the type of post)
+    class: String, //For experimental use (used to define the type of post: Science, Education, Lifestyle)
 
     // Sorted by least recent --> most recent
     comments: [new Schema({
@@ -23,6 +23,7 @@ const scriptSchema = new mongoose.Schema({
         unlikes: Number, //number of dislikes of comment (randomly assigned in populate.js, assigned for offense)
         actor: { type: Schema.ObjectId, ref: 'Actor' }, //actor of comment
         time: Number, //time of comment in reference to video (in milliseconds)
+        class: String, //For experimental use (used to define the type of comment, null, offense, control)
 
         subcomments: [new Schema({
             commentID: Number, // ID of the comment
@@ -31,6 +32,7 @@ const scriptSchema = new mongoose.Schema({
             unlikes: Number, //number of dislikes of comment (assigned for objection)
             actor: { type: Schema.ObjectId, ref: 'Actor' }, //actor of comment
             time: Number, //time of comment in reference to video (in milliseconds)
+            class: String, //For experimental use (used to define the type of subcomment: null, number 0-17)
 
             new_comment: { type: Boolean, default: false },
             liked: { type: Boolean, default: false },

@@ -12,6 +12,5 @@ $(window).on("load", function() { //notifications popup on click, show the corre
                     $('.ui.tiny.long.modal .ui.fluid.card img').visibility('refresh');
                 }
             });
-
     })
 });

@@ -34,66 +34,12 @@ $(window).on("load", function() {
         });
     }
 
-    //add humanized time to all posts
-    // $('.right.floated.time.meta, .date').each(function() {
-    //     var ms = parseInt($(this).text(), 10);
-    //     let time = new Date(ms);
-    //     $(this).text(humanized_time_span(time));
-    // });
-
-    //close loading dimmer on load
-    // $('#loading').hide();
-    // $('#content').attr('style', 'block');
-    // $('#content').fadeIn('slow');
-
-    //Semantic UI: function for closing messages
-    // $('.message .close').on('click', function() {
-    //     $(this).closest('.message').transition('fade');
-    // });
-    //Semantic UI: function to make checkbox work
-    // $('.ui.checkbox').checkbox();
-
     if (window.location.pathname !== '/signup') {
         $.post("/pageLog", {
             path: window.location.pathname,
             _csrf: $('meta[name="csrf-token"]').attr('content')
         });
-        // if (window.location.pathname !== '/notifications') {
-        //     setInterval(function() {
-        //         // method to be executed;
-        //         $.getJSON("/notifications", { bell: true }, function(json) {
-        //             if (json.count != 0) {
-        //                 $("i.big.alarm.icon").replaceWith('<i class="big icons"><i class="red alarm icon"></i><i class="corner yellow lightning icon"></i></i>');
-        //             }
-        //         });
-        //     }, 5000);
-        // }
     };
-
-    //Picture Preview on Image Selection (Used for: uploading new post, updating profile)
-    // function readURL(input) {
-    //     if (input.files && input.files[0]) {
-    //         var reader = new FileReader();
-    //         reader.onload = function(e) {
-    //             $('#imgInp').attr('src', e.target.result);
-    //         }
-    //         reader.readAsDataURL(input.files[0]);
-    //     }
-    // }
-
-    // $("#picinput").change(function() {
-    //     readURL(this);
-    // });
-
-    //Button to go to feed
-    // $('.ui.big.green.labeled.icon.button.feed, .ui.home.inverted.button').on('click', function() {
-    //     window.location.href = '/';
-    // });
-
-    //Edit button
-    // $('.ui.editprofile.button').on('click', function() {
-    //     window.location.href = '/account';
-    // });
 
     // Track how long a post is on the screen (borders are defined by image)
     // Start time: When the entire photo is visible in the viewport .

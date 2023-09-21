@@ -135,12 +135,6 @@ exports.getSignup = (req, res) => {
  * Create a new local account.
  */
 exports.postSignup = (req, res, next) => {
-    /*###############################
-    Place Experimental Varibles Here!
-    ###############################*/
-    var versions = 5;
-    var varResult = [0, 1, 2, 3, 4][Math.floor(Math.random() * versions)]
-
     //TODO: assigning the correct survey link according to the study group
     var surveyLink = "https://cornell.qualtrics.com/jfe/form/SV_8CdA8rLS8pjZIoJ";
 
@@ -149,6 +143,15 @@ exports.postSignup = (req, res, next) => {
     if (req.query.r_id == 'null') {
         req.query.r_id = makeid(10);
     }
+
+    // (1) If given c_id from Qualtrics: Use this as experimental condition
+    // (2) If not given c_id from Qualtrics: Select a random number (0-18: since there are 19 conditions)
+    if (req.query.c_id == 'null') {
+        const versions = 19;
+        req.query.c_id = Math.floor(Math.random() * versions);
+    }
+
+    // Experimental Condition is assigned via Qualtrics, passed
     User.findOne({ mturkID: req.query.r_id }, (err, existingUser) => {
         if (err) { return next(err); }
         let user;
@@ -166,7 +169,7 @@ exports.postSignup = (req, res, next) => {
                     color: '#a6a488',
                     picture: req.body.photo
                 },
-                group: varResult,
+                group: req.query.c_id,
                 endSurveyLink: surveyLink,
                 active: true,
                 lastNotifyVisit: (Date.now()),

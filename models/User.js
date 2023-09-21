@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
-    email: { type: String },
-    password: String,
+    // email: { type: String },
+    // password: String,
     // passwordResetToken: String,
     // passwordResetExpires: Date,
     username: String,
@@ -17,21 +17,21 @@ const userSchema = new mongoose.Schema({
 
     numPosts: { type: Number, default: -1 }, //# of user posts
     numComments: { type: Number, default: -1 }, //# of comments on posts (user and actor), it is used for indexing and commentID of uesr comments on posts (user and actor)
-    numActorReplies: { type: Number, default: -1 }, //# of actor replies on user posts, it is used for indexing and commentID of actor comments on user posts
+    // numActorReplies: { type: Number, default: -1 }, //# of actor replies on user posts, it is used for indexing and commentID of actor comments on user posts
 
     // numPostLikes: { type: Number, default: 0 }, //# of actor posts liked
     // numCommentLikes: { type: Number, default: 0 }, //# of actor comments liked
 
-    lastNotifyVisit: Date, //Absolute Time, most recent visit to /notifications. First initialization is at account creation
+    // lastNotifyVisit: Date, //Absolute Time, most recent visit to /notifications. First initialization is at account creation
     createdAt: Date, //Absolute Time user was created
     consent: { type: Boolean, default: false }, //Indicates if user has proceeded through welcome signup pages
 
     mturkID: { type: String, unique: true },
 
-    group: Number, //0, 1, 2, 3, 4 (which video the offense and objection appears in)
+    group: Number, //0-18 (Total of 19 groups: 18 conditions (0 through 17), 1 control (18); indicates which objection message appears).
     interest: String, //'Science', 'Lifestyle', 'Education'
 
-    tokens: Array,
+    // tokens: Array,
 
     // blocked: [String], //list of usernames of actors user has blocked
     // reported: [String], //list of usernames of actors user has reported
@@ -48,8 +48,9 @@ const userSchema = new mongoose.Schema({
     //     default: [0, 0]
     // }, //TODO: Update. It inaccurately +1, whenever creates a new post.
 
-    offenseMessageSeen: { type: Boolean, default: false },
+    offenseMessageSeen_1: { type: Boolean, default: false },
     objectionMessageSeen: { type: Boolean, default: false },
+    offenseMessageSeen_2: { type: Boolean, default: false },
 
     // User Made posts
     // posts: [new Schema({
@@ -149,7 +150,7 @@ const userSchema = new mongoose.Schema({
             flagTime: [Date], //absoluteTimes of times user has flagged the comment
             shareTime: [Date], //absoluteTimes of times user has shared the comment
             new_comment: { type: Boolean, default: false }, //is this a comment from user?
-            new_comment_id: Number, //ID for comment, begins at 63
+            new_comment_id: Number, //ID for comment, begins at 120
             reply_to: Number, // CommentID/index if comment is a reply
             parent_comment: Number, //CommentID/index of parent comment (used for identifying subcommenting)
             body: String, //Body of comment

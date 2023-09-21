@@ -123,7 +123,7 @@ async function doPopulate() {
         console.log(color_start, "Starting to populate actors collection...");
         return new Promise((resolve, reject) => {
             async.each(actors_list, function(actor_raw, callback) {
-                    var actordetail = {
+                    const actordetail = {
                         username: actor_raw.username,
                         profile: {
                             name: actor_raw.name,
@@ -135,7 +135,7 @@ async function doPopulate() {
                         class: actor_raw.class
                     };
 
-                    var actor = new Actor(actordetail);
+                    const actor = new Actor(actordetail);
                     actor.save(function(err) {
                         if (err) {
                             console.log(color_error, "ERROR: Something went wrong with saving actor in database");
@@ -173,7 +173,7 @@ async function doPopulate() {
                             return;
                         }
                         if (act) {
-                            var postdetail = {
+                            const postdetail = {
                                 postID: new_post.id,
                                 body: new_post.body,
                                 picture: new_post.picture,
@@ -184,7 +184,7 @@ async function doPopulate() {
                                 class: new_post.class
                             }
 
-                            var script = new Script(postdetail);
+                            const script = new Script(postdetail);
                             script.save(function(err) {
                                 if (err) {
                                     console.log(color_error, "ERROR: Something went wrong with saving post in database");
@@ -332,31 +332,37 @@ async function doPopulate() {
                         if (act) {
                             Script.findOne({ postID: new_reply.reply }, function(err, pr) {
                                 if (pr) {
-                                    var comment_detail = {
+                                    let comment_detail = {
                                         commentID: new_reply.id,
                                         body: new_reply.body,
                                         likes: new_reply.likes || getLikesComment(),
                                         unlikes: new_reply.dislikes || getUnlikesComment(),
                                         actor: act,
-                                        time: new_reply.time || null
+                                        time: new_reply.time || null,
+                                        class: new_reply.class,
+                                        subcomments: []
                                     };
-                                    if (new_reply.class == 'offense') {
+                                    if (new_reply.class == 'offense' && new_reply.reply % 5 == 1) {
                                         offenseComment = comment_detail;
                                         callback();
-                                    } else if (new_reply.class == 'objection') {
-                                        offenseComment.subcomments = [comment_detail];
-                                        comment_detail = offenseComment;
-                                        pr.comments.push(comment_detail);
-                                        pr.comments.sort(function(a, b) { return a.time - b.time; });
+                                    } else if (new_reply.class.match(/^-?\d+$/)) {
+                                        offenseComment.subcomments.push(comment_detail);
+                                        if (new_reply.class == 17) {
+                                            comment_detail = offenseComment;
+                                            pr.comments.push(comment_detail);
+                                            pr.comments.sort(function(a, b) { return a.time - b.time; });
 
-                                        pr.save(function(err) {
-                                            if (err) {
-                                                console.log(color_error, "ERROR: Something went wrong with saving reply in database");
-                                                callback(err);
-                                            }
-                                            // console.log('Saved New Reply');
+                                            pr.save(function(err) {
+                                                if (err) {
+                                                    console.log(color_error, "ERROR: Something went wrong with saving reply in database");
+                                                    callback(err);
+                                                }
+                                                // console.log('Saved New Reply');
+                                                callback();
+                                            });
+                                        } else {
                                             callback();
-                                        });
+                                        }
                                     } else {
                                         pr.comments.push(comment_detail);
                                         pr.comments.sort(function(a, b) { return a.time - b.time; });

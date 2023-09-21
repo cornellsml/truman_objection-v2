@@ -4,27 +4,6 @@ const Actor = require('../models/Actor');
 const Notification = require('../models/Notification');
 const _ = require('lodash');
 
-// From https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-function shuffle(array) {
-    let currentIndex = array.length,
-        randomIndex;
-
-    // While there remain elements to shuffle.
-    while (currentIndex != 0) {
-
-        // Pick a remaining element.
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        // And swap it with the current element.
-        [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]
-        ];
-    }
-
-    return array;
-}
-
 /**
  * GET /
  * Get list of posts for feed
@@ -39,6 +18,8 @@ exports.getScript = (req, res, next) => {
                 res.redirect('/signup');
             }
 
+            //Get user condition 
+            const experimentalCondition = user.group;
             //Get the newsfeed
             Script.find()
                 .where('class').equals(user.interest)
@@ -64,7 +45,7 @@ exports.getScript = (req, res, next) => {
                     //Final array of all posts to go in the feed
                     let finalfeed = [];
 
-                    // //While there are regular posts or user-made posts to add to the final feed
+                    // While there are regular posts to add to the final feed
                     while (script_feed.length) {
                         let replyDictionary = {}; // where Key = parent comment reply falls under, value = the list of comment objects
 
@@ -109,7 +90,7 @@ exports.getScript = (req, res, next) => {
                                         // This is not a new, user-created comment.
                                         // Get the comment index that corresponds to the correct comment
                                         const commentIndex = _.findIndex(script_feed[0].comments, function(o) { return o.id == commentObject.comment; });
-                                        // If this comment's ID is found in script_feed, add likes, flags, etc.
+                                        // If this comment's ID is found in script_feed, it is a parent comment; add likes, flags, etc.
                                         if (commentIndex != -1) {
                                             // Check if there is a like recorded for this comment.
                                             if (commentObject.liked) {
@@ -127,6 +108,7 @@ exports.getScript = (req, res, next) => {
                                                 script_feed[0].comments[commentIndex].flagged = true;
                                             }
                                         } else {
+                                            // Check if user conducted any actions on subcomments
                                             script_feed[0].comments.forEach(function(comment, index) {
                                                 const subcommentIndex = _.findIndex(comment.subcomments, function(o) { return o.id == commentObject.comment; });
                                                 if (subcommentIndex != -1) {
@@ -164,16 +146,27 @@ exports.getScript = (req, res, next) => {
                                     });
                             }
 
-                            // No longer looking at comments on this post.
-                            // Now we are looking at the main post.
-                            // Check if there user has viewed the post before.
-                            // if (user.feedAction[feedIndex].readTime[0]) {
-                            //     script_feed[0].read = true;
-                            //     script_feed[0].state = 'read';
-                            // } else {
-                            //     script_feed[0].read = false;
-                            //     script_feed[0].state = 'unread';
-                            // }
+                            // Look at the 2nd video
+                            if (script_feed[0].postID % 5 == 1) {
+                                const commentIndex = _.findIndex(script_feed[0].comments, function(o) { return o.class == 'offense'; });
+                                if (experimentalCondition <= 17) {
+                                    script_feed[0].comments[commentIndex]["subcomments"] = script_feed[0].comments[commentIndex]["subcomments"].filter(subcomment => subcomment.class == user.group || !subcomment.class);
+                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'offense' || !comment.class);
+                                }
+                                if (experimentalCondition == 18) {
+                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'control' || !comment.class);
+                                }
+                            }
+                            // Look at the 4th video 
+                            if (script_feed[0].postID % 5 == 3) {
+                                if (experimentalCondition <= 17) {
+                                    // console.log(script_feed[0].comments)
+                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'offense' || !comment.class);
+                                }
+                                if (experimentalCondition == 18) {
+                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'control' || !comment.class);
+                                }
+                            }
 
                             // Check if there is a like recorded for this post.
                             if (user.feedAction[feedIndex].liked) {
@@ -190,27 +183,35 @@ exports.getScript = (req, res, next) => {
                                 script_feed[0].flag = true;
                             }
 
-                            // Check if post has been flagged: remove it from feed array (script_feed)
-                            // if (user.feedAction[feedIndex].flagTime[0]) {
-                            //     script_feed.splice(0, 1);
-                            // } //Check if post is from a blocked user: remove it from feed array (script_feed)
-                            // else if (user.blocked.includes(script_feed[0].actor.username)) {
-                            //     script_feed.splice(0, 1);
-                            // } else {
                             finalfeed.push(script_feed[0]);
                             script_feed.splice(0, 1);
-                            // }
                         } //user did not interact with this post
                         else {
-                            //     if (user.blocked.includes(script_feed[0].actor.username)) {
-                            //         script_feed.splice(0, 1);
-                            //     } else {
+                            // Look at the 2nd video
+                            if (script_feed[0].postID % 5 == 1) {
+                                const commentIndex = _.findIndex(script_feed[0].comments, function(o) { return o.class == 'offense'; });
+                                if (experimentalCondition <= 17) {
+                                    script_feed[0].comments[commentIndex]["subcomments"] = script_feed[0].comments[commentIndex]["subcomments"].filter(subcomment => subcomment.class == user.group || !subcomment.class);
+                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'offense' || !comment.class);
+                                }
+                                if (experimentalCondition == 18) {
+                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'control' || !comment.class);
+                                }
+                            }
+                            // Look at the 4th video 
+                            if (script_feed[0].postID % 5 == 3) {
+                                if (experimentalCondition <= 17) {
+                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'offense' || !comment.class);
+                                }
+                                if (experimentalCondition == 18) {
+                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'control' || !comment.class);
+                                }
+                            }
                             script_feed[0].comments.sort(function(a, b) {
                                 return b.time - a.time;
                             });
                             finalfeed.push(script_feed[0]);
                             script_feed.splice(0, 1);
-                            // }
                         }
                     }
 
@@ -241,10 +242,10 @@ exports.postUpdateFeedAction = (req, res, next) => {
         if (err) { return next(err); }
 
         //find the object from the right post in feed
-        var feedIndex = _.findIndex(user.feedAction, function(o) { return o.post == req.body.postID; });
+        let feedIndex = _.findIndex(user.feedAction, function(o) { return o.post == req.body.postID; });
 
         if (feedIndex == -1) {
-            var cat = {
+            const cat = {
                 post: req.body.postID,
                 postClass: req.body.postClass,
             };
@@ -254,9 +255,9 @@ exports.postUpdateFeedAction = (req, res, next) => {
         //create a new Comment
         if (req.body.new_comment) {
             user.numComments = user.numComments + 1;
-            var cat = {
+            const cat = {
                 new_comment: true,
-                new_comment_id: user.numComments + 63,
+                new_comment_id: user.numComments + 120,
                 body: req.body.comment_text,
                 relativeTime: req.body.new_comment - user.createdAt,
                 absTime: req.body.new_comment,
@@ -274,7 +275,7 @@ exports.postUpdateFeedAction = (req, res, next) => {
         //Are we doing anything with a comment?
         else if (req.body.commentID) {
             const isUserComment = (req.body.isUserComment == 'true');
-            var commentIndex = (isUserComment) ?
+            let commentIndex = (isUserComment) ?
                 _.findIndex(user.feedAction[feedIndex].comments, function(o) {
                     return o.new_comment_id == req.body.commentID && o.new_comment == isUserComment
                 }) :
@@ -283,7 +284,7 @@ exports.postUpdateFeedAction = (req, res, next) => {
                 });
             //no comment in this post-actions yet
             if (commentIndex == -1) {
-                var cat = {
+                const cat = {
                     comment: req.body.commentID
                 };
                 user.feedAction[feedIndex].comments.push(cat);
@@ -382,7 +383,7 @@ exports.postUpdateFeedAction = (req, res, next) => {
                     user.feedAction[feedIndex].shareTime.push(share);
                 }
                 user.feedAction[feedIndex].shared = true;
-            } //Read event 
+            } //Read event: Not used.
             else if (req.body.viewed) {
                 let view = req.body.viewed;
                 if (!user.feedAction[feedIndex].readTime) {
@@ -397,7 +398,7 @@ exports.postUpdateFeedAction = (req, res, next) => {
             } else if (req.body.videoDuration) {
                 user.feedAction[feedIndex].videoDuration.push(req.body.videoDuration);
             } else {
-                console.log(req.body)
+                console.log(req.body);
                 console.log('Something in feedAction went crazy. You should never see this.');
             }
         }
@@ -422,8 +423,11 @@ exports.postUpdateFeedAction = (req, res, next) => {
 exports.postMessageSeen = (req, res, next) => {
     User.findById(req.user.id, (err, user) => {
         if (err) { return next(err); }
-        if (req.body.offense) {
-            user.offenseMessageSeen = true;
+        if (req.body.offense_1) {
+            user.offenseMessageSeen_1 = true;
+        }
+        if (req.body.offense_2) {
+            user.offenseMessageSeen_2 = true;
         }
         if (req.body.objection) {
             user.objectionMessageSeen = true;
