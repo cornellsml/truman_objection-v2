@@ -38,58 +38,58 @@
         .ui.comments
           each comment in val.comments
             .comment.hidden(commentID=comment.new_comment ? comment.commentID : comment.id, index=comment.commentID)
-              if comment.flagged 
-                .content
-                  .metadata  
-                    span.date 0:!{comment.time/1000<10 ? "0" + Math.floor(comment.time/1000) : Math.floor(comment.time/1000)}                                
-                  .text(style="background-color: black; color: white; margin-right:2.5em; padding: 0.2em")  You flagged this comment. The admins will review this comment further. We are sorry you had this experience.
-              else 
+              .content(class=!comment.flagged ? "transition hidden" : "")
+                .metadata  
+                  span.date 0:!{comment.time/1000<10 ? "0" + Math.floor(comment.time/1000) : Math.floor(comment.time/1000)}                                
+                .text(style="background-color: black; color: white; margin-right:2.5em; padding: 0.2em;")  You flagged this comment. The admins will review this comment further. We are sorry you had this experience.
+                .actions 
+                  a.unflag Unflag
+              if comment.new_comment 
+                .image(style="background-color:"+user.profile.color+";", class=comment.flagged ? "transition hidden": "")
+                  a.avatar
+                    img(src=user.profile.picture)
+              else
+                .image(style="background-color:"+comment.actor.profile.color+";", class=comment.flagged ? "transition hidden": "")
+                  a.avatar
+                    img(src=cdn+'/profile_pictures/'+comment.actor.profile.picture)
+              .content(class=comment.flagged ? "transition hidden": "")
                 if comment.new_comment 
-                  .image(style="background-color:"+user.profile.color)
-                    a.avatar
-                      img(src=user.profile.picture)
-                else
-                  .image(style="background-color:"+comment.actor.profile.color)
-                    a.avatar
-                      img(src=cdn+'/profile_pictures/'+comment.actor.profile.picture)
-                .content
-                  if comment.new_comment 
-                    a.author(class='/me') !{user.username} (me)
-                  else 
-                    a.author !{comment.actor.username}
-                  .metadata
-                    span.date 0:!{comment.time/1000<10 ? "0" + Math.floor(comment.time/1000) : Math.floor(comment.time/1000)}
-                  .text !{comment.body}
-                  .actions 
-                    a.like(class=comment.liked ? "green" : null)
-                      i.icon.thumbs.up(class=comment.liked ? "green" : null)
-                      span.num !{comment.likes} 
-                    a.unlike(class=comment.unliked ? "red" : null)
-                      i.icon.thumbs.down(class=comment.unliked ? "red" : null)
-                      span.num !{comment.unlikes}
-                    a.reply Reply
-                    if !comment.new_comment 
-                      a.flag Flag
-                    //- a.share Share
+                  a.author(class='/me') !{user.username} (me)
+                else 
+                  a.author !{comment.actor.username}
+                .metadata
+                  span.date 0:!{comment.time/1000<10 ? "0" + Math.floor(comment.time/1000) : Math.floor(comment.time/1000)}
+                .text !{comment.body}
+                .actions 
+                  a.like(class=comment.liked ? "green" : null)
+                    i.icon.thumbs.up(class=comment.liked ? "green" : null)
+                    span.num !{comment.likes} 
+                  a.unlike(class=comment.unliked ? "red" : null)
+                    i.icon.thumbs.down(class=comment.unliked ? "red" : null)
+                    span.num !{comment.unlikes}
+                  a.reply Reply
+                  if !comment.new_comment 
+                    a.flag Flag
+                  //- a.share Share
               if comment.subcomments.length!==0
                 .comments.subcomments.hidden
                   each subcomment in comment.subcomments
                     .comment.hidden(commentID=subcomment.new_comment ? subcomment.commentID : subcomment.id, index=subcomment.commentID)
-                      if subcomment.flagged 
-                        .content
-                          .metadata
-                            span.date 0:!{subcomment.time/1000<10 ? "0" + Math.floor(subcomment.time/1000) : Math.floor(subcomment.time/1000)}
-                          .text(style="background-color: black; color: white; margin-right:2.5em; padding: 0.2em") You flagged this comment. The admins will review this comment further. We are sorry you had this experience.
-                      else 
-                        if subcomment.new_comment 
-                          .image(style="background-color:"+user.profile.color)
-                            a.avatar
-                              img(src=user.profile.picture)
-                        else
-                          .image(style="background-color:"+subcomment.actor.profile.color)
-                            a.avatar
-                              img(src=cdn+'/profile_pictures/'+subcomment.actor.profile.picture)
-                        .content
+                      .content(class=!subcomment.flagged ? "transition hidden" : "")
+                        .metadata
+                          span.date 0:!{subcomment.time/1000<10 ? "0" + Math.floor(subcomment.time/1000) : Math.floor(subcomment.time/1000)}
+                        .text(style="background-color: black; color: white; margin-right:2.5em; padding: 0.2em") You flagged this comment. The admins will review this comment further. We are sorry you had this experience.
+                        .actions 
+                          a.unflag Unflag
+                      if subcomment.new_comment 
+                        .image(style="background-color:"+user.profile.color+";", class=subcomment.flagged ? "transition hidden": "")
+                          a.avatar
+                            img(src=user.profile.picture)
+                      else
+                        .image(style="background-color:"+subcomment.actor.profile.color+";", class=subcomment.flagged ? "transition hidden": "")
+                          a.avatar
+                            img(src=cdn+'/profile_pictures/'+subcomment.actor.profile.picture)
+                      .content(class=subcomment.flagged ? "transition hidden": "")
                           if subcomment.new_comment 
                             a.author(class='/me') !{user.username} (me)
                           else 

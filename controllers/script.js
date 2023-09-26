@@ -328,6 +328,18 @@ exports.postUpdateFeedAction = (req, res, next) => {
                 user.feedAction[feedIndex].comments[commentIndex].flagged = true;
             }
 
+            //UNFLAG A COMMENT
+            else if (req.body.unflag) {
+                let unflag = req.body.unflag;
+                if (user.feedAction[feedIndex].comments[commentIndex].flagTime) {
+                    user.feedAction[feedIndex].comments[commentIndex].flagTime.push(unflag);
+
+                } else {
+                    user.feedAction[feedIndex].comments[commentIndex].flagTime = [unflag];
+                }
+                user.feedAction[feedIndex].comments[commentIndex].flagged = false;
+            }
+
             //SHARE A COMMENT 
             else if (req.body.share) {
                 console.log()

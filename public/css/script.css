@@ -187,10 +187,14 @@ video {
     float: left;
     background-color: #b7c9c8;
     border-radius: 50% !important;
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
     align-content: center;
+}
+
+.comment .image.hidden {
+    display: none !important;
 }
 
 .comment>.image>a.avatar {
@@ -207,6 +211,10 @@ video {
 
 .comment>.content>.metadata {
     float: right;
+}
+
+.comment .content.hidden {
+    display: none !important;
 }
 
 .glowBorder {

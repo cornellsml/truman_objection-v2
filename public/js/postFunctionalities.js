@@ -212,38 +212,51 @@ function flagComment(e) {
     const target = $(e.target);
     const comment = target.closest(".comment");
     const postID = target.closest(".ui.fluid.card").attr("postID");
-    const postClass = target.closest(".ui.fluid.card").attr("postClass");;
+    const postClass = target.closest(".ui.fluid.card").attr("postClass");
     const commentID = comment.attr("commentID");
-    const index = comment.attr("index");
     const isUserComment = comment.children(".content").children("a.author").hasClass('/me');
 
-    const subcomments = comment.children('.subcomments').html();
-    const metadata = comment.children(".content").children(".metadata").html();
-    console.log(subcomments);
+    const comment_imageElement = comment.children('.image');
+    const comment_contentElement = comment.children('.content');
+    const flaggedComment_contentElement = comment.children('.content.hidden');
 
-    comment.replaceWith(`
-        <div class="comment" commentID="${commentID}" index="${index}">
-            <div class="content">
-                <div class="metadata">${metadata}</div>
-                <div class="text" style="background-color:black; color: white; margin-right:2.5em; padding: 0.2em">
-                    You flagged this comment. The admins will review this comment further. We are sorry you had this experience.
-                </div>
-            </div>
-            ${subcomments? '<div class="comments subcomments">' + 
-            subcomments
-            .replace("glowBorder", "")
-            .replace('class="like"', 'class="like" onclick="likeComment(event)"')
-            .replace('class="unlike"', 'class="unlike" onclick="unlikeComment(event)"')
-            .replace('class="flag"', 'class="flag" onclick="flagComment(event)"')
-            .replace('class="reply"', 'class="reply" onclick="openCommentReply(event)"')
-             + '</div>' : ""}
-        </div>`);
+    comment_imageElement.transition('hide');
+    comment_contentElement.transition('hide');
+    $(flaggedComment_contentElement).transition();
     const flag = Date.now();
 
     $.post("/feed", {
         postID: postID,
         commentID: commentID,
         flag: flag,
+        isUserComment: isUserComment,
+        postClass: postClass,
+        _csrf: $('meta[name="csrf-token"]').attr('content')
+    });
+}
+
+function unflagComment(e) {
+    const target = $(e.target);
+    const comment = target.closest(".comment");
+    const postID = target.closest(".ui.fluid.card").attr("postID");
+    const postClass = target.closest(".ui.fluid.card").attr("postClass");
+    const commentID = comment.attr("commentID");
+    const isUserComment = comment.children(".content").children("a.author").hasClass('/me');
+
+    const comment_imageElement = comment.children('.image.hidden');
+    const comment_contentElement = comment.children('.content.hidden');
+    const flaggedComment_contentElement = comment.children('.content:not(.hidden)');
+
+    $(flaggedComment_contentElement).transition('hide');
+    comment_imageElement.transition();
+    comment_contentElement.transition();
+
+    const unflag = Date.now();
+
+    $.post("/feed", {
+        postID: postID,
+        commentID: commentID,
+        unflag: unflag,
         isUserComment: isUserComment,
         postClass: postClass,
         _csrf: $('meta[name="csrf-token"]').attr('content')
@@ -521,6 +534,9 @@ $(window).on('load', () => {
 
     //Flag comment
     $('a.flag').on('click', flagComment);
+
+    //Flag comment
+    $('a.unflag').on('click', unflagComment);
 
     //Share comment 
     // $('a.share').on('click', shareComment);
