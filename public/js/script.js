@@ -52,7 +52,7 @@ $(window).on("load", function() {
                     offense_1: true,
                     _csrf: $('meta[name="csrf-token"]').attr('content')
                 });
-                offenseSeen = true;
+                offenseSeen_1 = true;
             }
             if (this.currentTime * 1000 > objection[index] && !objectionSeen) {
                 $.post("/messageSeen", {
@@ -68,7 +68,7 @@ $(window).on("load", function() {
                     offense_2: true,
                     _csrf: $('meta[name="csrf-token"]').attr('content')
                 });
-                offenseSeen = true;
+                offenseSeen_2 = true;
             }
         }
     });

@@ -103,11 +103,13 @@ $(window).on("load", async function() {
         const username = $('button.ui.button.green h2').text();
         const src = $('.image.green a.avatar img').attr('src');
         const userID = (new URL(document.location)).searchParams.get("r_id"); // null or Response ID from Qualtrics Survey
-        const experimentalCondition = (new URL(document.location)).searchParams.get("c_id"); // null or Condition from Qualtrics Survey
+        const obj = (new URL(document.location)).searchParams.get("obj"); // null or Condition from Qualtrics Survey
+        const off = (new URL(document.location)).searchParams.get("off"); // null or Condition from Qualtrics Survey
+        const m = (new URL(document.location)).searchParams.get("m"); // null or Condition from Qualtrics Survey
 
         if ($(this).hasClass("green")) {
             $(this).addClass('loading disabled');
-            $.post(`/signup?r_id=${userID}&c_id=${experimentalCondition}`, {
+            $.post(`/signup?r_id=${userID}&obj=${obj}&off=${off}&m=${m}`, {
                 username: username,
                 photo: src,
                 _csrf: $('meta[name="csrf-token"]').attr('content')

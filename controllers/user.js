@@ -144,11 +144,35 @@ exports.postSignup = (req, res, next) => {
         req.query.r_id = makeid(10);
     }
 
-    // (1) If given c_id from Qualtrics: Use this as experimental condition
-    // (2) If not given c_id from Qualtrics: Select a random number (0-18: since there are 19 conditions)
-    if (req.query.c_id == 'null') {
+    let experimentalCondition;
+    // (1) If given off, obj, and m from Qualtrics: Use this as experimental condition
+    // (2) If not given off, obj, and m from Qualtrics: Select a random number (0-18: since there are 19 conditions)
+    if (req.query.off == 'null' && req.query.obj == 'null' && req.query.m == 'null') {
         const versions = 19;
-        req.query.c_id = Math.floor(Math.random() * versions);
+        experimentalCondition = Math.floor(Math.random() * versions);
+    } else {
+        const conditionDictionary = {
+            '101': 0,
+            '102': 1,
+            '103': 2,
+            '201': 3,
+            '202': 4,
+            '203': 5,
+            '111': 6,
+            '112': 7,
+            '113': 8,
+            '211': 9,
+            '212': 10,
+            '213': 11,
+            '121': 12,
+            '122': 13,
+            '123': 14,
+            '221': 15,
+            '222': 16,
+            '223': 17,
+            '0': 18
+        };
+        experimentalCondition = conditionDictionary[req.query.obj + (req.query.off == 'null' ? '' : req.query.off) + (req.query.m == 'null' ? '' : req.query.m)];
     }
 
     // Experimental Condition is assigned via Qualtrics, passed
@@ -169,7 +193,7 @@ exports.postSignup = (req, res, next) => {
                     color: '#a6a488',
                     picture: req.body.photo
                 },
-                group: req.query.c_id,
+                group: experimentalCondition,
                 endSurveyLink: surveyLink,
                 active: true,
                 lastNotifyVisit: (Date.now()),

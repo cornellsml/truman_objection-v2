@@ -177,8 +177,8 @@ async function doPopulate() {
                                 postID: new_post.id,
                                 body: new_post.body,
                                 picture: new_post.picture,
-                                likes: getLikes(),
-                                unlikes: getUnlikes(),
+                                likes: new_post.likes || getLikes(),
+                                unlikes: new_post.dislikes || getUnlikes(),
                                 actor: act,
                                 time: new_post.time || null,
                                 class: new_post.class
