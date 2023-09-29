@@ -396,13 +396,11 @@ exports.postPageLog = (req, res, next) => {
 exports.postPageTime = (req, res, next) => {
     User.findById(req.user.id, (err, user) => {
         if (err) { return next(err); }
-        //What day in the study are we in?
-        const one_day = 86400000; // number of milliseconds in a day
-        const time_diff = Date.now() - user.createdAt;
-        const current_day = time_diff <= one_day ? 0 : 1;
-
-        user.pageTimes.set(current_day, user.pageTimes[current_day] + parseInt(req.body.time));
-
+        const log = {
+            time: req.body.time,
+            page: req.body.pathname,
+        };
+        user.pageTimes.push(log);
         user.save((err) => {
             if (err) {
                 return next(err);

@@ -1,40 +1,61 @@
 //Before Page load:
-// $('#content').hide();
-// $('#loading').show();
-let startTime = Date.now();
+let isActive = false;
+let activeStartTime;
 
-//Called when inactive and when page unloads
-//Function calculates duration of activity and adds to sum in the database.
-function addPageTime() {
-    const timeDuration = Date.now() - startTime;
-    $.post("/pageTimes", {
-        time: timeDuration,
-        _csrf: $('meta[name="csrf-token"]').attr('content')
-    }).then(function() {
-        startTime = null;
-    }).catch(function(err) {
-        console.log(err);
-    });
+//Called when user is inactive for about 1 minute, when user logs out of the website, when user changes the page (page and video)
+//Adds the amount of time use was active on the website for
+async function resetActiveTimer(loggingOut) {
+    if (isActive) {
+        const currentTime = new Date();
+        const activeDuration = currentTime - activeStartTime;
+        if (window.location.pathname !== '/signup' && window.location.pathname !== '/thankyou') {
+            let pathname = window.location.pathname;
+            if (window.location.pathname == '/') {
+                const currentCard = $('.ui.fluid.card:visible');
+                const index = currentCard.attr("index");
+                pathname += `?v=${index}`;
+            }
+            await $.post("/pageTimes", {
+                time: activeDuration,
+                pathname: pathname,
+                _csrf: $('meta[name="csrf-token"]').attr('content')
+            })
+            if (loggingOut) {
+                window.loggingOut = true;
+                window.location.href = '/logout';
+            }
+        }
+        isActive = false;
+    }
 }
 
 $(window).on("load", function() {
-    if (window.location.pathname == "/") {
-        var timeout = null; //Timer used for tracking user activity. Initialized to null. 
-        //Definition of an active user: mouse movement, clicks etc. If they haven't done it in 1 minute, we stop the timer and record the time.
-        $('#pagegrid').on('mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick mousewheel', function() {
-            //If there hasn't been a "start time" for activity, set it.We use session storage so we can track activity when pages changes too.
-            if (!startTime) {
-                startTime = Date.now();
-            }
-            clearTimeout(timeout);
-            timeout = setTimeout(function() {
-                console.log('Mouse idle for 60 sec');
-                addPageTime();
-            }, 60000);
-        });
-    }
+    //From the first answer from https://stackoverflow.com/questions/667555/how-to-detect-idle-time-in-javascript
+    let idleTime = 0;
+    //Definition of an active user: mouse movement, clicks etc.
+    //idleTime is reset to 0 whenever mouse movement occurs.
+    $('#pagegrid').on('mousemove keypress scroll mousewheel', function() {
+        //If there hasn't been a "start time" for activity, set it.
+        if (!isActive) {
+            activeStartTime = Date.now();
+            isActive = true;
+        }
+        idleTime = 0;
+    });
 
-    if (window.location.pathname !== '/signup') {
+    //every 15 seconds
+    setInterval(function() {
+        idleTime += 1;
+        if (idleTime > 4) { // 60.001-74.999 seconds (idle time)
+            resetActiveTimer(false);
+        }
+    }, 15000);
+
+    $('a.item.logoutLink').on('click', function() {
+        resetActiveTimer(true);
+    });
+
+    if (window.location.pathname !== '/signup' && window.location.pathname !== '/' && window.location.pathname !== '/logout' && window.location.pathname !== '/thankyou') {
         $.post("/pageLog", {
             path: window.location.pathname,
             _csrf: $('meta[name="csrf-token"]').attr('content')
@@ -128,8 +149,8 @@ $(window).on("load", function() {
 });
 
 $(window).on("beforeunload", function() {
-    // https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event
-    if (window.location.pathname == "/") {
-        addPageTime();
+    // https: //developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event
+    if (!window.loggingOut) {
+        resetActiveTimer(false);
     }
 });

@@ -89,10 +89,11 @@ const userSchema = new mongoose.Schema({
         page: String //URL
     })],
 
-    pageTimes: { //how much time the user spent on the website per day
-        type: [Number],
-        default: [0, 0]
-    },
+    pageTimes: [new Schema({ //how much time the user spent on a page
+        //values are added when page (page or video) changes, when user is inactive for 1 minute, or when user logs out
+        time: Number, //in millliseconds
+        page: String //URL
+    })],
 
     postStats: {
         SiteVisits: Number, //Total number of times the user has logged into the website

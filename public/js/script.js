@@ -3,7 +3,7 @@ $(window).on("load", function() {
     let offenseSeen_2 = false;
     let objectionSeen = false;
     $.post("/pageLog", {
-        path: window.location.pathname + `?=v${$('.ui.fluid.card:visible').attr('index')}`,
+        path: window.location.pathname + `?v=${$('.ui.fluid.card:visible').attr('index')}`,
         _csrf: $('meta[name="csrf-token"]').attr('content')
     });
     $('video').on("timeupdate", function() {
@@ -176,7 +176,7 @@ $(window).on("load", function() {
     })
 
     //Buttons to switch videos
-    $('button.circular.ui.icon.button.blue.centered').on("click", function() {
+    $('button.circular.ui.icon.button.blue.centered').on("click", async function() {
         const currentCard = $('.ui.fluid.card:visible');
         const postID = currentCard.attr("postID");
 
@@ -218,21 +218,18 @@ $(window).on("load", function() {
         }
 
         const nextVid = parseInt($(this).attr('nextVid'));
-        $.post("/pageLog", {
+        await resetActiveTimer(false);
+        await $.post("/pageLog", {
             path: window.location.pathname + `?v=${nextVid}`,
             _csrf: $('meta[name="csrf-token"]').attr('content')
         });
 
         if ($(this).hasClass("left")) {
-            $('.ui.fluid.card:visible').transition('fly left');
-            setTimeout(function() {
-                $(`.ui.fluid.card[index=${nextVid}]`).transition('fly right');
-            }, 500);
+            $('.ui.fluid.card:visible').transition('hide');
+            $(`.ui.fluid.card[index=${nextVid}]`).transition();
         } else {
-            $('.ui.fluid.card:visible').transition('fly right');
-            setTimeout(function() {
-                $(`.ui.fluid.card[index=${nextVid}]`).transition('fly left');
-            }, 500);
+            $('.ui.fluid.card:visible').transition('hide');
+            $(`.ui.fluid.card[index=${nextVid}]`).transition();
         }
 
         if (nextVid % 5 == 0) {
