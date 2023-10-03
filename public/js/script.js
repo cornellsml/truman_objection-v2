@@ -240,10 +240,12 @@ $(window).on("load", function() {
         }
 
         if (nextVid % 5 == 4) {
-            $('button.right').addClass("hidden");
+            $('button.right:not(.disabled)').addClass("hidden");
+            $('#lastVid-button').removeClass("hidden");
         } else {
-            $('button.right').removeClass("hidden");
-            $('button.right').attr('nextVid', nextVid + 1);
+            $('button.right:not(.disabled)').removeClass("hidden");
+            $('#lastVid-button').addClass("hidden");
+            $('button.right:not(.disabled)').attr('nextVid', nextVid + 1);
         }
     })
 });

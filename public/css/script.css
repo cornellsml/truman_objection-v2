@@ -64,6 +64,22 @@ video {
     justify-content: space-around;
 }
 
+@media only screen and (max-width: 1200px) {
+    .ui.buttons.small {
+        justify-content: space-around;
+        flex-direction: column;
+    }
+    .ui.labeled.button {
+        margin: 0.25em;
+    }
+    .ui.labeled.button .ui.like.button {
+        border-radius: 0 3em 3em 0;
+    }
+    .ui.labeled.button .ui.unlike.button {
+        border-radius: 3em 0 0 3em;
+    }
+}
+
 .secondary-buttons {
     display: flex;
     flex-direction: row;

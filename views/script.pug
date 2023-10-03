@@ -1,16 +1,19 @@
 extends ui_layout
 
 block content
-  .one.wide.column
-    button.circular.ui.icon.button.blue.big.centered.left.hidden(data-tooltip='Previous Video')
+  .two.wide.column(style="text-align: right; padding: 0;")
+    button.circular.ui.icon.button.blue.big.centered.left.hidden(data-tooltip='Previous Video', style="margin: 0;")
       i.chevron.left.icon
-  .thirteen.wide.computer.ten.wide.tablet.sixteen.wide.mobile.column
+  .twelve.wide.column
     each val, index in script
       include ./partials/actorPost
     //- include ./partials/shareModal
-  .one.wide.column
-    button.circular.ui.icon.button.blue.big.centered.right(nextVid=script[1].postID, data-tooltip='Next Video')
+  .two.wide.column(style="text-align: left; padding: 0;")
+    button.circular.ui.icon.button.blue.big.centered.right(nextVid=script[1].postID, data-tooltip='Next Video', style="margin: 0;")
       i.chevron.right.icon
+    div#lastVid-button.hidden(data-tooltip="This was the last video. Return to the survey.", data-position="top center", style="width: fit-content;")
+      button.circular.ui.icon.button.blue.big.centered.disabled.right(nextVid=script[1].postID, style="margin: 0;")
+        i.chevron.right.icon
     
 block scripts
   script.
