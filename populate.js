@@ -181,7 +181,8 @@ async function doPopulate() {
                                 unlikes: new_post.dislikes || getUnlikes(),
                                 actor: act,
                                 time: new_post.time || null,
-                                class: new_post.class
+                                class: new_post.class,
+                                length: new_post.length
                             }
 
                             const script = new Script(postdetail);

@@ -115,17 +115,34 @@ $(window).on("load", function() {
         });
     })
 
-    $('video').on("pause", function() {
+    $('video').on("pause", async function() {
         const post = $(this).parents('.ui.fluid.card');
         const postID = post.attr("postID");
         if (!this.seeking) {
-            $.post("/feed", {
+            await $.post("/feed", {
                 postID: postID,
                 videoAction: {
                     action: 'pause',
                     absTime: Date.now(),
                     videoTime: this.currentTime,
                 },
+                _csrf: $('meta[name="csrf-token"]').attr('content')
+            });
+        }
+
+        i = 0;
+        videoDuration = [];
+        while (i < post.find('video')[0].played.length) {
+            videoDuration.push({
+                startTime: post.find('video')[0].played.start(i),
+                endTime: post.find('video')[0].played.end(i)
+            })
+            i++;
+        }
+        if (videoDuration.length != 0) {
+            await $.post("/feed", {
+                postID: postID,
+                videoDuration: videoDuration,
                 _csrf: $('meta[name="csrf-token"]').attr('content')
             });
         }
@@ -178,39 +195,37 @@ $(window).on("load", function() {
     //Buttons to switch videos
     $('button.circular.ui.icon.button.blue.centered').on("click", async function() {
         const currentCard = $('.ui.fluid.card:visible');
-        const postID = currentCard.attr("postID");
-
-        i = 0;
-        videoDuration = [];
-        while (i < currentCard.find('video')[0].played.length) {
-            videoDuration.push({
-                startTime: currentCard.find('video')[0].played.start(i),
-                endTime: currentCard.find('video')[0].played.end(i)
-            })
-            i++;
-        }
-        if (videoDuration.length != 0) {
-            $.post("/feed", {
-                postID: postID,
-                videoDuration: videoDuration,
-                _csrf: $('meta[name="csrf-token"]').attr('content')
-            });
-        }
-
         if (!currentCard.find('video')[0].paused) {
             currentCard.find('video').off("pause");
             currentCard.find('video').trigger('pause');
-            currentCard.find('video').on("pause", function() {
+            currentCard.find('video').on("pause", async function() {
                 const post = $(this).parents('.ui.fluid.card');
                 const postID = post.attr("postID");
                 if (!this.seeking) {
-                    $.post("/feed", {
+                    await $.post("/feed", {
                         postID: postID,
                         videoAction: {
                             action: 'pause',
                             absTime: Date.now(),
                             videoTime: this.currentTime,
                         },
+                        _csrf: $('meta[name="csrf-token"]').attr('content')
+                    });
+                }
+
+                i = 0;
+                videoDuration = [];
+                while (i < post.find('video')[0].played.length) {
+                    videoDuration.push({
+                        startTime: post.find('video')[0].played.start(i),
+                        endTime: post.find('video')[0].played.end(i)
+                    })
+                    i++;
+                }
+                if (videoDuration.length != 0) {
+                    await $.post("/feed", {
+                        postID: postID,
+                        videoDuration: videoDuration,
                         _csrf: $('meta[name="csrf-token"]').attr('content')
                     });
                 }

@@ -14,6 +14,7 @@ const scriptSchema = new mongoose.Schema({
     objection_time: Number,
 
     class: String, //For experimental use (used to define the type of post: Science, Education, Lifestyle)
+    length: Number, //length of video in seconds
 
     // Sorted by least recent --> most recent
     comments: [new Schema({

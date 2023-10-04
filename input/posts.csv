@@ -1,18 +1,18 @@
-id,body,picture,actor,time,likes,dislikes,class,offense_time,objection_time
-0,The Magical Northern Lights ✨ ,Science/science_5.mp4,bbcearth,,,,Science,,
-1,Raindrops aren't shaped like raindrops,Science/science_3.mp4,veritasium,,4,0,Science,34000,42000
-2,Majestic dolphin leaps into the air ,Science/science_4.mp4,bbcearth,,,,Science,,
-3,How model stirling engines are made ,Science/science_1.mp4,sciencechannel,,4,0,Science,22000,
-4,Satellite sees global view of sandy's life to landfall,Science/science_2.mp4,nasa,,,,Science,,
-,,,,,,,,,
-5,Would you take the road less traveled? ,Education/education_2.mp4,teded,,,,Education,,
-6,What does “chance of rain” really mean?,Education/education_3.mp4,vox,,4,0,Education,30000,38000
-7,Are we all just players in the game of life?,Education/education_1.mp4,teded,,,,Education,,
-8,"White, pink, and brown noise, explained ",Education/education_4.mp4,vox,,4,0,Education,45000,
-9,How video games can level up the way you learn ,Education/education_5.mp4,teded,,,,Education,,
-,,,,,,,,,
-10,How to simplify your life ,Lifestyle/lifestyle_1.mp4,theschooloflifetv,,,,Lifestyle,,
-11,Ice restock!,Lifestyle/lifestyle_4.mp4,kaeliemaee,,4,0,Lifestyle,39000,46000
-12,Cleaning motivation 🧼🧹 ,Lifestyle/lifestyle_2.mp4,cleanwith_kayleigh,,,,Lifestyle,,
-13,A test to judge how good your parents were,Lifestyle/lifestyle_3.mp4,theschooloflifetv,,4,0,Lifestyle,22000,
-14,Restocking the fridge before a busy weekend,Lifestyle/lifestyle_5.mp4,kelliatkinson,,,,Lifestyle,,
+id,body,picture,actor,time,likes,dislikes,class,offense_time,objection_time,length,
+0,The Magical Northern Lights ✨ ,Science/science_5.mp4,bbcearth,,,,Science,,,26.888707,0
+1,Raindrops aren't shaped like raindrops,Science/science_3.mp4,veritasium,,4,0,Science,34000,42000,49.249524,1
+2,Majestic dolphin leaps into the air ,Science/science_4.mp4,bbcearth,,,,Science,,,13.119274,2
+3,How model stirling engines are made ,Science/science_1.mp4,sciencechannel,,4,0,Science,22000,,31.950658,3
+4,Satellite sees global view of sandy's life to landfall,Science/science_2.mp4,nasa,,,,Science,,,19.853061,4
+,,,,,,,,,,,
+5,Would you take the road less traveled? ,Education/education_2.mp4,teded,,,,Education,,,30.046621,0
+6,What does “chance of rain” really mean?,Education/education_3.mp4,vox,,4,0,Education,30000,38000,59.907483,1
+7,Are we all just players in the game of life?,Education/education_1.mp4,teded,,,,Education,,,26.284989,2
+8,"White, pink, and brown noise, explained ",Education/education_4.mp4,vox,,4,0,Education,45000,,58.862585,3
+9,How video games can level up the way you learn ,Education/education_5.mp4,teded,,,,Education,,,48.599365,4
+,,,,,,,,,,,
+10,How to simplify your life ,Lifestyle/lifestyle_1.mp4,theschooloflifetv,,,,Lifestyle,,,58.955465,0
+11,Ice restock!,Lifestyle/lifestyle_4.mp4,kaeliemaee,,4,0,Lifestyle,39000,46000,59.628844,1
+12,Cleaning motivation 🧼🧹 ,Lifestyle/lifestyle_2.mp4,cleanwith_kayleigh,,,,Lifestyle,,,24.450612,2
+13,A test to judge how good your parents were,Lifestyle/lifestyle_3.mp4,theschooloflifetv,,4,0,Lifestyle,22000,,39.125624,3
+14,Restocking the fridge before a busy weekend,Lifestyle/lifestyle_5.mp4,kelliatkinson,,,,Lifestyle,,,58.491066,4
