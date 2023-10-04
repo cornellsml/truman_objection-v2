@@ -4,10 +4,10 @@ let activeStartTime;
 
 //Called when user is inactive for about 1 minute, when user logs out of the website, when user changes the page (page and video)
 //Adds the amount of time use was active on the website for
-async function resetActiveTimer(loggingOut) {
+async function resetActiveTimer(loggingOut, fromIdle) {
     if (isActive) {
         const currentTime = new Date();
-        const activeDuration = currentTime - activeStartTime;
+        const activeDuration = currentTime - activeStartTime - (fromIdle ? 60000 : 0);
         if (window.location.pathname !== '/signup' && window.location.pathname !== '/thankyou') {
             let pathname = window.location.pathname;
             if (window.location.pathname == '/') {
@@ -47,12 +47,12 @@ $(window).on("load", function() {
     setInterval(function() {
         idleTime += 1;
         if (idleTime > 4) { // 60.001-74.999 seconds (idle time)
-            resetActiveTimer(false);
+            resetActiveTimer(false, true);
         }
     }, 15000);
 
     $('a.item.logoutLink').on('click', function() {
-        resetActiveTimer(true);
+        resetActiveTimer(true, false);
     });
 
     if (window.location.pathname !== '/signup' && window.location.pathname !== '/' && window.location.pathname !== '/logout' && window.location.pathname !== '/thankyou') {
@@ -151,6 +151,6 @@ $(window).on("load", function() {
 $(window).on("beforeunload", function() {
     // https: //developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event
     if (!window.loggingOut) {
-        resetActiveTimer(false);
+        resetActiveTimer(false, false);
     }
 });

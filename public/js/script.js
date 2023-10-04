@@ -233,7 +233,7 @@ $(window).on("load", function() {
         }
 
         const nextVid = parseInt($(this).attr('nextVid'));
-        await resetActiveTimer(false);
+        await resetActiveTimer(false, false);
         await $.post("/pageLog", {
             path: window.location.pathname + `?v=${nextVid}`,
             _csrf: $('meta[name="csrf-token"]').attr('content')
