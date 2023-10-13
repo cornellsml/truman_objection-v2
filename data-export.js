@@ -104,6 +104,7 @@ async function getDataExport() {
     const outputFilepath = `./outputFiles/truman-objections-formal/${outputFilename}.csv`;
     const csvWriter_header = [
         { id: 'id', title: "Qualtrics ID" },
+        { id: 'username', title: "Username" },
         { id: 'Topic', title: 'Topic' },
         { id: 'Condition', title: 'Condition' },
         { id: 'CompletedStudy', title: 'CompletedStudy' },
@@ -117,6 +118,7 @@ async function getDataExport() {
         { id: 'V4_timespent', title: 'V4_timespent' },
         { id: 'V5_timespent', title: 'V5_timespent' },
         { id: 'AvgTimeVideo', title: 'AvgTimeVideo' },
+        { id: 'PageLog', title: 'PageLog' },
         { id: 'VideoUpvoteNumber', title: 'VideoUpvoteNumber' },
         { id: 'VideoDownvoteNumber', title: 'VideoDownvoteNumber' },
         { id: 'VideoFlagNumber', title: 'VideoFlagNumber' },
@@ -174,6 +176,7 @@ async function getDataExport() {
     for (const user of users) {
         const record = {}; //Record for the user
         record.id = user.mturkID;
+        record.username = user.username;
         record.Topic = user.interest;
         record.Condition = user.group;
 
@@ -192,6 +195,9 @@ async function getDataExport() {
 
         //For each video (feedAction)
         for (const feedAction of user.feedAction) {
+            if (feedAction.post.class != user.interest) {
+                continue;
+            }
             const video = (feedAction.post.postID % 5) + 1; //1, 2, 3, 4, 5
             const video_length = feedAction.post.length;
             if (feedAction.liked) {
@@ -205,7 +211,7 @@ async function getDataExport() {
             }
 
             for (const element of feedAction.videoDuration) {
-                if (element.find(vidDuration => vidDuration.startTime == 0 && vidDuration.endTime == video_length)) {
+                if (element.find(vidDuration => vidDuration.startTime == 0 && vidDuration.endTime >= Math.floor(video_length * 100000) / 100000)) {
                     NumberVideoCompleted++;
                     if (video == 2) {
                         record.V2_Completed = true;
@@ -213,6 +219,7 @@ async function getDataExport() {
                     if (video == 4) {
                         record.V4_Completed = true;
                     }
+                    break;
                 }
             }
 
@@ -326,19 +333,43 @@ async function getDataExport() {
             }
         }
 
+        let string = "";
+        user.pageLog.forEach(page => { string += page.page + "\r\n" });
+        record.PageLog = string;
+
         record.CompletedStudy = (NumberVideoCompleted == 5) ? true : false;
         record.NumberVideoCompleted = NumberVideoCompleted;
         record.VideoUpvoteNumber = VideoUpvoteNumber;
         record.VideoDownvoteNumber = VideoDownvoteNumber;
         record.VideoFlagNumber = VideoFlagNumber;
 
-        record.CommentUpvoteNumber = (record.V1_CommentUpvoteNumber || 0) + (record.V2_CommentUpvoteNumber || 0) + (record.V3_CommentUpvoteNumber || 0) + (record.V4_CommentUpvoteNumber || 0) + (record.V5_CommentUpvoteNumber);
+        record.CommentUpvoteNumber =
+            (record.V1_CommentUpvoteNumber || 0) +
+            (record.V2_CommentUpvoteNumber || 0) +
+            (record.V3_CommentUpvoteNumber || 0) +
+            (record.V4_CommentUpvoteNumber || 0) +
+            (record.V5_CommentUpvoteNumber || 0);
 
-        record.CommentDownvoteNumber = (record.V1_CommentDownvoteNumber || 0) + (record.V2_CommentDownvoteNumber || 0) + (record.V3_CommentDownvoteNumber || 0) + (record.V4_CommentDownvoteNumber || 0) + (record.V5_CommentDownvoteNumber);
+        record.CommentDownvoteNumber =
+            (record.V1_CommentDownvoteNumber || 0) +
+            (record.V2_CommentDownvoteNumber || 0) +
+            (record.V3_CommentDownvoteNumber || 0) +
+            (record.V4_CommentDownvoteNumber || 0) +
+            (record.V5_CommentDownvoteNumber || 0);
 
-        record.CommentFlagNumber = (record.V1_CommentFlagNumber || 0) + (record.V2_CommentFlagNumber || 0) + (record.V3_CommentFlagNumber || 0) + (record.V4_CommentFlagNumber || 0) + (record.V5_CommentFlagNumber);
+        record.CommentFlagNumber =
+            (record.V1_CommentFlagNumber || 0) +
+            (record.V2_CommentFlagNumber || 0) +
+            (record.V3_CommentFlagNumber || 0) +
+            (record.V4_CommentFlagNumber || 0) +
+            (record.V5_CommentFlagNumber || 0);
 
-        record.GeneralPostComments = (record.V1_PostComments || 0) + (record.V2_PostComments || 0) + (record.V3_PostComments || 0) + (record.V4_PostComments || 0) + (record.V5_PostComments);
+        record.GeneralPostComments =
+            (record.V1_PostComments || 0) +
+            (record.V2_PostComments || 0) +
+            (record.V3_PostComments || 0) +
+            (record.V4_PostComments || 0) +
+            (record.V5_PostComments || 0);
 
         if (user.group <= 17) {
             record.OffenseOne_Appear = user.offenseMessageSeen_1;

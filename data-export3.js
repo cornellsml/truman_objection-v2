@@ -45,7 +45,7 @@ async function getDataExport() {
     console.log(color_start, `Starting the data export script...`);
     const currentDate = new Date();
     const outputFilename =
-        `truman_Objections-dataExport` +
+        `truman_Objections-formal-dataExport` +
         `.${currentDate.getMonth()+1}-${currentDate.getDate()}-${currentDate.getFullYear()}` +
         `.${currentDate.getHours()}-${currentDate.getMinutes()}-${currentDate.getSeconds()}`;
     const outputFilepath = `./outputFiles/${outputFilename}.csv`;
