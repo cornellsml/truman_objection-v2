@@ -25,7 +25,7 @@ db.on('error', (err) => {
 console.log(color_success, `Successfully connected to db.`);
 
 /*
-  Gets the user models from the database, or folder of json files.
+  Gets the user models from the database specified in the .env file.
 */
 async function getUserJsons() {
     const users = await User
@@ -35,6 +35,9 @@ async function getUserJsons() {
     return users;
 }
 
+/*
+  Gets the mongoDB object id value of the first offense message. If user is in the control group, object id value of the second offense message.
+*/
 async function getOffenseOneId(experimentalCondition, interest) {
     const videoIndexes = {
         'Science': 1,
@@ -55,6 +58,9 @@ async function getOffenseOneId(experimentalCondition, interest) {
     return offenseObj.id;
 }
 
+/*
+  Gets the mongoDB object id value of the second offense message. Returns a non-null value only if user is in the experimental group.
+*/
 async function getOffenseTwoId(experimentalCondition, interest) {
     const videoIndexes = {
         'Science': 3,
@@ -73,6 +79,9 @@ async function getOffenseTwoId(experimentalCondition, interest) {
     return offenseObj.id;
 }
 
+/*
+  Gets the mongoDB object id value of the objection message. Returns a non-null value only if user is in the experimental group.
+*/
 async function getObjectionId(experimentalCondition, interest) {
     const videoIndexes = {
         'Science': 1,
@@ -179,6 +188,12 @@ async function getDataExport() {
         record.username = user.username;
         record.Topic = user.interest;
         record.Condition = user.group;
+        if (!user.consent) {
+            record.CompletedStudy = false;
+            record.NumberVideoCompleted = 0;
+            records.push(record);
+            continue;
+        }
 
         //OffenseOne if experimental, OffenseTwo if control
         const offenseOneId = await getOffenseOneId(user.group, user.interest);
@@ -307,7 +322,6 @@ async function getDataExport() {
                     }
                 }
             }
-
 
             if (video == 4 && user.group <= 17) {
                 const off2Obj = feedAction.comments.find(comment => !comment.new_comment && comment.comment.toString() == offenseTwoId);
