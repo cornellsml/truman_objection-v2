@@ -1,12 +1,14 @@
-Truman Platform 
+The Truman Platform 
 =======================
 
-The Truman Platform is a fake social network for real results. This fake social network application allows researchers to create interesting and believable scenarios in a social network environment. Since the interactions that take place in a social setting and influence the outcome of an experiment, all content, users, interactions and notifications are “fake” and created by a set of digital actors. Each participant sees the same interactions and conversations, believe these to be unique to them. 
+Named after the 1998 film, The Truman Show, **the Truman Platform** is a social media simulation platform created by [The Cornell Social Media Lab](https://socialmedialab.cornell.edu/) to provide researchers a community research infrastructure to conduct social media experiments in ecologically-valid realistic environments. Researchers can create different social media environments with a repertoire of features and affordances that fit their research goals and purposes, while ensuring participants have a naturalistic social media experience. 
 
-This allows any experiment to be completely replicated, and the tools can be repurposed for other studies. 
+This current iteration studies **effective objections against problematic content on social media**. 
 
-This current iteration is testing the bystander effect on cyberbullying. Future studies could be done on a number of other topics and issues. 
+### **Demo:** 
+Coming soon.
 
-This project and software development was supported by the National Science Foundation through IIS-1405634. Special thanks to everyone at Cornell Social Media Lab in the Department of Communication. 
+### **Publication:**
+Zhao, P., Bazarova, N. N., DiFranzo, D., Hui, W., Kizilcec, & Margolin, D. (in press). Standing up to problematic content on social media: which objection strategies draw the audience’s approval? _Journal of Computer-Mediated Communication_.
 
-Also special thanks to Sahat Yalkabov and his [Hackathon Starter](https://github.com/sahat/hackathon-starter) project, which provided the basic organization for this project. 
+* Branch: pilot_study-official-code
