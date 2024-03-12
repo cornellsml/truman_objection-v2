@@ -19,6 +19,7 @@ public/css/main.css
 uploads/user_post
 
 outputFiles/
+mongodumps
 
 # API keys and secrets
 .env
