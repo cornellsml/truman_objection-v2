@@ -140,32 +140,35 @@ exports.postSignup = (req, res, next) => {
     let experimentalCondition;
     // (1) If given obj1, and obj2 from Qualtrics: Use this as experimental condition
     // (2) If not given from Qualtrics: Select a random number (0-10: since there are 10 conditions)
-    if (!req.query.obj1) {
-        const conditionMessages = [
-            '1_1', '1_2', '2_1', '2_2', '0_1', '0_2', '1_1&2_2', '1_2&2_1', '2_1&1_1', '2_2&1_2'
-        ];
-        experimentalCondition = conditionMessages[(Math.floor(Math.random() * 9))];
-    } else {
-        // ---- Conditions: 14 possible conditions: 12 experimentals & 2 controls ------//
-        // Retributive Message 1: 1_1
-        // Retributive Message 2: 1_2
-        // Retributive Message 1 + Restorative Message 1: 1_1 & 2_1 (unused)
-        // Retributive Message 1 + Restorative Message 2: 1_1 & 2_2
-        // Retributive Message 2 + Restorative Message 1: 1_2 & 2_1 
-        // Retributive Message 2 + Restorative Message 2: 1_2 & 2_2 (unused)
+    // if (!req.query.obj1) {
+    //     const conditionMessages = [
+    //         '1_1', '1_2', '2_1', '2_2', '0_1', '0_2', '1_1&2_2', '1_2&2_1', '2_1&1_1', '2_2&1_2'
+    //     ];
+    //     experimentalCondition = conditionMessages[(Math.floor(Math.random() * 9))];
+    // } else {
+    // ---- Conditions: 14 possible conditions: 12 experimentals & 2 controls ------//
+    // Retributive Message 1: 1_1
+    // Retributive Message 2: 1_2
+    // Retributive Message 1 + Restorative Message 1: 1_1 & 2_1 (unused)
+    // Retributive Message 1 + Restorative Message 2: 1_1 & 2_2
+    // Retributive Message 2 + Restorative Message 1: 1_2 & 2_1 
+    // Retributive Message 2 + Restorative Message 2: 1_2 & 2_2 (unused)
 
-        // Restorative Message 1: 2_1
-        // Restorative Message 2: 2_2
-        // Restorative Message 1 + Retributive Message 1: 2_1 & 1_1
-        // Restorative Message 1 + Retributive Message 2: 2_1 & 1_2 (unused)
-        // Restorative Message 2 + Retributive Message 1: 2_2 & 1_1 (unused)
-        // Restorative Message 2 + Retributive Message 2: 2_2 & 1_2
+    // Restorative Message 1: 2_1
+    // Restorative Message 2: 2_2
+    // Restorative Message 1 + Retributive Message 1: 2_1 & 1_1
+    // Restorative Message 1 + Retributive Message 2: 2_1 & 1_2 (unused)
+    // Restorative Message 2 + Retributive Message 1: 2_2 & 1_1 (unused)
+    // Restorative Message 2 + Retributive Message 2: 2_2 & 1_2
 
-        // Control Message 1: 0_1
-        // Control Message 2: 0_2
+    // Control Message 1: 0_1
+    // Control Message 2: 0_2
 
-        experimentalCondition = req.query.obj1 + "&" + (!req.query.obj2 ? '' : req.queryobj2);
-    }
+    console.log(req.query)
+    console.log(req.query.obj1);
+    console.log(req.query.obj2);
+    experimentalCondition = req.query.obj1 + "&" + (!req.query.obj2 ? '' : req.query.obj2);
+    // }
 
     // Experimental Condition is assigned via Qualtrics, passed
     User.findOne({ mturkID: req.query.r_id }, (err, existingUser) => {
