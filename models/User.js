@@ -31,52 +31,9 @@ const userSchema = new mongoose.Schema({
     group: Number, //0-18 (Total of 19 groups: 18 conditions (0 through 17), 1 control (18); indicates which objection message appears).
     interest: String, //'Science', 'Lifestyle', 'Education'
 
-    // tokens: Array,
-
-    // blocked: [String], //list of usernames of actors user has blocked
-    // reported: [String], //list of usernames of actors user has reported
-    // followed: [String], //list of usernames of actors user has followed
-    // blockReportAndFollowLog: [new Schema({
-    //     time: Date,
-    //     action: String,
-    //     report_issue: String,
-    //     actorName: String
-    // })],
-
-    // study_days: { //how many times the user looked at the feed per day
-    //     type: [Number],
-    //     default: [0, 0]
-    // }, //TODO: Update. It inaccurately +1, whenever creates a new post.
-
-    offenseMessageSeen_1: { type: Boolean, default: false },
+    offenseMessageSeen_1: { type: Boolean, default: false }, //TO DO: Might be helpful to add the time the offense message appeared on the screen
     objectionMessageSeen: { type: Boolean, default: false },
     offenseMessageSeen_2: { type: Boolean, default: false },
-
-    // User Made posts
-    // posts: [new Schema({
-    //     type: String, //Value: user_post
-    //     postID: Number, //postID for user post (0,1,2,3...)
-    //     body: { type: String, default: '', trim: true }, //body of post
-    //     picture: String, //picture for post
-    //     liked: { type: Boolean, default: false }, //has the user liked it?
-    //     likes: { type: Number, default: 0 }, //number of likes on post by actors (excludes user's like)
-
-    //     //Comments for User Made Posts
-    //     comments: [new Schema({
-    //         actor: { type: Schema.ObjectId, ref: 'Actor' }, //If comment is by Actor
-    //         body: { type: String, default: '', trim: true }, //body of comment
-    //         commentID: Number, //ID of the comment
-    //         relativeTime: Number, //in milliseconds, relative time to when the user created their account
-    //         absTime: Date, //Exact time comment is made
-    //         new_comment: { type: Boolean, default: false }, //is this a comment from user?
-    //         liked: { type: Boolean, default: false }, //has the user liked it?
-    //         flagged: { type: Boolean, default: false }, //has the user flagged it?
-    //         likes: { type: Number, default: 0 } //number of likes on comment by actors (excludes user's like)
-    //     }, { versionKey: false })],
-
-    //     absTime: Date, //Exact time post is made
-    //     relativeTime: { type: Number } //in milliseconds, relative time to when the user created their account
-    // })],
 
     log: [new Schema({ //Logins
         time: Date,
@@ -112,9 +69,6 @@ const userSchema = new mongoose.Schema({
 
     feedAction: [new Schema({
         post: { type: Schema.ObjectId, ref: 'Script' },
-        // postClass: String, //Used for post classification purposes.
-        // mostRecentTime: Date, //Absolute Time, the most recent Date the post was viewed
-        // rereadTimes: { type: Number, default: 0 }, //number of times post has been viewed by user.
 
         liked: { type: Boolean, default: false }, //has the user liked it?
         unliked: { type: Boolean, default: false }, //has the user disliked it?

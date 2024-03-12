@@ -362,6 +362,7 @@ async function getDataExport() {
     await csvWriter.writeRecords(records);
     console.log(color_success, `...Data export completed.\nFile exported to: ${outputFilepath} with ${records.length} records.`);
     console.log(color_success, `...Finished reading from the db.`);
+
     db.close();
     console.log(color_start, 'Closed db connection.');
 }
