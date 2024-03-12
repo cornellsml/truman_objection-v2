@@ -6,123 +6,93 @@ id,body,actor,reply,likes,dislikes,time,humanized_time,class
 4,Classic raindrop shape is actually a very short moment of a drip,wh092,1,,,10000,0:10,
 5,Literally an art study of rain and its realistic shape 😍,qq753,1,,,16000,0:16,
 6,The reason we think of them in that classic shape is because that's what they look like when they hit a surface and drip down,dj293,1,,,25000,0:25,
-7,"LOL, did you even preview this before sharing? No one is interested in this crap. Save your time and ours!",pd881,1,1,1,34000,0:34,offense
-8,"Seriously, how can you be so clueless about what's worth sharing? Your stuff is a total waste of space!",hs231,1,1,1,34000,0:34,control
-9,You know what’s a waste of time? Reading your pointless comment. Do us all a favor and keep your negativity to yourself.,op231,1,1,1,42000,0:42,0
-10,LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,op231,1,1,1,42000,0:42,1
-11,Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,op231,1,1,1,42000,0:42,2
-12,We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,op231,1,1,1,42000,0:42,3
-13,"It’s important that we treat each other’s efforts with respect and kindness. Try to appreciate the work, dude. You owe an apology.",op231,1,1,1,42000,0:42,4
-14,This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,op231,1,1,1,42000,0:42,5
-15,Here you go again!! You know what’s a waste of time? Reading your pointless comment. Do us all a favor and keep your negativity to yourself.,op231,1,1,1,42000,0:42,6
-16,Here you go again!! LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,op231,1,1,1,42000,0:42,7
-17,Here you go again!! Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,op231,1,1,1,42000,0:42,8
-18,Here you go again!! We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,op231,1,1,1,42000,0:42,9
-19,"Here you go again!! It’s important that we treat each other’s efforts with respect and kindness. Try to appreciate the work, dude. You owe an apology.",op231,1,1,1,42000,0:42,10
-20,Here you go again!! This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,op231,1,1,1,42000,0:42,11
-21,"Huh, didn’t expect this from you. Not your typical friendly self… Oh well, but you know what’s a waste of time? Reading your pointless comment. Do us all a favor and keep your negativity to yourself.",op231,1,1,1,42000,0:42,12
-22,"Huh, didn’t expect this from you. Not your typical friendly self… Oh well, but you know what? LOL at your comment! You're clearly not a video maker. Probably can't even operate a toaster properly. Keep your unqualified opinions to yourself.",op231,1,1,1,42000,0:42,13
-23,"Huh, didn’t expect this from you. Not your typical friendly self… Oh well, but you know what? Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!",op231,1,1,1,42000,0:42,14
-24,"Huh, didn't expect this from you. Not your typical friendly self. We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.",op231,1,1,1,42000,0:42,15
-25,"Huh, didn't expect this from you. Not your typical friendly self. It’s important that we treat each other’s efforts with respect and kindness. Try to appreciate the work, dude. You owe an apology.",op231,1,1,1,42000,0:42,16
-26,"Huh, didn't expect this from you. Not your typical friendly self. This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?",op231,1,1,1,42000,0:42,17
-27,Such a Beautiful animal,yu239,2,,,2000,0:02,
-28,"That's one of the most acrobatic dolphins, the dusky dolphin.",mx921,2,,,3000,0:03,
-29,The cameramen are so lucky to witness all these majestic feats of nature,id578,2,,,8000,0:08,
-30,The grace and ease with which dolphins moves is wonderful. They have a dancer's spirit and soul.🐬🐬🐬💙💙💙,sb302,2,,,10000,0:10,
-31,I want one of those on my desk lol.  Can you buy this somewhere?,eh552,3,,,3000,0:03,
-32,I want one. I love gizmos !,kf043,3,,,10000,0:10,
-33,My wife will love the idea i can create from this hot idea!  I won’t tire out now as it can do all the work !,de384,3,,,16000,0:16,
-34,This is really interesting not seen it before but I like it😊😊😊😊😊😊,pd881,3,0,0,22000,0:22,control
-35,"Seriously, how can you be so clueless about what's worth sharing? Your stuff is a total waste of space!",hs231,3,0,0,22000,0:22,offense
-36,"Jeeez, imagine being that far from Earth! ",hy507,4,,,6000,0:06,
-37,"Wow, that was such a rough storm for us. Watching it develop from space is just unbelievable",di371,4,,,11000,0:11,
-38,"watching this 8 years later is so fascinating, but weird at the same time",jj392,4,,,13000,0:13,
-39,"It's just the clouds getting lit up by the sun during the day. The cloud cover is always there, its just less visible because its night time for 1/2 the rotation :)",se341,4,,,17000,0:17,
+7,"LOL, did you even preview this before sharing? No one is interested in this crap. Save your time and ours!",pd881,1,1,1,30000,0:30,offense
+8,<a>@pd881</a> I saw a similar video last week,hs231,1,1,1,37000,0:37,obj1=0_1
+9,<a>@pd881</a> This video reminds me of another video I saw before,hs231,1,1,1,37000,0:37,obj1=0_2
+10,<a>@pd881</a> LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,hs231,1,1,1,37000,0:37,obj1=1_1
+11,<a>@pd881</a> Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,hs231,1,1,1,37000,0:37,obj1=1_2
+12,<a>@pd881</a> We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,hs231,1,1,1,37000,0:37,obj1=2_1
+13,<a>@pd881</a> This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,hs231,1,1,1,37000,0:37,obj1=2_2
+14,<a>@pd881</a> LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,op231,1,1,1,39000,0:39,obj2=1_1
+15,<a>@pd881</a> Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,op231,1,1,1,39000,0:39,obj2=1_2
+16,<a>@pd881</a> We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,op231,1,1,1,39000,0:39,obj2=2_1
+17,<a>@pd881</a> This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,op231,1,1,1,39000,0:39,obj2=2_2
+18,Such a Beautiful animal,yu239,2,,,2000,0:02,
+19,"That's one of the most acrobatic dolphins, the dusky dolphin.",mx921,2,,,3000,0:03,
+20,The cameramen are so lucky to witness all these majestic feats of nature,id578,2,,,8000,0:08,
+21,The grace and ease with which dolphins moves is wonderful. They have a dancer's spirit and soul.🐬🐬🐬💙💙💙,sb302,2,,,10000,0:10,
+22,I want one of those on my desk lol.  Can you buy this somewhere?,eh552,3,,,3000,0:03,
+23,I want one. I love gizmos !,kf043,3,,,10000,0:10,
+24,My wife will love the idea i can create from this hot idea!  I won’t tire out now as it can do all the work !,de384,3,,,16000,0:16,
+25,This is really interesting not seen it before but I like it😊😊😊😊😊😊,jk554,3,,,22000,0:22,
+26,"Jeeez, imagine being that far from Earth! ",hy507,4,,,6000,0:06,
+27,"Wow, that was such a rough storm for us. Watching it develop from space is just unbelievable",di371,4,,,11000,0:11,
+28,"watching this 8 years later is so fascinating, but weird at the same time",jj392,4,,,13000,0:13,
+29,"It's just the clouds getting lit up by the sun during the day. The cloud cover is always there, its just less visible because its night time for 1/2 the rotation :)",se341,4,,,17000,0:17,
 ,,,,,,,,
-40,Man I had to analyze this poem in school many times but it's nice to actually listen to.,jd920,5,,,6000,0:06,
-41,"Beautiful poem , and that has made all the difference",ap022,5,,,11000,0:11,
-42,"Sincere appreciation for the voice , soft and mind capturing at the same time",dh223,5,,,13000,0:13,
-43,I remember reading this in my kiddle school English class.  I really liked this poem a lot.,lk203,5,,,25000,0:25,
-44,So basically it’s the chance that it rains on you specifically.,wh092,6,,,8000,0:08,
-45,this is why i bring my umbrella 100% of the time i go out. i dont go out without my bag anyway 😂,qq753,6,,,16000,0:16,
-46,i love risk of rain,dj293,6,,,24000,0:24,
-47,"LOL, did you even preview this before sharing? No one is interested in this crap. Save your time and ours!",pd881,6,1,1,30000,0:30,offense
-48,"Seriously, how can you be so clueless about what's worth sharing? Your stuff is a total waste of space!",hs231,6,1,1,30000,0:30,control
-49,You know what’s a waste of time? Reading your pointless comment. Do us all a favor and keep your negativity to yourself.,op231,6,1,1,38000,0:38,0
-50,LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,op231,6,1,1,38000,0:38,1
-51,Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,op231,6,1,1,38000,0:38,2
-52,We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,op231,6,1,1,38000,0:38,3
-53,"It’s important that we treat each other’s efforts with respect and kindness. Try to appreciate the work, dude. You owe an apology.",op231,6,1,1,38000,0:38,4
-54,This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,op231,6,1,1,38000,0:38,5
-55,Here you go again!! You know what’s a waste of time? Reading your pointless comment. Do us all a favor and keep your negativity to yourself.,op231,6,1,1,38000,0:38,6
-56,Here you go again!! LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,op231,6,1,1,38000,0:38,7
-57,Here you go again!! Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,op231,6,1,1,38000,0:38,8
-58,Here you go again!! We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,op231,6,1,1,38000,0:38,9
-59,"Here you go again!! It’s important that we treat each other’s efforts with respect and kindness. Try to appreciate the work, dude. You owe an apology.",op231,6,1,1,38000,0:38,10
-60,Here you go again!! This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,op231,6,1,1,38000,0:38,11
-61,"Huh, didn’t expect this from you. Not your typical friendly self… Oh well, but you know what’s a waste of time? Reading your pointless comment. Do us all a favor and keep your negativity to yourself.",op231,6,1,1,38000,0:38,12
-62,"Huh, didn’t expect this from you. Not your typical friendly self… Oh well, but you know what? LOL at your comment! You're clearly not a video maker. Probably can't even operate a toaster properly. Keep your unqualified opinions to yourself.",op231,6,1,1,38000,0:38,13
-63,"Huh, didn’t expect this from you. Not your typical friendly self… Oh well, but you know what? Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!",op231,6,1,1,38000,0:38,14
-64,"Huh, didn't expect this from you. Not your typical friendly self. We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.",op231,6,1,1,38000,0:38,15
-65,"Huh, didn't expect this from you. Not your typical friendly self. It’s important that we treat each other’s efforts with respect and kindness. Try to appreciate the work, dude. You owe an apology.",op231,6,1,1,38000,0:38,16
-66,"Huh, didn't expect this from you. Not your typical friendly self. This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?",op231,6,1,1,38000,0:38,17
-67,"This poem is written by the legendary ""shakespeare"" 🌟",yu239,7,,,3000,0:03,
-68,I had this poem in highschool,mx921,7,,,10000,0:10,
-69,"My fav poem in 10th grade
+30,Man I had to analyze this poem in school many times but it's nice to actually listen to.,jd920,5,,,6000,0:06,
+31,"Beautiful poem , and that has made all the difference",ap022,5,,,11000,0:11,
+32,"Sincere appreciation for the voice , soft and mind capturing at the same time",dh223,5,,,13000,0:13,
+33,I remember reading this in my kiddle school English class.  I really liked this poem a lot.,lk203,5,,,25000,0:25,
+34,So basically it’s the chance that it rains on you specifically.,wh092,6,,,8000,0:08,
+35,this is why i bring my umbrella 100% of the time i go out. i dont go out without my bag anyway 😂,qq753,6,,,16000,0:16,
+36,i love risk of rain,dj293,6,,,24000,0:24,
+37,"LOL, did you even preview this before sharing? No one is interested in this crap. Save your time and ours!",pd881,6,1,1,30000,0:30,offense
+38,<a>@pd881</a> I saw a similar video last week,hs231,6,1,1,38000,0:38,obj1=0_1
+39,<a>@pd881</a> This video reminds me of another video I saw before,hs231,6,1,1,38000,0:38,obj1=0_2
+40,<a>@pd881</a> LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,hs231,6,1,1,38000,0:38,obj1=1_1
+41,<a>@pd881</a> Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,hs231,6,1,1,38000,0:38,obj1=1_2
+42,<a>@pd881</a> We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,hs231,6,1,1,38000,0:38,obj1=2_1
+43,<a>@pd881</a> This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,hs231,6,1,1,38000,0:38,obj1=2_2
+44,<a>@pd881</a> LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,op231,6,1,1,40000,0:40,obj2=1_1
+45,<a>@pd881</a> Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,op231,6,1,1,40000,0:40,obj2=1_2
+46,<a>@pd881</a> We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,op231,6,1,1,40000,0:40,obj2=2_1
+47,<a>@pd881</a> This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,op231,6,1,1,40000,0:40,obj2=2_2
+48,"This poem is written by the legendary ""shakespeare"" 🌟",yu239,7,,,3000,0:03,
+49,I had this poem in highschool,mx921,7,,,10000,0:10,
+50,"My fav poem in 10th grade
 By- William Shakespeare 😌",id578,7,,,16000,0:16,
-70,Nice 👍🏻,sb302,7,,,22000,0:22,
-71,"White noise sounds like steam hissing.
+51,Nice 👍🏻,sb302,7,,,22000,0:22,
+52,"White noise sounds like steam hissing.
 Pink noise sounds like rainfall.
 Brown noise sounds like ocean waves.",eh552,8,,,12000,0:12,
-72,"Brown noise is definitely the best one. It sounds like several relaxing things, for example: rain, the ocean, a fan or the air conditioner.",kf043,8,,,30000,0:30,
-73,"This is really interesting! I just recently found green noise, and I find it incredibly relaxing. 😊🙌",de384,8,,,32000,0:32,
-74,They all sound like different stages in deep frying 😅,pd881,8,0,0,45000,0:45,control
-75,"Seriously, how can you be so clueless about what's worth sharing? Your stuff is a total waste of space!",hs231,8,0,0,45000,0:45,offense
-76,"i feel it'll be great for adhd as well. My bf has trouble focusing on lectures and reading textbooks, but video games engage him enough that he can stay focused for a prolonged period of time.",hy507,9,,,8000,0:08,
-77,"I can truly imagine making a video game that's teaches pharmacology, all those complex and gritty details beautifully encoded into a storyline.",di371,9,,,13000,0:13,
-78,I love this guy's enthusiasm for video games,jj392,9,,,33000,0:33,
-79,The future is going to be perfectly perfect 😍,se341,9,,,45000,0:45,
+53,"Brown noise is definitely the best one. It sounds like several relaxing things, for example: rain, the ocean, a fan or the air conditioner.",kf043,8,,,30000,0:30,
+54,"This is really interesting! I just recently found green noise, and I find it incredibly relaxing. 😊🙌",de384,8,,,32000,0:32,
+55,They all sound like different stages in deep frying 😅,pd881,8,,,45000,0:45,
+56,"i feel it'll be great for adhd as well. My bf has trouble focusing on lectures and reading textbooks, but video games engage him enough that he can stay focused for a prolonged period of time.",hy507,9,,,8000,0:08,
+57,"I can truly imagine making a video game that's teaches pharmacology, all those complex and gritty details beautifully encoded into a storyline.",di371,9,,,13000,0:13,
+58,I love this guy's enthusiasm for video games,jj392,9,,,33000,0:33,
+59,The future is going to be perfectly perfect 😍,se341,9,,,45000,0:45,
 ,,,,,,,,
-80,We NEED more REST.,jd920,10,,,8000,0:08,
-81,"Unplug, unwind. Stare out the window.",ap022,10,,,13000,0:13,
-82,I allow myself to be content with a peaceful and commited way of life,dh223,10,,,33000,0:33,
-83,"Utterly delightful..
+60,We NEED more REST.,jd920,10,,,8000,0:08,
+61,"Unplug, unwind. Stare out the window.",ap022,10,,,13000,0:13,
+62,I allow myself to be content with a peaceful and commited way of life,dh223,10,,,33000,0:33,
+63,"Utterly delightful..
 A perfect thought to retire to 🛌 ..",lk203,10,,,45000,0:45,
-84,"As an ice lover, i appreciate making so many ice flavours and shapes i would love to try making all of them",wh092,11,,,7000,0:07,
-85,I just can’t she’s so aesthetic,qq753,11,,,16000,0:16,
-86,"question: won't it stick together? i have a problem with my ice cause right after i remove them from the dispenser, it all sticks together 😢",dj293,11,,,29000,0:29,
-87,"LOL, did you even preview this before sharing? No one is interested in this crap. Save your time and ours!",pd881,11,1,1,39000,0:39,offense
-88,"Seriously, how can you be so clueless about what's worth sharing? Your stuff is a total waste of space!",hs231,11,1,1,39000,0:39,control
-89,You know what’s a waste of time? Reading your pointless comment. Do us all a favor and keep your negativity to yourself.,op231,11,1,1,46000,0:46,0
-90,LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,op231,11,1,1,46000,0:46,1
-91,Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,op231,11,1,1,46000,0:46,2
-92,We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,op231,11,1,1,46000,0:46,3
-93,"It’s important that we treat each other’s efforts with respect and kindness. Try to appreciate the work, dude. You owe an apology.",op231,11,1,1,46000,0:46,4
-94,This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,op231,11,1,1,46000,0:46,5
-95,Here you go again!! You know what’s a waste of time? Reading your pointless comment. Do us all a favor and keep your negativity to yourself.,op231,11,1,1,46000,0:46,6
-96,Here you go again!! LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,op231,11,1,1,46000,0:46,7
-97,Here you go again!! Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,op231,11,1,1,46000,0:46,8
-98,Here you go again!! We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,op231,11,1,1,46000,0:46,9
-99,"Here you go again!! It’s important that we treat each other’s efforts with respect and kindness. Try to appreciate the work, dude. You owe an apology.",op231,11,1,1,46000,0:46,10
-100,Here you go again!! This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,op231,11,1,1,46000,0:46,11
-101,"Huh, didn’t expect this from you. Not your typical friendly self… Oh well, but you know what’s a waste of time? Reading your pointless comment. Do us all a favor and keep your negativity to yourself.",op231,11,1,1,46000,0:46,12
-102,"Huh, didn’t expect this from you. Not your typical friendly self… Oh well, but you know what? LOL at your comment! You're clearly not a video maker. Probably can't even operate a toaster properly. Keep your unqualified opinions to yourself.",op231,11,1,1,46000,0:46,13
-103,"Huh, didn’t expect this from you. Not your typical friendly self… Oh well, but you know what? Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!",op231,11,1,1,46000,0:46,14
-104,"Huh, didn't expect this from you. Not your typical friendly self. We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.",op231,11,1,1,46000,0:46,15
-105,"Huh, didn't expect this from you. Not your typical friendly self. It’s important that we treat each other’s efforts with respect and kindness. Try to appreciate the work, dude. You owe an apology.",op231,11,1,1,46000,0:46,16
-106,"Huh, didn't expect this from you. Not your typical friendly self. This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?",op231,11,1,1,46000,0:46,17
-107,I love cleaning. This was so nice to watch,yu239,12,,,6000,0:06,
-108,I want your home  is so beautiful,mx921,12,,,11000,0:11,
-109,If cleaning was this fast I would definitely do it,id578,12,,,13000,0:13,
-110,I am that type of person who won't clean but watch others clean💀,sb302,12,,,20000,0:20,
-111,I am the first one here,eh552,13,,,3000,0:03,
-112,This is called giving kids the benefit of doubt.,kf043,13,,,10000,0:10,
-113,Where's the line between being forgiving and kind and being too passive and enabling bad behavior?,de384,13,,,16000,0:16,
-114,"Even if you don't have children, please adopt this mindset & 3 dimensional thinking for everyone around you - it makes you much more pleasant!",pd881,13,0,0,22000,0:22,control
-115,"Seriously, how can you be so clueless about what's worth sharing? Your stuff is a total waste of space!",hs231,13,0,0,22000,0:22,offense
-116,Seeing everything so organized feels  comforting and relaxing😃,hy507,14,,,9000,0:09,
-117,"Now deliver this fridge to me 😂
+64,"As an ice lover, i appreciate making so many ice flavours and shapes i would love to try making all of them",wh092,11,,,7000,0:07,
+65,I just can’t she’s so aesthetic,qq753,11,,,16000,0:16,
+66,"question: won't it stick together? i have a problem with my ice cause right after i remove them from the dispenser, it all sticks together 😢",dj293,11,,,29000,0:29,
+67,"LOL, did you even preview this before sharing? No one is interested in this crap. Save your time and ours!",pd881,11,1,1,39000,0:39,offense
+68,<a>@pd881</a> I saw a similar video last week,hs231,11,1,1,46000,0:46,obj1=0_1
+69,<a>@pd881</a> This video reminds me of another video I saw before,hs231,11,1,1,46000,0:46,obj1=0_2
+70,<a>@pd881</a> LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,hs231,11,1,1,46000,0:46,obj1=1_1
+71,<a>@pd881</a> Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,hs231,11,1,1,46000,0:46,obj1=1_2
+72,<a>@pd881</a> We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,hs231,11,1,1,46000,0:46,obj1=2_1
+73,<a>@pd881</a> This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,hs231,11,1,1,46000,0:46,obj1=2_2
+74,<a>@pd881</a> LOL at your comment! You’re clearly not a video maker. Probably can’t even operate a toaster properly. Keep your unqualified opinions to yourself.,op231,11,1,1,48000,0:48,obj2=1_1
+75,<a>@pd881</a> Nobody cares about your crap comment. Stop wasting your time being nasty and embarrassing yourself!,op231,11,1,1,48000,0:48,obj2=1_2
+76,<a>@pd881</a> We should always support each other’s creative efforts rather than tearing each other down. I think you should apologize.,op231,11,1,1,48000,0:48,obj2=2_1
+77,<a>@pd881</a> This is not how we should treat each other. It’s crucial to foster a supportive environment where we encourage and inspire one another. Would you please apologize?,op231,11,1,1,48000,0:48,obj2=2_2
+78,I love cleaning. This was so nice to watch,yu239,12,,,6000,0:06,
+79,I want your home  is so beautiful,mx921,12,,,11000,0:11,
+80,If cleaning was this fast I would definitely do it,id578,12,,,13000,0:13,
+81,I am that type of person who won't clean but watch others clean💀,sb302,12,,,20000,0:20,
+82,I am the first one here,eh552,13,,,3000,0:03,
+83,This is called giving kids the benefit of doubt.,kf043,13,,,10000,0:10,
+84,Where's the line between being forgiving and kind and being too passive and enabling bad behavior?,de384,13,,,16000,0:16,
+85,"Even if you don't have children, please adopt this mindset & 3 dimensional thinking for everyone around you - it makes you much more pleasant!",pd881,13,,,22000,0:22,
+86,Seeing everything so organized feels  comforting and relaxing😃,hy507,14,,,9000,0:09,
+87,"Now deliver this fridge to me 😂
 It will be very nice of you 😂",di371,14,,,30000,0:30,
-118,Tips: wait till your fruits dry before putting them in a closed container. They will spoil tmr.,jj392,14,,,32000,0:32,
-119,the fact that everything fits perfectly in each containers 😌💯,se341,14,,,45000,0:45,
+88,Tips: wait till your fruits dry before putting them in a closed container. They will spoil tmr.,jj392,14,,,32000,0:32,
+89,the fact that everything fits perfectly in each containers 😌💯,se341,14,,,45000,0:45,

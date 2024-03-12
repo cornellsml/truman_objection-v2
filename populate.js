@@ -318,12 +318,12 @@ async function doPopulate() {
         //             }
         //         );
         //     });
-        //     /*************************
-        //     Creates inline comments for each post
-        //     Looks up actors and posts to insert the correct comment
-        //     Does this in series to insure comments are put in the correct order
-        //     Takes a while to run because of this.
-        //     *************************/
+        /*************************
+        Creates inline comments for each post
+        Looks up actors and posts to insert the correct comment
+        Does this in series to insure comments are put in the correct order
+        Takes a while to run because of this.
+        *************************/
     }).then(function(result) {
         console.log(color_start, "Starting to populate post replies...");
         return new Promise((resolve, reject) => {
@@ -346,9 +346,9 @@ async function doPopulate() {
                                     if (new_reply.class == 'offense' && new_reply.reply % 5 == 1) {
                                         offenseComment = comment_detail;
                                         callback();
-                                    } else if (new_reply.class.match(/^-?\d+$/)) {
+                                    } else if (new_reply.class.startsWith("obj")) {
                                         offenseComment.subcomments.push(comment_detail);
-                                        if (new_reply.class == 17) {
+                                        if (new_reply.class == "obj2=2_2") {
                                             comment_detail = offenseComment;
                                             pr.comments.push(comment_detail);
                                             pr.comments.sort(function(a, b) { return a.time - b.time; });

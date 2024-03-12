@@ -4,36 +4,33 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
-    // email: { type: String },
-    // password: String,
-    // passwordResetToken: String,
-    // passwordResetExpires: Date,
     username: String,
     active: { type: Boolean, default: true },
     isAdmin: { type: Boolean, default: false },
     completed: { type: Boolean, default: false },
 
-    endSurveyLink: String,
+    numComments: { type: Number, default: -1 }, // # of comments on posts (user and actor), it is used for indexing and commentID of uesr comments on posts (user and actor)
 
-    numPosts: { type: Number, default: -1 }, //# of user posts
-    numComments: { type: Number, default: -1 }, //# of comments on posts (user and actor), it is used for indexing and commentID of uesr comments on posts (user and actor)
-    // numActorReplies: { type: Number, default: -1 }, //# of actor replies on user posts, it is used for indexing and commentID of actor comments on user posts
-
-    // numPostLikes: { type: Number, default: 0 }, //# of actor posts liked
-    // numCommentLikes: { type: Number, default: 0 }, //# of actor comments liked
-
-    // lastNotifyVisit: Date, //Absolute Time, most recent visit to /notifications. First initialization is at account creation
-    createdAt: Date, //Absolute Time user was created
+    createdAt: Date, // Absolute Time user was created
     consent: { type: Boolean, default: false }, //Indicates if user has proceeded through welcome signup pages
 
     mturkID: { type: String, unique: true },
 
-    group: Number, //0-18 (Total of 19 groups: 18 conditions (0 through 17), 1 control (18); indicates which objection message appears).
+    group: String, // [obj1]_[obj2] format.
     interest: String, //'Science', 'Lifestyle', 'Education'
 
-    offenseMessageSeen_1: { type: Boolean, default: false }, //TO DO: Might be helpful to add the time the offense message appeared on the screen
-    objectionMessageSeen: { type: Boolean, default: false },
-    offenseMessageSeen_2: { type: Boolean, default: false },
+    offenseMessage_Seen: {
+        seen: { type: Boolean, default: false },
+        time: Date,
+    },
+    objection1Message_Seen: {
+        seen: { type: Boolean, default: false },
+        time: Date,
+    },
+    objection2Message_Seen: {
+        seen: { type: Boolean, default: false },
+        time: Date,
+    },
 
     log: [new Schema({ //Logins
         time: Date,
@@ -105,7 +102,7 @@ const userSchema = new mongoose.Schema({
             flagTime: [Date], //absoluteTimes of times user has flagged the comment
             shareTime: [Date], //absoluteTimes of times user has shared the comment
             new_comment: { type: Boolean, default: false }, //is this a comment from user?
-            new_comment_id: Number, //ID for comment, begins at 120
+            new_comment_id: Number, //ID for comment, begins at 90
             reply_to: Number, // CommentID/index if comment is a reply
             parent_comment: Number, //CommentID/index of parent comment (used for identifying subcommenting)
             body: String, //Body of comment

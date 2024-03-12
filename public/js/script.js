@@ -1,7 +1,7 @@
 $(window).on("load", function() {
-    let offenseSeen_1 = false;
-    let offenseSeen_2 = false;
-    let objectionSeen = false;
+    let offenseSeen = false;
+    let objection1Seen = false;
+    let objection2Seen = false;
     $.post("/pageLog", {
         path: window.location.pathname + `?v=${$('.ui.fluid.card:visible').attr('index')}`,
         _csrf: $('meta[name="csrf-token"]').attr('content')
@@ -22,6 +22,10 @@ $(window).on("load", function() {
                             }
                         }
                         commentElement.addClass("glowBorder", 1000).transition('fade up');
+                        commentElement[0].scrollIntoView({
+                            behavior: "smooth", // or "auto" or "instant"
+                            block: "start" // or "end"
+                        });
                         setTimeout(function() {
                             commentElement.removeClass("glowBorder", 1000);
                         }, 2500);
@@ -31,44 +35,42 @@ $(window).on("load", function() {
         };
 
         const index = parseInt(post.attr("index"));
-        const offense_1 = {
-            1: 34000,
+        const offense = {
+            1: 30000,
             6: 30000,
             11: 39000
         }
-        const offense_2 = {
-            3: 22000,
-            8: 45000,
-            13: 22000
-        }
-        const objection = {
-            1: 42000,
+        const objection1 = {
+            1: 37000,
             6: 38000,
             11: 46000
         }
-        if ([1, 6, 11].includes(index)) {
-            if (this.currentTime * 1000 > offense_1[index] && !offenseSeen_1) {
-                $.post("/messageSeen", {
-                    offense_1: true,
-                    _csrf: $('meta[name="csrf-token"]').attr('content')
-                });
-                offenseSeen_1 = true;
-            }
-            if (this.currentTime * 1000 > objection[index] && !objectionSeen) {
-                $.post("/messageSeen", {
-                    objection: true,
-                    _csrf: $('meta[name="csrf-token"]').attr('content')
-                });
-                objectionSeen = true;
-            }
+        const objection2 = {
+            1: 39000,
+            6: 40000,
+            11: 48000
         }
-        if ([3, 8, 13].includes(index)) {
-            if (this.currentTime * 1000 > offense_2[index] && !offenseSeen_2) {
+        if ([1, 6, 11].includes(index)) {
+            if (this.currentTime * 1000 > offense[index] && !offenseSeen) {
                 $.post("/messageSeen", {
-                    offense_2: true,
+                    offense: true,
                     _csrf: $('meta[name="csrf-token"]').attr('content')
                 });
-                offenseSeen_2 = true;
+                offenseSeen = true;
+            }
+            if (this.currentTime * 1000 > objection1[index] && !objection1Seen) {
+                $.post("/messageSeen", {
+                    objection1: true,
+                    _csrf: $('meta[name="csrf-token"]').attr('content')
+                });
+                objection1Seen = true;
+            }
+            if (this.currentTime * 1000 > objection2[index] && !objection2Seen) {
+                $.post("/messageSeen", {
+                    objection2: true,
+                    _csrf: $('meta[name="csrf-token"]').attr('content')
+                });
+                objection2Seen = true;
             }
         }
     });

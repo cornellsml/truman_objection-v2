@@ -148,23 +148,13 @@ exports.getScript = (req, res, next) => {
 
                             // Look at the 2nd video
                             if (script_feed[0].postID % 5 == 1) {
-                                const commentIndex = _.findIndex(script_feed[0].comments, function(o) { return o.class == 'offense'; });
-                                if (experimentalCondition <= 17) {
-                                    script_feed[0].comments[commentIndex]["subcomments"] = script_feed[0].comments[commentIndex]["subcomments"].filter(subcomment => subcomment.class == user.group || !subcomment.class);
-                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'offense' || !comment.class);
-                                }
-                                if (experimentalCondition == 18) {
-                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'control' || !comment.class);
-                                }
-                            }
-                            // Look at the 4th video 
-                            if (script_feed[0].postID % 5 == 3) {
-                                if (experimentalCondition <= 17) {
-                                    // console.log(script_feed[0].comments)
-                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'offense' || !comment.class);
-                                }
-                                if (experimentalCondition == 18) {
-                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'control' || !comment.class);
+                                const commentIndex = _.findIndex(script_feed[0].comments, function(o) { return o.class == 'offense' });
+
+                                const messages = experimentalCondition.split("&");
+                                if (messages.length == 1) {
+                                    script_feed[0].comments[commentIndex]["subcomments"] = script_feed[0].comments[commentIndex]["subcomments"].filter(comment => comment.class == "obj1=" + messages[0]);
+                                } else {
+                                    script_feed[0].comments[commentIndex]["subcomments"] = script_feed[0].comments[commentIndex]["subcomments"].filter(comment => comment.class == "obj1=" + messages[0] || comment.class == "obj2=" + messages[1]);
                                 }
                             }
 
@@ -189,24 +179,16 @@ exports.getScript = (req, res, next) => {
                         else {
                             // Look at the 2nd video
                             if (script_feed[0].postID % 5 == 1) {
-                                const commentIndex = _.findIndex(script_feed[0].comments, function(o) { return o.class == 'offense'; });
-                                if (experimentalCondition <= 17) {
-                                    script_feed[0].comments[commentIndex]["subcomments"] = script_feed[0].comments[commentIndex]["subcomments"].filter(subcomment => subcomment.class == user.group || !subcomment.class);
-                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'offense' || !comment.class);
-                                }
-                                if (experimentalCondition == 18) {
-                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'control' || !comment.class);
-                                }
-                            }
-                            // Look at the 4th video 
-                            if (script_feed[0].postID % 5 == 3) {
-                                if (experimentalCondition <= 17) {
-                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'offense' || !comment.class);
-                                }
-                                if (experimentalCondition == 18) {
-                                    script_feed[0].comments = script_feed[0].comments.filter(comment => comment.class == 'control' || !comment.class);
+                                const commentIndex = _.findIndex(script_feed[0].comments, function(o) { return o.class == 'offense' });
+
+                                const messages = experimentalCondition.split("&");
+                                if (messages.length == 1) {
+                                    script_feed[0].comments[commentIndex]["subcomments"] = script_feed[0].comments[commentIndex]["subcomments"].filter(comment => comment.class == "obj1=" + messages[0]);
+                                } else {
+                                    script_feed[0].comments[commentIndex]["subcomments"] = script_feed[0].comments[commentIndex]["subcomments"].filter(comment => comment.class == "obj1=" + messages[0] || comment.class == "obj2=" + messages[1]);
                                 }
                             }
+
                             script_feed[0].comments.sort(function(a, b) {
                                 return b.time - a.time;
                             });
@@ -257,7 +239,7 @@ exports.postUpdateFeedAction = (req, res, next) => {
             user.numComments = user.numComments + 1;
             const cat = {
                 new_comment: true,
-                new_comment_id: user.numComments + 120,
+                new_comment_id: user.numComments + 90,
                 body: req.body.comment_text,
                 relativeTime: req.body.new_comment - user.createdAt,
                 absTime: req.body.new_comment,
@@ -435,14 +417,28 @@ exports.postUpdateFeedAction = (req, res, next) => {
 exports.postMessageSeen = (req, res, next) => {
     User.findById(req.user.id, (err, user) => {
         if (err) { return next(err); }
-        if (req.body.offense_1) {
-            user.offenseMessageSeen_1 = true;
+        const experimentalCondition = user.group;
+        const date = Date.now();
+        if (req.body.offense) {
+            user.offenseMessage_Seen = {
+                seen: true,
+                time: date
+            };
         }
-        if (req.body.offense_2) {
-            user.offenseMessageSeen_2 = true;
+        if (req.body.objection1) {
+            user.objection1Message_Seen = {
+                seen: true,
+                time: date
+            };
         }
-        if (req.body.objection) {
-            user.objectionMessageSeen = true;
+        if (req.body.objection2) {
+            const messages = experimentalCondition.split("&");
+            if (messages.length == 2) {
+                user.objection2Message_Seen = {
+                    seen: true,
+                    time: date
+                };
+            }
         }
         user.save((err) => {
             if (err) {

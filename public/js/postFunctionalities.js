@@ -297,7 +297,7 @@ function addCommentToVideo(e) {
         const videoTime = card.find("video")[0].currentTime * 1000;
         const date = Date.now();
         const postID = card.attr("postID");
-        const commentID = numComments + 1 + 120;
+        const commentID = numComments + 1 + 90;
 
         const mess = `
         <div class="comment" commentID=${commentID} index=${commentID}>
@@ -371,7 +371,7 @@ function openCommentReply(e) {
                     <div class="image" style="background-color:${color}">
                         <img class="ui image rounded" src=${photo}>
                     </div>
-                    <textarea class="replyToComment" type="text" placeholder="Add a Reply..." rows="1" onInput="changeColor(event${comment_level==2 ? ", '@"+reply_to +"'": ""})">${(comment_level == 2) ? "@"+reply_to+" " : ""}</textarea>
+                    <textarea class="replyToComment" type="text" placeholder="Add a Reply..." rows="1" onInput="changeColor(event${", '@"+reply_to +"'"})">${"@"+reply_to+" "}</textarea>
                 </div>
                 <div class="ui submit button replyToComment" onClick="addCommentToComment(event)">
                     Reply to ${reply_to}
@@ -386,14 +386,14 @@ function openCommentReply(e) {
         const comment_area_element = $(target).find('textarea.replyToComment');
         const end = comment_area_element.val().length;
         comment_area_element[0].setSelectionRange(end, end);
-        if (comment_level == 2) {
-            comment_area_element.highlightWithinTextarea({
+        // if (comment_level == 2) {
+        comment_area_element.highlightWithinTextarea({
                 highlight: [{
                     highlight: "@" + reply_to, // string, regexp, array, function, or custom object
                     className: 'blue'
                 }]
             })
-        };
+            // };
         comment_area_element.focus();
         comment_area_element[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
     }
@@ -435,7 +435,7 @@ function addCommentToComment(e) {
         const date = Date.now();
         const postID = card.attr("postID");
         const postClass = card.attr("postClass");
-        const commentID = numComments + 1 + 120;
+        const commentID = numComments + 1 + 90;
         const reply_to = orig_comment.children(".content").children("a.author").hasClass('/me') ? orig_comment.attr('commentID') : orig_comment.attr('index');
         const parent_comment = form.parents(".comment").last().attr('index');
 
