@@ -72,7 +72,7 @@ function unlikePost(e) {
 }
 
 function flagPost(e) {
-    const target = $(e.target);
+    const target = $(e.target).closest('.ui.flag.button');
     const post = target.closest(".ui.fluid.card");
     const postID = post.attr("postID");
     const postClass = post.attr("postClass");
