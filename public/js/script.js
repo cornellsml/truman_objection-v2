@@ -6,6 +6,7 @@ $(window).on("load", function() {
         path: window.location.pathname + `?v=${$('.ui.fluid.card:visible').attr('index')}`,
         _csrf: $('meta[name="csrf-token"]').attr('content')
     });
+    $(`.ui.fluid.card:visible video`)[0].play();
     $('video').on("timeupdate", function() {
         const post = $(this).parents('.ui.fluid.card');
         const postTimeStamps = JSON.parse(post.attr('postTimeStamps'));
@@ -235,19 +236,20 @@ $(window).on("load", function() {
         }
 
         const nextVid = parseInt($(this).attr('nextVid'));
+        if ($(this).hasClass("left")) {
+            $('.ui.fluid.card:visible').transition('hide');
+            $(`.ui.fluid.card[index=${nextVid}]`).transition();
+            $(`.ui.fluid.card[index=${nextVid}] video`)[0].play();
+        } else {
+            $('.ui.fluid.card:visible').transition('hide');
+            $(`.ui.fluid.card[index=${nextVid}]`).transition();
+            $(`.ui.fluid.card[index=${nextVid}] video`)[0].play();
+        }
         await resetActiveTimer(false, false);
         await $.post("/pageLog", {
             path: window.location.pathname + `?v=${nextVid}`,
             _csrf: $('meta[name="csrf-token"]').attr('content')
         });
-
-        if ($(this).hasClass("left")) {
-            $('.ui.fluid.card:visible').transition('hide');
-            $(`.ui.fluid.card[index=${nextVid}]`).transition();
-        } else {
-            $('.ui.fluid.card:visible').transition('hide');
-            $(`.ui.fluid.card[index=${nextVid}]`).transition();
-        }
 
         if (nextVid % 5 == 0) {
             $('button.left').addClass("hidden");
