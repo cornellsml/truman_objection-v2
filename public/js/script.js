@@ -42,14 +42,14 @@ $(window).on("load", function() {
             11: 39000
         }
         const objection1 = {
-            1: 37000,
-            6: 38000,
-            11: 46000
+            1: 34000,
+            6: 34000,
+            11: 43000
         }
         const objection2 = {
-            1: 39000,
-            6: 40000,
-            11: 48000
+            1: 36000,
+            6: 36000,
+            11: 45000
         }
         if ([1, 6, 11].includes(index)) {
             if (this.currentTime * 1000 > offense[index] && !offenseSeen) {
