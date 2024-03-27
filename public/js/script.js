@@ -197,42 +197,10 @@ $(window).on("load", function() {
 
     //Buttons to switch videos
     $('button.circular.ui.icon.button.blue.centered').on("click", async function() {
+        const actionArray = []; // This array will be handled by Promise.all
         const currentCard = $('.ui.fluid.card:visible');
         if (!currentCard.find('video')[0].paused) {
-            currentCard.find('video').off("pause");
             currentCard.find('video').trigger('pause');
-            currentCard.find('video').on("pause", async function() {
-                const post = $(this).parents('.ui.fluid.card');
-                const postID = post.attr("postID");
-                if (!this.seeking) {
-                    await $.post("/feed", {
-                        postID: postID,
-                        videoAction: {
-                            action: 'pause',
-                            absTime: Date.now(),
-                            videoTime: this.currentTime,
-                        },
-                        _csrf: $('meta[name="csrf-token"]').attr('content')
-                    });
-                }
-
-                i = 0;
-                videoDuration = [];
-                while (i < post.find('video')[0].played.length) {
-                    videoDuration.push({
-                        startTime: post.find('video')[0].played.start(i),
-                        endTime: post.find('video')[0].played.end(i)
-                    })
-                    i++;
-                }
-                if (videoDuration.length != 0) {
-                    await $.post("/feed", {
-                        postID: postID,
-                        videoDuration: videoDuration,
-                        _csrf: $('meta[name="csrf-token"]').attr('content')
-                    });
-                }
-            })
         }
 
         const nextVid = parseInt($(this).attr('nextVid'));
@@ -245,12 +213,6 @@ $(window).on("load", function() {
             $(`.ui.fluid.card[index=${nextVid}]`).transition();
             $(`.ui.fluid.card[index=${nextVid}] video`)[0].play();
         }
-        await resetActiveTimer(false, false);
-        await $.post("/pageLog", {
-            path: window.location.pathname + `?v=${nextVid}`,
-            _csrf: $('meta[name="csrf-token"]').attr('content')
-        });
-
         if (nextVid % 5 == 0) {
             $('button.left').addClass("hidden");
         } else {
@@ -266,5 +228,11 @@ $(window).on("load", function() {
             $('#lastVid-button').addClass("hidden");
             $('button.right:not(.disabled)').attr('nextVid', nextVid + 1);
         }
+        actionArray.push(resetActiveTimer(false, false));
+        actionArray.push($.post("/pageLog", {
+            path: window.location.pathname + `?v=${nextVid}`,
+            _csrf: $('meta[name="csrf-token"]').attr('content')
+        }));
+        Promise.all(actionArray);
     })
 });
