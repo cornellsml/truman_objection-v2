@@ -57,10 +57,6 @@ $(window).on("load", async function() {
                         $(`h2.username_${i+1}`).text(randomNames[i]);
                     }
                 }, 750);
-                $('.ui.vertical.basic.buttons')[0].scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
             }
             canContinue();
         }
