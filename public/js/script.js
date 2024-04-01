@@ -1,5 +1,6 @@
 $(window).on("load", function() {
-    let offenseSeen = false;
+    let offense1Seen = false;
+    let offense2Seen = false;
     let objection1Seen = false;
     let objection2Seen = false;
     $.post("/pageLog", {
@@ -36,10 +37,15 @@ $(window).on("load", function() {
         };
 
         const index = parseInt(post.attr("index"));
-        const offense = {
+        const offense1 = {
             1: 30000,
             6: 30000,
             11: 39000
+        }
+        const offense2 = {
+            3: 22000,
+            8: 45000,
+            13: 22000
         }
         const objection1 = {
             1: 34000,
@@ -52,12 +58,12 @@ $(window).on("load", function() {
             11: 45000
         }
         if ([1, 6, 11].includes(index)) {
-            if (this.currentTime * 1000 > offense[index] && !offenseSeen) {
+            if (this.currentTime * 1000 > offense1[index] && !offense1Seen) {
                 $.post("/messageSeen", {
-                    offense: true,
+                    offense1: true,
                     _csrf: $('meta[name="csrf-token"]').attr('content')
                 });
-                offenseSeen = true;
+                offense1Seen = true;
             }
             if (this.currentTime * 1000 > objection1[index] && !objection1Seen) {
                 $.post("/messageSeen", {
@@ -72,6 +78,15 @@ $(window).on("load", function() {
                     _csrf: $('meta[name="csrf-token"]').attr('content')
                 });
                 objection2Seen = true;
+            }
+        }
+        if ([3, 8, 13].includes(index)) {
+            if (this.currentTime * 1000 > offense2[index] && !offense2Seen) {
+                $.post("/messageSeen", {
+                    offense2: true,
+                    _csrf: $('meta[name="csrf-token"]').attr('content')
+                });
+                offense2Seen = true;
             }
         }
     });

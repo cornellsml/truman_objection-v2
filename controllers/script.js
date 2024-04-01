@@ -419,8 +419,14 @@ exports.postMessageSeen = (req, res, next) => {
         if (err) { return next(err); }
         const experimentalCondition = user.group;
         const date = Date.now();
-        if (req.body.offense) {
-            user.offenseMessage_Seen = {
+        if (req.body.offense1) {
+            user.offense1Message_Seen = {
+                seen: true,
+                time: date
+            };
+        }
+        if (req.body.offense2) {
+            user.offense2Message_Seen = {
                 seen: true,
                 time: date
             };

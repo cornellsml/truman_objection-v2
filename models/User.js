@@ -19,7 +19,11 @@ const userSchema = new mongoose.Schema({
     group: String, // [obj1]_[obj2] format.
     interest: String, //'Science', 'Lifestyle', 'Education'
 
-    offenseMessage_Seen: {
+    offense1Message_Seen: {
+        seen: { type: Boolean, default: false },
+        time: Date,
+    },
+    offense2Message_Seen: {
         seen: { type: Boolean, default: false },
         time: Date,
     },

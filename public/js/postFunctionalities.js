@@ -139,14 +139,14 @@ function likeComment(e) {
             var icon2 = dislike.find("i.icon.thumbs.down");
             label2.html(function(i, val) { return val * 1 - 1 });
             icon2.removeClass("red");
-            // $.post("/feed", {
-            //     postID: postID,
-            //     commentID: commentID,
-            //     unlike: like,
-            //     isUserComment: isUserComment,
-            //     postClass: postClass,
-            //     _csrf: $('meta[name="csrf-token"]').attr('content')
-            // });
+            $.post("/feed", {
+                postID: postID,
+                commentID: commentID,
+                unlike: like,
+                isUserComment: isUserComment,
+                postClass: postClass,
+                _csrf: $('meta[name="csrf-token"]').attr('content')
+            });
         }
     }
     $.post("/feed", {
@@ -187,14 +187,14 @@ function unlikeComment(e) {
             var icon2 = like.find("i.icon.thumbs.up");
             label2.html(function(i, val) { return val * 1 - 1 });
             icon2.removeClass("green");
-            // $.post("/feed", {
-            //     postID: postID,
-            //     commentID: commentID,
-            //     like: unlike,
-            //     isUserComment: isUserComment,
-            //     postClass: postClass,
-            //     _csrf: $('meta[name="csrf-token"]').attr('content')
-            // });
+            $.post("/feed", {
+                postID: postID,
+                commentID: commentID,
+                like: unlike,
+                isUserComment: isUserComment,
+                postClass: postClass,
+                _csrf: $('meta[name="csrf-token"]').attr('content')
+            });
         }
     }
     $.post("/feed", {
@@ -330,6 +330,7 @@ function addCommentToVideo(e) {
         } else { // There are some comments visible.
             lastVisibleComment.insertAdjacentHTML("beforebegin", mess);
         }
+        $(`.comment[commentID=${commentID}]`).last()[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
 
         $.post("/feed", {
             postID: postID,
