@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
 
     mturkID: { type: String, unique: true },
 
-    group: String, // [obj1]_[obj2] format.
+    group: String, // [obj1]&[obj2] format.
     interest: String, //'Science', 'Lifestyle', 'Education'
 
     offense1Message_Seen: {
