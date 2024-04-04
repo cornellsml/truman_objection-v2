@@ -133,7 +133,14 @@ $(window).on("load", function() {
         });
     })
 
-    $('video').on("pause", async function() {
+    $('video').on("pause", async function(event) {
+        // When a user switches to another video while it is still playing, the "pause" is triggered programatically by .trigger("pause").
+        // But for some reason, programatically triggering the pause calls the .on("pause") event handler twice. 
+        // So, ignore one of these triggers.
+        if (event.isTrigger) {
+            return;
+        }
+
         const post = $(this).parents('.ui.fluid.card');
         const postID = post.attr("postID");
         if (!this.seeking) {
@@ -194,7 +201,6 @@ $(window).on("load", function() {
         });
     })
 
-
     $('video').on("volumechange", function() {
         const post = $(this).parents('.ui.fluid.card');
         const postID = post.attr("postID");
@@ -210,24 +216,23 @@ $(window).on("load", function() {
         });
     })
 
-    //Buttons to switch videos
+    // Buttons to switch videos
     $('button.circular.ui.icon.button.blue.centered').on("click", async function() {
-        const actionArray = []; // This array will be handled by Promise.all
         const currentCard = $('.ui.fluid.card:visible');
+        // If current video is not paused, pause video.
         if (!currentCard.find('video')[0].paused) {
             currentCard.find('video').trigger('pause');
         }
+        // Record the time spent on current video.
+        await resetActiveTimer(false, false);
 
+        // Transition to next video and play the video.
         const nextVid = parseInt($(this).attr('nextVid'));
-        if ($(this).hasClass("left")) {
-            $('.ui.fluid.card:visible').transition('hide');
-            $(`.ui.fluid.card[index=${nextVid}]`).transition();
-            $(`.ui.fluid.card[index=${nextVid}] video`)[0].play();
-        } else {
-            $('.ui.fluid.card:visible').transition('hide');
-            $(`.ui.fluid.card[index=${nextVid}]`).transition();
-            $(`.ui.fluid.card[index=${nextVid}] video`)[0].play();
-        }
+        $('.ui.fluid.card:visible').transition('hide');
+        $(`.ui.fluid.card[index=${nextVid}]`).transition();
+        $(`.ui.fluid.card[index=${nextVid}] video`)[0].play();
+
+        // Hide buttons accordingly
         if (nextVid % 5 == 0) {
             $('button.left').addClass("hidden");
         } else {
@@ -243,11 +248,11 @@ $(window).on("load", function() {
             $('#lastVid-button').addClass("hidden");
             $('button.right:not(.disabled)').attr('nextVid', nextVid + 1);
         }
-        actionArray.push(resetActiveTimer(false, false));
-        actionArray.push($.post("/pageLog", {
+
+        // Log new page
+        await $.post("/pageLog", {
             path: window.location.pathname + `?v=${nextVid}`,
             _csrf: $('meta[name="csrf-token"]').attr('content')
-        }));
-        Promise.all(actionArray);
+        });
     })
 });

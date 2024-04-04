@@ -12,7 +12,7 @@ async function resetActiveTimer(loggingOut, fromIdle) {
             let pathname = window.location.pathname;
             if (window.location.pathname == '/') {
                 const currentCard = $('.ui.fluid.card:visible');
-                const index = currentCard.attr("index");
+                const index = currentCard.attr("index"); // postID (i.e. 0, 1, 2, 3, 4)
                 pathname += `?v=${index}`;
             }
             await $.post("/pageTimes", {
