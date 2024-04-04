@@ -95,8 +95,7 @@ async function getObjectionOneId(experimentalCondition, interest) {
         .exec();
 
     let objectionObj = videoObj[0].comments.find(comment => comment.class == 'offense');
-    objectionObj = offenseObj.subcomments.find(subcomment => subcomment.class == ("obj1=" + msgs[0]));
-    console.log(objectionObj.body);
+    objectionObj = objectionObj.subcomments.find(subcomment => subcomment.class == ("obj1=" + msgs[0]));
 
     return objectionObj.id;
 }
@@ -120,8 +119,7 @@ async function getObjectionTwoId(experimentalCondition, interest) {
         .exec();
 
     let objectionObj = videoObj[0].comments.find(comment => comment.class == 'offense');
-    objectionObj = offenseObj.subcomments.find(subcomment => subcomment.class == ("obj2=" + msgs[1]));
-    console.log(objectionObj.body);
+    objectionObj = objectionObj.subcomments.find(subcomment => subcomment.class == ("obj2=" + msgs[1]));
 
     return objectionObj.id;
 }
@@ -135,7 +133,7 @@ async function getDataExport() {
         `truman_Objections-formal-followup-dataExport` +
         `.${currentDate.getMonth()+1}-${currentDate.getDate()}-${currentDate.getFullYear()}` +
         `.${currentDate.getHours()}-${currentDate.getMinutes()}-${currentDate.getSeconds()}`;
-    const outputFilepath = `./outputFiles/truman-objections-formal-followup/${outputFilename}.csv`;
+    const outputFilepath = `./outputFiles/formal-followup_study/${outputFilename}.csv`;
     const csvWriter_header = [
         { id: 'id', title: "Qualtrics ID" },
         { id: 'username', title: "Username" },
@@ -146,12 +144,12 @@ async function getDataExport() {
         { id: 'V2_Completed', title: 'V2_Completed' },
         { id: 'V4_Completed', title: 'V4_Completed' },
         { id: 'GeneralTimeSpent', title: 'GeneralTimeSpent' },
-        { id: 'V1_timespent', title: 'V1_timespent' },
-        { id: 'V2_timespent', title: 'V2_timespent' },
-        { id: 'V3_timespent', title: 'V3_timespent' },
-        { id: 'V4_timespent', title: 'V4_timespent' },
-        { id: 'V5_timespent', title: 'V5_timespent' },
-        { id: 'AvgTimeVideo', title: 'AvgTimeVideo' },
+        // { id: 'V1_timespent', title: 'V1_timespent' },
+        // { id: 'V2_timespent', title: 'V2_timespent' },
+        // { id: 'V3_timespent', title: 'V3_timespent' },
+        // { id: 'V4_timespent', title: 'V4_timespent' },
+        // { id: 'V5_timespent', title: 'V5_timespent' },
+        // { id: 'AvgTimeVideo', title: 'AvgTimeVideo' },
         { id: 'PageLog', title: 'PageLog' },
         { id: 'VideoUpvoteNumber', title: 'VideoUpvoteNumber' },
         { id: 'VideoDownvoteNumber', title: 'VideoDownvoteNumber' },
@@ -288,7 +286,7 @@ async function getDataExport() {
                 !(comment.reply_to >= 37 && comment.reply_to <= 47) &&
                 (comment.reply_to != 55) &&
                 !(comment.reply_to >= 67 && comment.reply_to <= 77) &&
-                (comment.reply_to != 85)).length;
+                (comment.reply_to != 85));
             const numNewComments = newComments.length;
 
             record[`V${video}_CommentUpvoteNumber`] = numLikes;
@@ -419,43 +417,47 @@ async function getDataExport() {
             (record.V4_PostComments || 0) +
             (record.V5_PostComments || 0);
 
-        if (user.group <= 17) {
-            record.OffenseOne_Appear = user.offenseMessageSeen_1;
-            record.Objection_Appear = user.objectionMessageSeen;
-            record.OffenseTwo_Appear = user.offenseMessageSeen_2;
-        } else {
-            record.OffenseTwo_Appear = user.offenseMessageSeen_2;
-        }
 
-        let pageTimes = {
-            1: 0,
-            2: 0,
-            3: 0,
-            4: 0,
-            5: 0
-        }
+        record.Off1_Appear = user.offense1Message_Seen.seen;
+        record.Obj1_Appear = user.objection1Message_Seen.seen;
+        record.Obj2_Appear = user.objection2Message_Seen.seen;
+        record.Off2_Appear = user.offense2Message_Seen.seen;
+
+        // let pageTimes = {
+        //     1: 0,
+        //     2: 0,
+        //     3: 0,
+        //     4: 0,
+        //     5: 0
+        // }
         let sumOnSite = 0;
         for (const pageLog of user.pageTimes) {
-            if (pageLog.page.startsWith("/?v=")) {
-                const page = (pageLog.page.replace(/\D/g, '') % 5) + 1;
-                pageTimes[page] = pageTimes[page] + pageLog.time;
-            }
+            // Begin at v=1, v=2, v=3, v=4, v=5
+            // if (pageLog.page.startsWith("/?v=")) {
+            //     let page = parseInt((pageLog.page.replace(/\D/g, '') % 5));
+            //     if (page == 0) {
+            //         page = 5;
+            //     }
+            //     console.log(pageLog);
+            //     console.log(page);
+            //     pageTimes[page] = pageTimes[page] + pageLog.time;
+            // }
             sumOnSite += pageLog.time;
         }
         record.GeneralTimeSpent = sumOnSite / 1000;
 
-        let sumOnVideos = 0;
-        let numVideos = 0;
-        for (const key in pageTimes) {
-            record[`V${key}_timespent`] = pageTimes[key] / 1000;
-            if (pageTimes[key] > 1500) {
-                numVideos++;
-                sumOnVideos += pageTimes[key];
-            }
-        }
+        // let sumOnVideos = 0;
+        // let numVideos = 0;
+        // for (let key in pageTimes) {
+        //     if (pageTimes[key] > 1500) {
+        //         numVideos++;
+        //         sumOnVideos += pageTimes[key];
+        //     }
+        //     record[`V${key}_timespent`] = pageTimes[key] / 1000;
+        // }
 
-        record.AvgTimeVideo = (sumOnVideos / 1000) / numVideos;
-        console.log(record);
+        // record.AvgTimeVideo = (sumOnVideos / 1000) / numVideos;
+        // console.log(record);
         records.push(record);
     }
 
