@@ -24,6 +24,19 @@ db.on('error', (err) => {
 });
 console.log(color_success, `Successfully connected to db.`);
 
+const validExperimentalConditions = [
+    "1_1",
+    "1_2",
+    "2_1",
+    "2_2",
+    "1_1&2_2",
+    "1_2&2_1",
+    "2_1&1_1",
+    "2_2&1_2",
+    "0_1",
+    "0_2"
+];
+
 /*
   Gets the user models from the database specified in the .env file.
 */
@@ -212,6 +225,10 @@ async function getDataExport() {
     const records = [];
     // For each user
     for (const user of users) {
+        if (!validExperimentalConditions.includes(user.group)) {
+            console.log(user.group);
+            continue;
+        }
         const record = {}; // Record for the user
         record.id = user.mturkID;
         record.username = user.username;
@@ -363,7 +380,7 @@ async function getDataExport() {
                 record.Off2_Downvote = (off2Obj != undefined) ? off2Obj.unliked : false;
                 record.Off2_Flag = (off2Obj != undefined) ? off2Obj.flagged : false;
 
-                const replyToOffense = feedAction.comments.filter(comment => [7, 37, 67].includes(comment.reply_to));
+                const replyToOffense = feedAction.comments.filter(comment => [25, 55, 85].includes(comment.reply_to));
                 if (replyToOffense.length != 0) {
                     let string = "";
                     replyToOffense.forEach(comment => { string += comment.new_comment_id + (comment.reply_to ? " (is a reply to " + comment.reply_to + ")" : "") + ": " + comment.body + "\r\n" });
