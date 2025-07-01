@@ -66,17 +66,5 @@
     "engines": {
         "node": ">=8.16.0",
         "npm": ">=6.4.1"
-    },
-    "eslintConfig": {
-        "extends": "airbnb-base",
-        "rules": {
-            "comma-dangle": 0,
-            "consistent-return": 0,
-            "no-param-reassign": 0,
-            "no-underscore-dangle": 0,
-            "no-shadow": 0,
-            "no-console": 0,
-            "no-plusplus": 0
-        }
     }
 }
