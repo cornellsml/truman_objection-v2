@@ -29,7 +29,7 @@ The first experiment manipulated two justice types (retributive vs. restorative)
 | obj_2  | Indicates the second message (if defined) |  1_1, 1_2, 2_1, 2_2 <br/><br/> 1_1: Retributive Objection Message #1<br/>1_2: Retributive Objection Message #2<br/>2_1: Restorative Objection Message #1<br/>2_2: Restorative Objection Message #2 |
 
 ### **Demo:** 
-Study 1: 
+Study 1: https://truman-objection-v2-s1-e7cc55b393c7.herokuapp.com/
 Study 2: https://truman-objections-v2-78b98f1a285a.herokuapp.com/
 
 ### **Publications:** 
