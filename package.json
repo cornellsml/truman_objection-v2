@@ -12,7 +12,7 @@
         "dev": "nodemon app.js",
         "start": "node app.js",
         "test": "mocha --reporter spec",
-        "heroku-postbuild": "npm install --legacy-peer-deps"
+        "heroku-postbuild": "npm install --omit=dev"
     },
     "dependencies": {
         "async": "^2.6.2",
