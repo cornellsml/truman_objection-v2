@@ -29,13 +29,19 @@ var notification_reply_list;
 
 dotenv.config({ path: '.env' });
 
-mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI, { useNewUrlParser: true });
-var db = mongoose.connection;
-mongoose.connection.on('error', (err) => {
+
+mongoose.Promise = global.Promise;
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
+var db = mongoose.connection.on('error', (err) => {
     console.error(err);
-    console.log(color_error, '%s MongoDB connection error. Please make sure MongoDB is running.');
-    process.exit(1);
+    //console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+    process.exit();
 });
+
 
 /*
 This is a huge function of chained promises, done to achieve serial completion of asynchronous actions.
